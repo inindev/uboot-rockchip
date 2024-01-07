@@ -1,7 +1,7 @@
-From 4e88242eaaeafac1db73fbba15e9fc8d3d0cc075 Mon Sep 17 00:00:00 2001
+From e5d7039116b1903e0490f2c473b7910c9f43becb Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Sat, 16 Dec 2023 12:13:16 +0000
-Subject: [PATCH 09/10] arm64: dts: rockchip: nanopi-r6c device tree
+Subject: [PATCH 15/17] arm64: dts: rockchip: nanopi-r6c device tree
 
 Signed-off-by: John Clark <inindev@gmail.com>
 ---

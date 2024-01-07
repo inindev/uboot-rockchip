@@ -1,7 +1,7 @@
-From e51ba6d7768221f8dfc41fa295af75d68c147301 Mon Sep 17 00:00:00 2001
+From acef6ed7540908233388f42777f532f2945890d0 Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Fri, 4 Aug 2023 09:53:16 +0000
-Subject: [PATCH 02/10] arm64: dts: rockchip: change spi-max-frequency to
+Subject: [PATCH 07/17] arm64: dts: rockchip: change spi-max-frequency to
  50000000 as per radxa's dts
  https://github.com/radxa/kernel/blob/stable-5.10-rock5/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
 

@@ -1,7 +1,7 @@
-From 807ab90d926d363059935af2b2ec0570bea41a07 Mon Sep 17 00:00:00 2001
+From 50f40a5d78dff1539184bece849b035c1474aff5 Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Sun, 24 Dec 2023 02:37:30 +0000
-Subject: [PATCH 05/10] arm64: dts: rockchip: nanopc-t6 regulator cleanup
+Subject: [PATCH 10/17] arm64: dts: rockchip: nanopc-t6 regulator cleanup
 
 Signed-off-by: John Clark <inindev@gmail.com>
 ---

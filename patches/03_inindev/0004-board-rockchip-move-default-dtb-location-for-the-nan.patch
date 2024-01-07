@@ -1,0 +1,27 @@
+From 2a3556630ce48dcfe88361d8f79561a8aa34d0d8 Mon Sep 17 00:00:00 2001
+From: John Clark <inindev@gmail.com>
+Date: Sun, 7 Jan 2024 21:16:55 +0000
+Subject: [PATCH 04/17] board: rockchip: move default dtb location for the
+ nanopi-r5s
+
+Signed-off-by: John Clark <inindev@gmail.com>
+---
+ configs/nanopi-r5s-rk3568_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configs/nanopi-r5s-rk3568_defconfig b/configs/nanopi-r5s-rk3568_defconfig
+index 2736d382a3..0d959a30ff 100644
+--- a/configs/nanopi-r5s-rk3568_defconfig
++++ b/configs/nanopi-r5s-rk3568_defconfig
+@@ -25,7 +25,7 @@ CONFIG_FIT_VERBOSE=y
+ CONFIG_SPL_FIT_SIGNATURE=y
+ CONFIG_SPL_LOAD_FIT=y
+ CONFIG_LEGACY_IMAGE_FORMAT=y
+-CONFIG_DEFAULT_FDT_FILE="rockchip/rk3568-nanopi-r5s.dtb"
++CONFIG_DEFAULT_FDT_FILE="rk3568-nanopi-r5s.dtb"
+ # CONFIG_DISPLAY_CPUINFO is not set
+ CONFIG_DISPLAY_BOARDINFO_LATE=y
+ CONFIG_SPL_MAX_SIZE=0x40000
+-- 
+2.43.0
+

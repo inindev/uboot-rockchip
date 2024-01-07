@@ -1,7 +1,7 @@
-From e50b92cb9fb0aa36f2cafa4eb5dc9b53cf484dea Mon Sep 17 00:00:00 2001
+From 8476308816faf3f40322c3c5ceed911c83791a0a Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Sun, 24 Dec 2023 02:58:45 +0000
-Subject: [PATCH 06/10] arm64: dts: rockchip: add usb 3.0a support for the
+Subject: [PATCH 11/17] arm64: dts: rockchip: add usb 3.0a support for the
  nanopc-t6
 
 Signed-off-by: John Clark <inindev@gmail.com>

@@ -1,7 +1,7 @@
-From ef612a92ac52dff33ad3e4dae42a366c6ad5fd18 Mon Sep 17 00:00:00 2001
+From dcd2dffd07316c099af584d0d1a2fed3fb52a744 Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Thu, 28 Dec 2023 11:25:56 +0000
-Subject: [PATCH 08/10] arm64: dts: rockchip: change spi-max-frequency to
+Subject: [PATCH 14/17] arm64: dts: rockchip: change spi-max-frequency to
  50000000 as per vendor device tree
 
 Signed-off-by: John Clark <inindev@gmail.com>
