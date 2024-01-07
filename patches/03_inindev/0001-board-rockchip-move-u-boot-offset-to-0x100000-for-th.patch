@@ -1,0 +1,27 @@
+From 635172ca7e5889cdf402312be1be0a44e74c1f4a Mon Sep 17 00:00:00 2001
+From: John Clark <inindev@gmail.com>
+Date: Fri, 4 Aug 2023 09:49:52 +0000
+Subject: [PATCH 01/10] board: rockchip: move u-boot offset to 0x100000 for the
+ rock-5b
+
+Signed-off-by: John Clark <inindev@gmail.com>
+---
+ configs/rock5b-rk3588_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configs/rock5b-rk3588_defconfig b/configs/rock5b-rk3588_defconfig
+index 0595325e81..306cdc5c9c 100644
+--- a/configs/rock5b-rk3588_defconfig
++++ b/configs/rock5b-rk3588_defconfig
+@@ -45,7 +45,7 @@ CONFIG_SPL_BSS_MAX_SIZE=0x4000
+ # CONFIG_SPL_SHARES_INIT_SP_ADDR is not set
+ CONFIG_SPL_STACK_R=y
+ CONFIG_SPL_SPI_LOAD=y
+-CONFIG_SYS_SPI_U_BOOT_OFFS=0x60000
++CONFIG_SYS_SPI_U_BOOT_OFFS=0x100000
+ CONFIG_SPL_ATF=y
+ CONFIG_CMD_GPIO=y
+ CONFIG_CMD_GPT=y
+-- 
+2.43.0
+
