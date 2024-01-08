@@ -1,13 +1,13 @@
 
 # Copyright (C) 2024, John Clark <inindev@gmail.com>
 
-UBOOT_TAG = v2024.01-rc6
+UBOOT_TAG  := v2024.01
 
-RK3568_ATF = ../rkbin/rk3568_bl31_v1.28.elf
-RK3568_TPL = ../rkbin/rk3568_ddr_1560MHz_v1.15.bin
+RK3568_ATF := ../rkbin/rk3568_bl31_v1.28.elf
+RK3568_TPL := ../rkbin/rk3568_ddr_1560MHz_v1.15.bin
 
-RK3588_ATF = ../rkbin/rk3588_bl31_v1.34.elf
-RK3588_TPL = ../rkbin/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.08.bin
+RK3588_ATF := ../rkbin/rk3588_bl31_v1.34.elf
+RK3588_TPL := ../rkbin/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.08.bin
 
 UBOOT_BRANCH := $(UBOOT_TAG:v%=%)
 
