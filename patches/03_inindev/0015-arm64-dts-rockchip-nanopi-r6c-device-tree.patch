@@ -1,13 +1,15 @@
-From e5d7039116b1903e0490f2c473b7910c9f43becb Mon Sep 17 00:00:00 2001
+From c9cb749053dd7542c0a5e1e0e2e271ac4dc9f67d Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Sat, 16 Dec 2023 12:13:16 +0000
 Subject: [PATCH 15/17] arm64: dts: rockchip: nanopi-r6c device tree
 
 Signed-off-by: John Clark <inindev@gmail.com>
 ---
- arch/arm/dts/Makefile               |   1 +
- arch/arm/dts/rk3588s-nanopi-r6c.dts | 775 ++++++++++++++++++++++++++++
- 2 files changed, 776 insertions(+)
+ arch/arm/dts/Makefile                       |   1 +
+ arch/arm/dts/rk3588s-nanopi-r6c-u-boot.dtsi |  15 +
+ arch/arm/dts/rk3588s-nanopi-r6c.dts         | 775 ++++++++++++++++++++
+ 3 files changed, 791 insertions(+)
+ create mode 100644 arch/arm/dts/rk3588s-nanopi-r6c-u-boot.dtsi
  create mode 100644 arch/arm/dts/rk3588s-nanopi-r6c.dts
 
 diff --git a/arch/arm/dts/Makefile b/arch/arm/dts/Makefile
@@ -22,6 +24,27 @@ index e9b62483f7..8065d93325 100644
  	rk3588s-orangepi-5.dtb \
  	rk3588-orangepi-5-plus.dtb \
  	rk3588-quartzpro64.dtb \
+diff --git a/arch/arm/dts/rk3588s-nanopi-r6c-u-boot.dtsi b/arch/arm/dts/rk3588s-nanopi-r6c-u-boot.dtsi
+new file mode 100644
+index 0000000000..3b2666b9ec
+--- /dev/null
++++ b/arch/arm/dts/rk3588s-nanopi-r6c-u-boot.dtsi
+@@ -0,0 +1,15 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++
++#include "rk3588s-u-boot.dtsi"
++
++/ {
++	chosen {
++		u-boot,spl-boot-order = "same-as-spl", &sdmmc, &sdhci;
++	};
++};
++
++&sdhci {
++        cap-mmc-highspeed;
++        mmc-ddr-1_8v;
++        mmc-hs200-1_8v;
++};
 diff --git a/arch/arm/dts/rk3588s-nanopi-r6c.dts b/arch/arm/dts/rk3588s-nanopi-r6c.dts
 new file mode 100644
 index 0000000000..27ac495fc1
