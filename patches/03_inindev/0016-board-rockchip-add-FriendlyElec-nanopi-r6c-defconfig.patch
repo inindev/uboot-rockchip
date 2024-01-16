@@ -1,7 +1,7 @@
 From 6fa78d047417aa2c86d4180095539d0813b60e48 Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Sat, 16 Dec 2023 00:27:47 +0000
-Subject: [PATCH 16/17] board: rockchip: add FriendlyElec nanopi-r6c defconfig
+Subject: [PATCH 16/19] board: rockchip: add FriendlyElec nanopi-r6c defconfig
 
 Signed-off-by: John Clark <inindev@gmail.com>
 ---

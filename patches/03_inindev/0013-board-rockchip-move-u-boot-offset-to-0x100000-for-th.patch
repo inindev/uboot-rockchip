@@ -1,7 +1,7 @@
 From 5d00151a3cb8e994a98f2810c3b9f30833563aa4 Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Thu, 21 Dec 2023 15:41:27 +0000
-Subject: [PATCH 13/17] board: rockchip: move u-boot offset to 0x100000 for the
+Subject: [PATCH 13/19] board: rockchip: move u-boot offset to 0x100000 for the
  nanopc-t6
 
 Signed-off-by: John Clark <inindev@gmail.com>

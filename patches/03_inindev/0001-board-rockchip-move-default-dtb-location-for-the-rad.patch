@@ -1,7 +1,7 @@
 From 7aea4d14e22d39aae8028ddf26b698993f54b565 Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Sun, 7 Jan 2024 21:11:56 +0000
-Subject: [PATCH 01/17] board: rockchip: move default dtb location for the
+Subject: [PATCH 01/19] board: rockchip: move default dtb location for the
  radxa-e25
 
 Signed-off-by: John Clark <inindev@gmail.com>

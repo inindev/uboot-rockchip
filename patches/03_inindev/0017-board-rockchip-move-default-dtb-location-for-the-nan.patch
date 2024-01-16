@@ -1,7 +1,7 @@
 From f018602fbcdfba04990cb598789147b224daa2e7 Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Sun, 7 Jan 2024 21:17:48 +0000
-Subject: [PATCH 17/17] board: rockchip: move default dtb location for the
+Subject: [PATCH 17/19] board: rockchip: move default dtb location for the
  nanopi-r6c
 
 Signed-off-by: John Clark <inindev@gmail.com>

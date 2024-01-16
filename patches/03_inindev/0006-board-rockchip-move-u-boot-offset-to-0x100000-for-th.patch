@@ -1,7 +1,7 @@
 From f6a601b75cf95c7eb95c8ca95537b2d8611ef7f8 Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Fri, 4 Aug 2023 09:49:52 +0000
-Subject: [PATCH 06/17] board: rockchip: move u-boot offset to 0x100000 for the
+Subject: [PATCH 06/19] board: rockchip: move u-boot offset to 0x100000 for the
  rock-5b
 
 Signed-off-by: John Clark <inindev@gmail.com>

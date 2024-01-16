@@ -11,7 +11,8 @@ RK3588_TPL := ../rkbin/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.08.bin
 
 UBOOT_BRANCH := $(UBOOT_TAG:v%=%)
 
-TARGETS := target_rock-5b target_nanopc-t6 target_nanopi-r6c target_nanopi-r5c target_nanopi-r5s target_odroid-m1 target_radxa-e25
+TARGETS := target_rock-5b target_nanopc-t6 target_nanopi-r6c target_orangepi-5 target_orangepi-5-plus \
+           target_nanopi-r5c target_nanopi-r5s target_odroid-m1 target_radxa-e25
 
 
 all: $(TARGETS)
@@ -47,6 +48,12 @@ target_nanopc-t6:
 
 target_nanopi-r6c:
 	$(MAKE) CFG=nanopi-r6c-rk3588s_defconfig BL31=$(RK3588_ATF) ROCKCHIP_TPL=$(RK3588_TPL) BRD=$(@:target_%=%) build
+
+target_orangepi-5:
+	$(MAKE) CFG=orangepi-5-rk3588s_defconfig BL31=$(RK3588_ATF) ROCKCHIP_TPL=$(RK3568_TPL) BRD=$(@:target_%=%) build
+
+target_orangepi-5-plus:
+	$(MAKE) CFG=orangepi-5-plus-rk3588_defconfig BL31=$(RK3588_ATF) ROCKCHIP_TPL=$(RK3568_TPL) BRD=$(@:target_%=%) build
 
 target_nanopi-r5c:
 	$(MAKE) CFG=nanopi-r5c-rk3568_defconfig BL31=$(RK3568_ATF) ROCKCHIP_TPL=$(RK3568_TPL) BRD=$(@:target_%=%) build
