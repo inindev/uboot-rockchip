@@ -1,7 +1,7 @@
-From 70d217f75ece0576eada1ca6e761e8b4a5729ff6 Mon Sep 17 00:00:00 2001
+From 77ab088cc061badbc237d51c9cfde201b5c6f6e0 Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Sun, 7 Jan 2024 21:16:15 +0000
-Subject: [PATCH 03/19] board: rockchip: move default dtb location for the
+Subject: [PATCH 03/12] board: rockchip: move default dtb location for the
  nanopi-r5c
 
 Signed-off-by: John Clark <inindev@gmail.com>
@@ -10,10 +10,10 @@ Signed-off-by: John Clark <inindev@gmail.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/configs/nanopi-r5c-rk3568_defconfig b/configs/nanopi-r5c-rk3568_defconfig
-index 833cff0e45..1fb52275fe 100644
+index 00743b7f92..4497490c72 100644
 --- a/configs/nanopi-r5c-rk3568_defconfig
 +++ b/configs/nanopi-r5c-rk3568_defconfig
-@@ -25,7 +25,7 @@ CONFIG_FIT_VERBOSE=y
+@@ -16,7 +16,7 @@ CONFIG_FIT_VERBOSE=y
  CONFIG_SPL_FIT_SIGNATURE=y
  CONFIG_SPL_LOAD_FIT=y
  CONFIG_LEGACY_IMAGE_FORMAT=y

@@ -1,7 +1,7 @@
-From d3b43afadf52ec6c7366a2028acaf8491dd77725 Mon Sep 17 00:00:00 2001
+From 5ee3c21189a6f7950e821ffc3f38e1234203a629 Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
-Date: Sun, 7 Jan 2024 21:21:13 +0000
-Subject: [PATCH 12/19] board: rockchip: move default dtb location for
+Date: Sun, 19 May 2024 14:44:51 +0000
+Subject: [PATCH 08/12] board: rockchip: move default dtb location for
  nanopc-t6
 
 Signed-off-by: John Clark <inindev@gmail.com>
@@ -10,13 +10,13 @@ Signed-off-by: John Clark <inindev@gmail.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/configs/nanopc-t6-rk3588_defconfig b/configs/nanopc-t6-rk3588_defconfig
-index 070399ce2a..06e74c5bce 100644
+index 738dda026b..58c4fb6e11 100644
 --- a/configs/nanopc-t6-rk3588_defconfig
 +++ b/configs/nanopc-t6-rk3588_defconfig
-@@ -31,7 +31,7 @@ CONFIG_SPL_FIT_SIGNATURE=y
+@@ -22,7 +22,7 @@ CONFIG_FIT_VERBOSE=y
+ CONFIG_SPL_FIT_SIGNATURE=y
  CONFIG_SPL_LOAD_FIT=y
  CONFIG_LEGACY_IMAGE_FORMAT=y
- CONFIG_OF_BOARD_SETUP=y
 -CONFIG_DEFAULT_FDT_FILE="rockchip/rk3588-nanopc-t6.dtb"
 +CONFIG_DEFAULT_FDT_FILE="rk3588-nanopc-t6.dtb"
  # CONFIG_DISPLAY_CPUINFO is not set

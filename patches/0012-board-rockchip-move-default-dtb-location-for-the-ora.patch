@@ -1,7 +1,7 @@
-From ba2d57aea6adeb05d8e8b23fb8a02c92d3b2331d Mon Sep 17 00:00:00 2001
+From f237706998fc3188b0efde22e0e83d54a6a046cc Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
-Date: Mon, 15 Jan 2024 19:18:52 -0500
-Subject: [PATCH 19/19] board: rockchip: move default dtb location for the
+Date: Sun, 19 May 2024 14:48:55 +0000
+Subject: [PATCH 12/12] board: rockchip: move default dtb location for the
  orangepi-5-plus
 
 Signed-off-by: John Clark <inindev@gmail.com>
@@ -10,18 +10,18 @@ Signed-off-by: John Clark <inindev@gmail.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/configs/orangepi-5-plus-rk3588_defconfig b/configs/orangepi-5-plus-rk3588_defconfig
-index 0473699621..0bb74289b6 100644
+index ba8005363a..b25229768b 100644
 --- a/configs/orangepi-5-plus-rk3588_defconfig
 +++ b/configs/orangepi-5-plus-rk3588_defconfig
-@@ -32,7 +32,7 @@ CONFIG_SPL_FIT_SIGNATURE=y
+@@ -23,7 +23,7 @@ CONFIG_FIT_VERBOSE=y
+ CONFIG_SPL_FIT_SIGNATURE=y
  CONFIG_SPL_LOAD_FIT=y
  CONFIG_LEGACY_IMAGE_FORMAT=y
- CONFIG_OF_BOARD_SETUP=y
 -CONFIG_DEFAULT_FDT_FILE="rockchip/rk3588-orangepi-5-plus.dtb"
 +CONFIG_DEFAULT_FDT_FILE="rk3588-orangepi-5-plus.dtb"
  # CONFIG_DISPLAY_CPUINFO is not set
  CONFIG_DISPLAY_BOARDINFO_LATE=y
  CONFIG_SPL_MAX_SIZE=0x40000
 -- 
-2.39.2
+2.43.0
 

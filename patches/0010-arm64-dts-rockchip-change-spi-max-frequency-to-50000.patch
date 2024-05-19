@@ -1,7 +1,7 @@
-From dcd2dffd07316c099af584d0d1a2fed3fb52a744 Mon Sep 17 00:00:00 2001
+From 2dd3343e87728de5d56c9682f3e768f5545fe299 Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
-Date: Thu, 28 Dec 2023 11:25:56 +0000
-Subject: [PATCH 14/19] arm64: dts: rockchip: change spi-max-frequency to
+Date: Sun, 19 May 2024 14:46:44 +0000
+Subject: [PATCH 10/12] arm64: dts: rockchip: change spi-max-frequency to
  50000000 as per vendor device tree
 
 Signed-off-by: John Clark <inindev@gmail.com>
@@ -10,13 +10,13 @@ Signed-off-by: John Clark <inindev@gmail.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/arm/dts/rk3588-nanopc-t6-u-boot.dtsi b/arch/arm/dts/rk3588-nanopc-t6-u-boot.dtsi
-index 87831c9d43..88b3997d0a 100644
+index 968385622f..7cf87c747b 100644
 --- a/arch/arm/dts/rk3588-nanopc-t6-u-boot.dtsi
 +++ b/arch/arm/dts/rk3588-nanopc-t6-u-boot.dtsi
-@@ -29,7 +29,7 @@
- 		bootph-pre-ram;
- 		compatible = "jedec,spi-nor";
+@@ -23,7 +23,7 @@
  		reg = <0>;
+ 		bootph-pre-ram;
+ 		bootph-some-ram;
 -		spi-max-frequency = <24000000>;
 +		spi-max-frequency = <50000000>;
  		spi-rx-bus-width = <4>;

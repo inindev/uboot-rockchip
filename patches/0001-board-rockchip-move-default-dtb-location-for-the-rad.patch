@@ -1,7 +1,7 @@
-From 7aea4d14e22d39aae8028ddf26b698993f54b565 Mon Sep 17 00:00:00 2001
+From bf791bfee07255563b88a78e6352cf1b7f3e80c4 Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Sun, 7 Jan 2024 21:11:56 +0000
-Subject: [PATCH 01/19] board: rockchip: move default dtb location for the
+Subject: [PATCH 01/12] board: rockchip: move default dtb location for the
  radxa-e25
 
 Signed-off-by: John Clark <inindev@gmail.com>
@@ -10,10 +10,10 @@ Signed-off-by: John Clark <inindev@gmail.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/configs/radxa-e25-rk3568_defconfig b/configs/radxa-e25-rk3568_defconfig
-index 2dfff6af3b..7dfb935c8d 100644
+index dbb77b85f5..0864bf57d7 100644
 --- a/configs/radxa-e25-rk3568_defconfig
 +++ b/configs/radxa-e25-rk3568_defconfig
-@@ -26,7 +26,7 @@ CONFIG_FIT_VERBOSE=y
+@@ -17,7 +17,7 @@ CONFIG_FIT_VERBOSE=y
  CONFIG_SPL_FIT_SIGNATURE=y
  CONFIG_SPL_LOAD_FIT=y
  CONFIG_LEGACY_IMAGE_FORMAT=y

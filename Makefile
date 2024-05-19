@@ -1,17 +1,17 @@
 
 # Copyright (C) 2024, John Clark <inindev@gmail.com>
 
-UBOOT_TAG  := v2024.01
+UBOOT_TAG  := v2024.07-rc3
 
-RK3568_ATF := ../rkbin/rk3568_bl31_v1.28.elf
-RK3568_TPL := ../rkbin/rk3568_ddr_1560MHz_v1.15.bin
+RK3568_ATF := ../rkbin/rk3568_bl31_v1.44.elf
+RK3568_TPL := ../rkbin/rk3568_ddr_1560MHz_v1.21.bin
 
-RK3588_ATF := ../rkbin/rk3588_bl31_v1.34.elf
-RK3588_TPL := ../rkbin/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.08.bin
+RK3588_ATF := ../rkbin/rk3588_bl31_v1.45.elf
+RK3588_TPL := ../rkbin/rk3588_ddr_lp4_2112MHz_lp5_2400MHz_v1.16.bin
 
 UBOOT_BRANCH := $(UBOOT_TAG:v%=%)
 
-TARGETS := target_rock-5b target_nanopc-t6 target_nanopi-r6c target_orangepi-5 target_orangepi-5-plus \
+TARGETS := target_rock-5b target_nanopc-t6 target_orangepi-5 target_orangepi-5-plus \
            target_nanopi-r5c target_nanopi-r5s target_odroid-m1 target_radxa-e25
 
 
@@ -45,9 +45,6 @@ target_rock-5b:
 target_nanopc-t6:
 	$(MAKE) CFG=nanopc-t6-rk3588_defconfig BL31=$(RK3588_ATF) ROCKCHIP_TPL=$(RK3588_TPL) BRD=$(@:target_%=%) build
 	@$(MAKE) --no-print-directory help_spi
-
-target_nanopi-r6c:
-	$(MAKE) CFG=nanopi-r6c-rk3588s_defconfig BL31=$(RK3588_ATF) ROCKCHIP_TPL=$(RK3588_TPL) BRD=$(@:target_%=%) build
 
 target_orangepi-5:
 	$(MAKE) CFG=orangepi-5-rk3588s_defconfig BL31=$(RK3588_ATF) ROCKCHIP_TPL=$(RK3568_TPL) BRD=$(@:target_%=%) build

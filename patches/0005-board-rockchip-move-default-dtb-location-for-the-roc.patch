@@ -1,7 +1,7 @@
-From 72df3d52084796e75abc548fc39ed74171a137ad Mon Sep 17 00:00:00 2001
+From a1cff29a175c57c2e0a0f6b4ca3c7039b9fec0a6 Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
-Date: Sun, 7 Jan 2024 21:18:41 +0000
-Subject: [PATCH 05/19] board: rockchip: move default dtb location for the
+Date: Sun, 19 May 2024 14:22:35 +0000
+Subject: [PATCH 05/12] board: rockchip: move default dtb location for the
  rock-5b
 
 Signed-off-by: John Clark <inindev@gmail.com>
@@ -10,13 +10,13 @@ Signed-off-by: John Clark <inindev@gmail.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/configs/rock5b-rk3588_defconfig b/configs/rock5b-rk3588_defconfig
-index 0595325e81..3bb9df16ee 100644
+index 9e14b14af7..912062a612 100644
 --- a/configs/rock5b-rk3588_defconfig
 +++ b/configs/rock5b-rk3588_defconfig
-@@ -33,7 +33,7 @@ CONFIG_SPL_FIT_SIGNATURE=y
+@@ -23,7 +23,7 @@ CONFIG_FIT_VERBOSE=y
+ CONFIG_SPL_FIT_SIGNATURE=y
  CONFIG_SPL_LOAD_FIT=y
  CONFIG_LEGACY_IMAGE_FORMAT=y
- CONFIG_OF_BOARD_SETUP=y
 -CONFIG_DEFAULT_FDT_FILE="rockchip/rk3588-rock-5b.dtb"
 +CONFIG_DEFAULT_FDT_FILE="rk3588-rock-5b.dtb"
  # CONFIG_DISPLAY_CPUINFO is not set
