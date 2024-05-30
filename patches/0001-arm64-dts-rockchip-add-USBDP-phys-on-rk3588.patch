@@ -1,0 +1,87 @@
+From 74f7f273c0f49bc742212ad9dca32b28f2b57d74 Mon Sep 17 00:00:00 2001
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+Date: Tue, 9 Apr 2024 00:50:33 +0200
+Subject: [PATCH 1/8] arm64: dts: rockchip: add USBDP phys on rk3588
+
+Add both USB3-DisplayPort PHYs to RK3588 SoC DT.
+
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Link: https://lore.kernel.org/r/20240408225109.128953-7-sebastian.reichel@collabora.com
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+---
+ dts/upstream/src/arm64/rockchip/rk3588.dtsi | 52 +++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
+
+diff --git a/dts/upstream/src/arm64/rockchip/rk3588.dtsi b/dts/upstream/src/arm64/rockchip/rk3588.dtsi
+index 5519c1430c..4fdd047c9e 100644
+--- a/dts/upstream/src/arm64/rockchip/rk3588.dtsi
++++ b/dts/upstream/src/arm64/rockchip/rk3588.dtsi
+@@ -17,6 +17,36 @@
+ 		reg = <0x0 0xfd5c0000 0x0 0x100>;
+ 	};
+ 
++	usbdpphy1_grf: syscon@fd5cc000 {
++		compatible = "rockchip,rk3588-usbdpphy-grf", "syscon";
++		reg = <0x0 0xfd5cc000 0x0 0x4000>;
++	};
++
++	usb2phy1_grf: syscon@fd5d4000 {
++		compatible = "rockchip,rk3588-usb2phy-grf", "syscon", "simple-mfd";
++		reg = <0x0 0xfd5d4000 0x0 0x4000>;
++		#address-cells = <1>;
++		#size-cells = <1>;
++
++		u2phy1: usb2phy@4000 {
++			compatible = "rockchip,rk3588-usb2phy";
++			reg = <0x4000 0x10>;
++			#clock-cells = <0>;
++			clocks = <&cru CLK_USB2PHY_HDPTXRXPHY_REF>;
++			clock-names = "phyclk";
++			clock-output-names = "usb480m_phy1";
++			interrupts = <GIC_SPI 394 IRQ_TYPE_LEVEL_HIGH 0>;
++			resets = <&cru SRST_OTGPHY_U3_1>, <&cru SRST_P_USB2PHY_U3_1_GRF0>;
++			reset-names = "phy", "apb";
++			status = "disabled";
++
++			u2phy1_otg: otg-port {
++				#phy-cells = <0>;
++				status = "disabled";
++			};
++		};
++	};
++
+ 	i2s8_8ch: i2s@fddc8000 {
+ 		compatible = "rockchip,rk3588-i2s-tdm";
+ 		reg = <0x0 0xfddc8000 0x0 0x1000>;
+@@ -310,6 +340,28 @@
+ 		};
+ 	};
+ 
++	usbdp_phy1: phy@fed90000 {
++		compatible = "rockchip,rk3588-usbdp-phy";
++		reg = <0x0 0xfed90000 0x0 0x10000>;
++		#phy-cells = <1>;
++		clocks = <&cru CLK_USBDPPHY_MIPIDCPPHY_REF>,
++			 <&cru CLK_USBDP_PHY1_IMMORTAL>,
++			 <&cru PCLK_USBDPPHY1>,
++			 <&u2phy1>;
++		clock-names = "refclk", "immortal", "pclk", "utmi";
++		resets = <&cru SRST_USBDP_COMBO_PHY1_INIT>,
++			 <&cru SRST_USBDP_COMBO_PHY1_CMN>,
++			 <&cru SRST_USBDP_COMBO_PHY1_LANE>,
++			 <&cru SRST_USBDP_COMBO_PHY1_PCS>,
++			 <&cru SRST_P_USBDPPHY1>;
++		reset-names = "init", "cmn", "lane", "pcs_apb", "pma_apb";
++		rockchip,u2phy-grf = <&usb2phy1_grf>;
++		rockchip,usb-grf = <&usb_grf>;
++		rockchip,usbdpphy-grf = <&usbdpphy1_grf>;
++		rockchip,vo-grf = <&vo0_grf>;
++		status = "disabled";
++	};
++
+ 	combphy1_ps: phy@fee10000 {
+ 		compatible = "rockchip,rk3588-naneng-combphy";
+ 		reg = <0x0 0xfee10000 0x0 0x100>;
+-- 
+2.39.2
+

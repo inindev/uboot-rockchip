@@ -1,0 +1,48 @@
+From 64f6fef6f2506d34d70b9a6090789fb910b4df25 Mon Sep 17 00:00:00 2001
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+Date: Tue, 9 Apr 2024 00:50:34 +0200
+Subject: [PATCH 2/8] arm64: dts: rockchip: add USB3 DRD controllers on rk3588
+
+Add both USB3 dual-role controllers to the RK3588 devicetree.
+
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Link: https://lore.kernel.org/r/20240408225109.128953-8-sebastian.reichel@collabora.com
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+---
+ dts/upstream/src/arm64/rockchip/rk3588.dtsi | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/dts/upstream/src/arm64/rockchip/rk3588.dtsi b/dts/upstream/src/arm64/rockchip/rk3588.dtsi
+index 4fdd047c9e..5984016b5f 100644
+--- a/dts/upstream/src/arm64/rockchip/rk3588.dtsi
++++ b/dts/upstream/src/arm64/rockchip/rk3588.dtsi
+@@ -7,6 +7,26 @@
+ #include "rk3588-pinctrl.dtsi"
+ 
+ / {
++	usb_host1_xhci: usb@fc400000 {
++		compatible = "rockchip,rk3588-dwc3", "snps,dwc3";
++		reg = <0x0 0xfc400000 0x0 0x400000>;
++		interrupts = <GIC_SPI 221 IRQ_TYPE_LEVEL_HIGH 0>;
++		clocks = <&cru REF_CLK_USB3OTG1>, <&cru SUSPEND_CLK_USB3OTG1>,
++			 <&cru ACLK_USB3OTG1>;
++		clock-names = "ref_clk", "suspend_clk", "bus_clk";
++		dr_mode = "otg";
++		phys = <&u2phy1_otg>, <&usbdp_phy1 PHY_TYPE_USB3>;
++		phy-names = "usb2-phy", "usb3-phy";
++		phy_type = "utmi_wide";
++		power-domains = <&power RK3588_PD_USB>;
++		resets = <&cru SRST_A_USB3OTG1>;
++		snps,dis_enblslpm_quirk;
++		snps,dis-u2-freeclk-exists-quirk;
++		snps,dis-del-phy-power-chg-quirk;
++		snps,dis-tx-ipgap-linecheck-quirk;
++		status = "disabled";
++	};
++
+ 	pcie30_phy_grf: syscon@fd5b8000 {
+ 		compatible = "rockchip,rk3588-pcie3-phy-grf", "syscon";
+ 		reg = <0x0 0xfd5b8000 0x0 0x10000>;
+-- 
+2.39.2
+
