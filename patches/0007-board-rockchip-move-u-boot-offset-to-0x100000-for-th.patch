@@ -1,7 +1,7 @@
-From 508f0b9cf81dfe70235a00947141d4b4003b6360 Mon Sep 17 00:00:00 2001
+From 71069b32538e1fa5a03879355a31d83ad0d07be7 Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Sun, 19 May 2024 14:45:44 +0000
-Subject: [PATCH 09/12] board: rockchip: move u-boot offset to 0x100000 for the
+Subject: [PATCH 7/8] board: rockchip: move u-boot offset to 0x100000 for the
  nanopc-t6
 
 Signed-off-by: John Clark <inindev@gmail.com>
@@ -10,7 +10,7 @@ Signed-off-by: John Clark <inindev@gmail.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/configs/nanopc-t6-rk3588_defconfig b/configs/nanopc-t6-rk3588_defconfig
-index 58c4fb6e11..7f34fd82fe 100644
+index 926267f93a..b3ec3d7fbd 100644
 --- a/configs/nanopc-t6-rk3588_defconfig
 +++ b/configs/nanopc-t6-rk3588_defconfig
 @@ -29,7 +29,7 @@ CONFIG_SPL_MAX_SIZE=0x40000
@@ -23,5 +23,5 @@ index 58c4fb6e11..7f34fd82fe 100644
  CONFIG_CMD_GPIO=y
  CONFIG_CMD_GPT=y
 -- 
-2.43.0
+2.39.2
 

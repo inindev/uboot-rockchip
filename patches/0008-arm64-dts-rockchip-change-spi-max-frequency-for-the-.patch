@@ -1,8 +1,8 @@
-From 2dd3343e87728de5d56c9682f3e768f5545fe299 Mon Sep 17 00:00:00 2001
+From cd84154f77147435d25187653cb46ac3933c478d Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Sun, 19 May 2024 14:46:44 +0000
-Subject: [PATCH 10/12] arm64: dts: rockchip: change spi-max-frequency to
- 50000000 as per vendor device tree
+Subject: [PATCH 8/8] arm64: dts: rockchip: change spi-max-frequency for the
+ nanopc-t6 to match downstream vendor dts
 
 Signed-off-by: John Clark <inindev@gmail.com>
 ---
@@ -23,5 +23,5 @@ index 968385622f..7cf87c747b 100644
  		spi-tx-bus-width = <1>;
  	};
 -- 
-2.43.0
+2.39.2
 
