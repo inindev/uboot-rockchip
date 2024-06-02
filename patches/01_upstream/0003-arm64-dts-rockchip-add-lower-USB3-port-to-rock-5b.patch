@@ -1,7 +1,7 @@
 From cf77ca66c97de5d1e7f02b2cf9c1805485be7bbc Mon Sep 17 00:00:00 2001
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
 Date: Tue, 9 Apr 2024 00:50:37 +0200
-Subject: [PATCH 3/8] arm64: dts: rockchip: add lower USB3 port to rock-5b
+Subject: [PATCH 3/3] arm64: dts: rockchip: add lower USB3 port to rock-5b
 
 Enable full support (XHCI, EHCI, OHCI) for the lower USB3 port from
 Radxa Rock 5 Model B. The upper one is already supported.
