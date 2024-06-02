@@ -1,0 +1,36 @@
+From 67dcd0efb9541236cdc03b9ed246288874678259 Mon Sep 17 00:00:00 2001
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+Date: Fri, 31 May 2024 16:59:05 +0200
+Subject: [PATCH 5/5] MAINTAINERS: add TCPM section
+
+Add new section for USB TypeC Port Manager (TCPM) support, which
+is needed to figure out cable orientation of USB-C plus and to do
+USB PD communication.
+
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+---
+ MAINTAINERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 638b2fdd44..dbd81dac71 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1684,6 +1684,14 @@ F:	common/usb_kbd.c
+ F:	common/usb_storage.c
+ F:	include/usb.h
+ 
++USB TCPM
++M:	Sebastian Reichel <sebastian.reichel@collabora.com>
++S:	Maintained
++F:	cmd/tcpm.c
++F:	drivers/usb/tcpm/
++F:	include/usb/pd.h
++F:	include/usb/tcpm.h
++
+ USB xHCI
+ M:	Bin Meng <bmeng.cn@gmail.com>
+ S:	Maintained
+-- 
+2.39.2
+
