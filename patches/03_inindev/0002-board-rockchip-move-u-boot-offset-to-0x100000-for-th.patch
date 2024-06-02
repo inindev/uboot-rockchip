@@ -1,7 +1,7 @@
-From 8dad7d94549e292c2dd8c7a6ed85edd743894aea Mon Sep 17 00:00:00 2001
+From cf4688eb2456868320cf7e7ba2ba1542324f8f2e Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Sun, 19 May 2024 14:23:36 +0000
-Subject: [PATCH 5/8] board: rockchip: move u-boot offset to 0x100000 for the
+Subject: [PATCH 2/5] board: rockchip: move u-boot offset to 0x100000 for the
  rock-5b
 
 Signed-off-by: John Clark <inindev@gmail.com>
@@ -10,10 +10,10 @@ Signed-off-by: John Clark <inindev@gmail.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/configs/rock5b-rk3588_defconfig b/configs/rock5b-rk3588_defconfig
-index fc118cea7b..bdd53381fe 100644
+index f056728d33..9cb7b2f4bb 100644
 --- a/configs/rock5b-rk3588_defconfig
 +++ b/configs/rock5b-rk3588_defconfig
-@@ -30,7 +30,7 @@ CONFIG_SPL_MAX_SIZE=0x40000
+@@ -31,7 +31,7 @@ CONFIG_SPL_MAX_SIZE=0x40000
  CONFIG_SPL_PAD_TO=0x7f8000
  # CONFIG_SPL_RAW_IMAGE_SUPPORT is not set
  CONFIG_SPL_SPI_LOAD=y
