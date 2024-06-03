@@ -66,6 +66,7 @@ target_radxa-e25:
 	$(MAKE) CFG=radxa-e25-rk3568_defconfig BL31=$(RK3568_ATF) ROCKCHIP_TPL=$(RK3568_TPL) BRD=$(@:target_%=%) build
 
 patch:
+	@git rev-parse $(UBOOT_TAG) >/dev/null
 	@if ! git -C u-boot branch | grep -q $(UBOOT_BRANCH); then \
 	    git -C u-boot checkout -b $(UBOOT_BRANCH) $(UBOOT_TAG); \
 	    \
