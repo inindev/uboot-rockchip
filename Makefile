@@ -1,7 +1,7 @@
 
 # Copyright (C) 2024, John Clark <inindev@gmail.com>
 
-UBOOT_TAG  := v2024.07-rc3
+UBOOT_TAG  := v2024.07-rc4
 
 RK3568_ATF := ../rkbin/rk3568_bl31_v1.44.elf
 RK3568_TPL := ../rkbin/rk3568_ddr_1560MHz_v1.21.bin
@@ -66,7 +66,7 @@ target_radxa-e25:
 	$(MAKE) CFG=radxa-e25-rk3568_defconfig BL31=$(RK3568_ATF) ROCKCHIP_TPL=$(RK3568_TPL) BRD=$(@:target_%=%) build
 
 patch:
-	@git rev-parse $(UBOOT_TAG) >/dev/null
+	@git -C u-boot rev-parse $(UBOOT_TAG) >/dev/null
 	@if ! git -C u-boot branch | grep -q $(UBOOT_BRANCH); then \
 	    git -C u-boot checkout -b $(UBOOT_BRANCH) $(UBOOT_TAG); \
 	    \
