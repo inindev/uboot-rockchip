@@ -3,16 +3,18 @@
 
 UBOOT_TAG  := v2024.07-rc4
 
-RK3568_ATF := ../rkbin/rk3568_bl31_v1.44.elf
-RK3568_TPL := ../rkbin/rk3568_ddr_1560MHz_v1.21.bin
+RKBASE := https://raw.githubusercontent.com/rockchip-linux/rkbin/master
 
-RK3588_ATF := ../rkbin/rk3588_bl31_v1.45.elf
-RK3588_TPL := ../rkbin/rk3588_ddr_lp4_2112MHz_lp5_2400MHz_v1.16.bin
+RK3568_BL31 := downloads/rk3568_bl31_v*.elf
+RK3568_DDR  := downloads/rk3568_ddr_*.bin
+
+RK3588_BL31 := downloads/rk3588_bl31_v*.elf
+RK3588_DDR  := downloads/rk3588_ddr_lp4_*.bin
 
 UBOOT_BRANCH := $(UBOOT_TAG:v%=%)
 
-TARGETS := target_rock-5b target_nanopc-t6 target_orangepi-5 target_orangepi-5-plus \
-           target_nanopi-r5c target_nanopi-r5s target_odroid-m1 target_radxa-e25
+TARGETS := target_nanopi-r5c target_nanopi-r5s target_odroid-m1 target_radxa-e25 \
+           target_orangepi-5 target_orangepi-5-plus target_nanopc-t6 target_rock-5b
 
 
 all: $(TARGETS)
@@ -38,32 +40,32 @@ u-boot: | check_prereqs
 	git clone "https://github.com/u-boot/u-boot.git"
 	git -C u-boot fetch --tags
 
-target_rock-5b:
-	$(MAKE) CFG=rock5b-rk3588_defconfig BL31=$(RK3588_ATF) ROCKCHIP_TPL=$(RK3588_TPL) BRD=$(@:target_%=%) build
+target_nanopi-r5c: $(RK3568_BL31) $(RK3568_DDR)
+	$(MAKE) CFG=nanopi-r5c-rk3568_defconfig BL31=$$(realpath $(RK3568_BL31)) ROCKCHIP_TPL=$$(realpath $(RK3568_DDR)) BRD=$(@:target_%=%) build
+
+target_nanopi-r5s: $(RK3568_BL31) $(RK3568_DDR)
+	$(MAKE) CFG=nanopi-r5s-rk3568_defconfig BL31=$$(realpath $(RK3568_BL31)) ROCKCHIP_TPL=$$(realpath $(RK3568_DDR)) BRD=$(@:target_%=%) build
+
+target_odroid-m1: $(RK3568_BL31) $(RK3568_DDR)
+	$(MAKE) CFG=odroid-m1-rk3568_defconfig BL31=$$(realpath $(RK3568_BL31)) ROCKCHIP_TPL=$$(realpath $(RK3568_DDR)) BRD=$(@:target_%=%) build
 	@$(MAKE) --no-print-directory help_spi
 
-target_nanopc-t6:
-	$(MAKE) CFG=nanopc-t6-rk3588_defconfig BL31=$(RK3588_ATF) ROCKCHIP_TPL=$(RK3588_TPL) BRD=$(@:target_%=%) build
+target_radxa-e25: $(RK3568_BL31) $(RK3568_DDR)
+	$(MAKE) CFG=radxa-e25-rk3568_defconfig BL31=$$(realpath $(RK3568_BL31)) ROCKCHIP_TPL=$$(realpath $(RK3568_DDR)) BRD=$(@:target_%=%) build
+
+target_orangepi-5: $(RK3588_BL31) $(RK3588_DDR)
+	$(MAKE) CFG=orangepi-5-rk3588s_defconfig BL31=$$(realpath $(RK3588_BL31)) ROCKCHIP_TPL=$$(realpath $(RK3588_DDR)) BRD=$(@:target_%=%) build
+
+target_orangepi-5-plus: $(RK3588_BL31) $(RK3588_DDR)
+	$(MAKE) CFG=orangepi-5-plus-rk3588_defconfig BL31=$$(realpath $(RK3588_BL31)) ROCKCHIP_TPL=$$(realpath $(RK3588_DDR)) BRD=$(@:target_%=%) build
+
+target_nanopc-t6: $(RK3588_BL31) $(RK3588_DDR)
+	$(MAKE) CFG=nanopc-t6-rk3588_defconfig BL31=$$(realpath $(RK3588_BL31)) ROCKCHIP_TPL=$$(realpath $(RK3588_DDR)) BRD=$(@:target_%=%) build
 	@$(MAKE) --no-print-directory help_spi
 
-target_orangepi-5:
-	$(MAKE) CFG=orangepi-5-rk3588s_defconfig BL31=$(RK3588_ATF) ROCKCHIP_TPL=$(RK3568_TPL) BRD=$(@:target_%=%) build
-
-target_orangepi-5-plus:
-	$(MAKE) CFG=orangepi-5-plus-rk3588_defconfig BL31=$(RK3588_ATF) ROCKCHIP_TPL=$(RK3568_TPL) BRD=$(@:target_%=%) build
-
-target_nanopi-r5c:
-	$(MAKE) CFG=nanopi-r5c-rk3568_defconfig BL31=$(RK3568_ATF) ROCKCHIP_TPL=$(RK3568_TPL) BRD=$(@:target_%=%) build
-
-target_nanopi-r5s:
-	$(MAKE) CFG=nanopi-r5s-rk3568_defconfig BL31=$(RK3568_ATF) ROCKCHIP_TPL=$(RK3568_TPL) BRD=$(@:target_%=%) build
-
-target_odroid-m1:
-	$(MAKE) CFG=odroid-m1-rk3568_defconfig BL31=$(RK3568_ATF) ROCKCHIP_TPL=$(RK3568_TPL) BRD=$(@:target_%=%) build
+target_rock-5b: $(RK3588_BL31) $(RK3588_DDR)
+	$(MAKE) CFG=rock5b-rk3588_defconfig BL31=$$(realpath $(RK3588_BL31)) ROCKCHIP_TPL=$$(realpath $(RK3588_DDR)) BRD=$(@:target_%=%) build
 	@$(MAKE) --no-print-directory help_spi
-
-target_radxa-e25:
-	$(MAKE) CFG=radxa-e25-rk3568_defconfig BL31=$(RK3568_ATF) ROCKCHIP_TPL=$(RK3568_TPL) BRD=$(@:target_%=%) build
 
 patch:
 	@git -C u-boot rev-parse $(UBOOT_TAG) >/dev/null
@@ -92,7 +94,40 @@ check_prereqs:
 	    exit 1; \
 	fi
 
+rk_bl31:
+	@bl31_val="$$(curl -s "$(RKBASE)/RKTRUST/RK$${rkmodel}TRUST.ini" | sed -rn 's/PATH=(.*\.elf)/\1/p')"; \
+	bl31_rel="downloads/$$(basename "$$bl31_val")"; \
+	if ! [ -e "$$bl31_rel" ]; then \
+	    mkdir -p 'downloads'; \
+	    wget -P 'downloads' "$(RKBASE)/$$bl31_val"; \
+	fi
+
+rk_ddr:
+	@ddr_val="$$(curl -s "$(RKBASE)/RKBOOT/RK$${rkmodel}MINIALL.ini" | sed -rn 's/FlashData=(.*)/\1/p')"; \
+	ddr_rel="downloads/$$(basename "$$ddr_val")"; \
+	if ! [ -e "$$ddr_rel" ]; then \
+	    mkdir -p 'downloads'; \
+	    wget -P 'downloads' "$(RKBASE)/$$ddr_val"; \
+	fi
+
+$(RK3568_BL31):
+	@$(MAKE) rkmodel=3568 rk_bl31
+
+$(RK3568_DDR):
+	@$(MAKE) rkmodel=3568 rk_ddr
+
+$(RK3588_BL31):
+	@$(MAKE) rkmodel=3588 rk_bl31
+
+$(RK3588_DDR):
+	@$(MAKE) rkmodel=3588 rk_ddr
+
 clean: | $(wildcard u-boot)_clean
+	@rm -rf outbin
+	@echo "\nclean complete\n"
+
+mrproper: | $(wildcard u-boot)_clean
+	@rm -rf downloads
 	@rm -rf outbin
 	@echo "\nclean complete\n"
 
@@ -123,7 +158,7 @@ help_spi:
 	@echo "$(rst)"
 
 
-.PHONY: all configure build $(TARGETS) patch check_prereqs clean _clean u-boot_clean help help_block help_spi
+.PHONY: all configure build $(TARGETS) patch check_prereqs rk_bl31 rk_ddr clean mrproper _clean u-boot_clean help help_block help_spi
 
 
 # colors
