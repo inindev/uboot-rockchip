@@ -1,7 +1,7 @@
 
 # Copyright (C) 2024, John Clark <inindev@gmail.com>
 
-UBOOT_TAG  := v2024.07-rc4
+UBOOT_TAG  := v2024.07
 
 RKBASE := https://raw.githubusercontent.com/rockchip-linux/rkbin/master
 
