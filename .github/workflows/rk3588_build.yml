@@ -1,0 +1,137 @@
+name: Build u-boot for RK3588
+run-name: u-boot ${{ inputs.uboot_ref }} for RK3588
+on:
+  workflow_dispatch:
+    inputs:
+      uboot_ref:
+        description: Enter a u-boot git tag (or branch/commit)
+        required: true
+        default: v2025.04
+        type: string
+      use_arm_tf:
+        description: Use ARM Trusted Firmware for BL31 (if unchecked, uses Rockchip BL31)
+        required: true
+        default: true
+        type: boolean
+
+jobs:
+  build:
+    name: ${{ matrix.board.name }}
+    runs-on: ubuntu-24.04-arm
+    strategy:
+      matrix:
+        board:
+          - name: rk3588-cm3588-nas
+            config: cm3588-nas-rk3588_defconfig
+          - name: rk3588-coolpi-cm5-evb
+            config: coolpi-cm5-evb-rk3588_defconfig
+          - name: rk3588-coolpi-cm5-genbook
+            config: coolpi-cm5-genbook-rk3588_defconfig
+          - name: rk3588-evb
+            config: evb-rk3588_defconfig
+          - name: rk3588-generic
+            config: generic-rk3588_defconfig
+          - name: rk3588-jaguar
+            config: jaguar-rk3588_defconfig
+          - name: rk3588-nanopc-t6
+            config: nanopc-t6-rk3588_defconfig
+          - name: rk3588-neu6a-io
+            config: neu6a-io-rk3588_defconfig
+          - name: rk3588-neu6b-io
+            config: neu6b-io-rk3588_defconfig
+          - name: rk3588-orangepi-5-plus
+            config: orangepi-5-plus-rk3588_defconfig
+          - name: rk3588-quartzpro64
+            config: quartzpro64-rk3588_defconfig
+          - name: rk3588-rock-5-itx
+            config: rock-5-itx-rk3588_defconfig
+          - name: rk3588-rock-5b
+            config: rock5b-rk3588_defconfig
+          - name: rk3588-sige7
+            config: sige7-rk3588_defconfig
+          - name: rk3588-tiger
+            config: tiger-rk3588_defconfig
+          - name: rk3588-toybrick
+            config: toybrick-rk3588_defconfig
+          - name: rk3588-turing-rk1
+            config: turing-rk1-rk3588_defconfig
+          - name: rk3588s-coolpi-4b
+            config: coolpi-4b-rk3588s_defconfig
+          - name: rk3588s-nanopi-r6c
+            config: nanopi-r6c-rk3588s_defconfig
+          - name: rk3588s-nanopi-r6s
+            config: nanopi-r6s-rk3588s_defconfig
+          - name: rk3588s-nova
+            config: nova-rk3588s_defconfig
+          - name: rk3588s-odroid-m2
+            config: odroid-m2-rk3588s_defconfig
+          - name: rk3588s-orangepi-5
+            config: orangepi-5-rk3588s_defconfig
+          - name: rk3588s-rock-5a
+            config: rock5a-rk3588s_defconfig
+      fail-fast: true
+
+    steps:
+      - name: Toolchain
+        run: |
+          sudo apt update
+          sudo apt install gcc python3-pyelftools libgnutls28-dev
+          gcc --version
+
+      - name: Checkout rockchip rkbin
+        uses: actions/checkout@v4
+        with:
+          repository: rockchip-linux/rkbin
+          ref: master
+          path: rkbin
+
+      - name: Checkout ARM Trusted Firmware
+        if: inputs.use_arm_tf
+        uses: actions/checkout@v4
+        with:
+          repository: ARM-software/arm-trusted-firmware
+          ref: master
+          path: arm-trusted-firmware
+
+      - name: Build BL31
+        if: inputs.use_arm_tf
+        run: |
+          cd arm-trusted-firmware
+          make PLAT=rk3588 bl31
+          ls -l build/rk3588/release/bl31/bl31.elf
+
+      - name: Checkout u-boot ${{ inputs.uboot_ref }}
+        uses: actions/checkout@v4
+        with:
+          repository: u-boot/u-boot
+          ref: ${{ inputs.uboot_ref }}
+          path: u-boot
+
+      - name: "Configure and build u-boot config: ${{ matrix.board.config }}"
+        run: |
+          set -e
+          export ROCKCHIP_TPL=../rkbin/$(awk -F'=' '$1 == "[LOADER_OPTION]" {f=1; next} f && $1 == "FlashData" {print $2; exit}' rkbin/RKBOOT/RK3588MINIALL.ini)
+          if [ "${{ inputs.use_arm_tf }}" = "true" ]; then
+            export BL31=../arm-trusted-firmware/build/rk3588/release/bl31/bl31.elf
+          else
+            export BL31=../rkbin/$(awk -F'=' '$1 == "[BL31_OPTION]" {f=1; next} f && $1 == "PATH" {print $2; exit}' rkbin/RKTRUST/RK3588TRUST.ini)
+          fi
+          cd u-boot
+          make mrproper
+          make ${{ matrix.board.config }}
+          make -j$(nproc) KCFLAGS="-Werror"
+          tools/mkimage -l u-boot.itb
+          sha256sum idbloader.img u-boot.itb u-boot-rockchip.bin \
+            $(test -f u-boot-rockchip-spi.bin && echo u-boot-rockchip-spi.bin) > sha256sums.txt 2>/dev/null
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.board.name }}
+          path: |
+            u-boot/idbloader.img
+            u-boot/u-boot.itb
+            u-boot/u-boot-rockchip.bin
+            u-boot/u-boot-rockchip-spi.bin
+            u-boot/sha256sums.txt
+          if-no-files-found: error

@@ -1,0 +1,117 @@
+name: Build u-boot for RK3568
+run-name: u-boot ${{ inputs.uboot_ref }} for RK3568
+on:
+  workflow_dispatch:
+    inputs:
+      uboot_ref:
+        description: Enter a u-boot git tag (or branch/commit)
+        required: true
+        default: v2025.04
+        type: string
+      use_arm_tf:
+        description: Use ARM Trusted Firmware for BL31 (if unchecked, uses Rockchip BL31)
+        required: true
+        default: true
+        type: boolean
+
+jobs:
+  build:
+    name: ${{ matrix.board.name }}
+    runs-on: ubuntu-24.04-arm
+    strategy:
+      matrix:
+        board:
+          - name: rk3568-bpi-r2-pro
+            config: bpi-r2-pro-rk3568_defconfig
+          - name: rk3568-evb
+            config: evb-rk3568_defconfig
+          - name: rk3568-generic
+            config: generic-rk3568_defconfig
+          - name: rk3568-lubancat-2
+            config: lubancat-2-rk3568_defconfig
+          - name: rk3568-nanopi-r5c
+            config: nanopi-r5c-rk3568_defconfig
+          - name: rk3568-nanopi-r5s
+            config: nanopi-r5s-rk3568_defconfig
+          - name: rk3568-odroid-m1
+            config: odroid-m1-rk3568_defconfig
+          - name: rk3568-qnap-ts433
+            config: qnap-ts433-rk3568_defconfig
+          - name: rk3568-radxa-e25
+            config: radxa-e25-rk3568_defconfig
+            baudrate: 115200
+          - name: rk3568-rock-3a
+            config: rock-3a-rk3568_defconfig
+          - name: rk3568-rock-3b
+            config: rock-3b-rk3568_defconfig
+      fail-fast: true
+
+    steps:
+      - name: Toolchain
+        run: |
+          sudo apt update
+          sudo apt install gcc python3-pyelftools libgnutls28-dev
+          gcc --version
+
+      - name: Checkout rockchip rkbin
+        uses: actions/checkout@v4
+        with:
+          repository: rockchip-linux/rkbin
+          ref: master
+          path: rkbin
+
+      - name: Checkout ARM Trusted Firmware
+        if: inputs.use_arm_tf
+        uses: actions/checkout@v4
+        with:
+          repository: ARM-software/arm-trusted-firmware
+          ref: master
+          path: arm-trusted-firmware
+
+      - name: Build BL31
+        if: inputs.use_arm_tf
+        run: |
+          cd arm-trusted-firmware
+          make PLAT=rk3568 bl31
+          ls -l build/rk3568/release/bl31/bl31.elf
+
+      - name: Checkout u-boot ${{ inputs.uboot_ref }}
+        uses: actions/checkout@v4
+        with:
+          repository: u-boot/u-boot
+          ref: ${{ inputs.uboot_ref }}
+          path: u-boot
+
+      - name: "Configure and build u-boot config: ${{ matrix.board.config }}"
+        run: |
+          set -e
+          DDR_BIN=rkbin/$(awk -F'=' '$1 == "[LOADER_OPTION]" {f=1; next} f && $1 == "FlashData" {print $2; exit}' rkbin/RKBOOT/RK3568MINIALL.ini)
+          if test -n "${{ matrix.board.baudrate }}"; then
+            sed -i "s/uart baudrate=.*/uart baudrate=${{ matrix.board.baudrate }}/" rkbin/tools/ddrbin_param.txt
+            python3 rkbin/tools/ddrbin_tool.py rk3568 rkbin/tools/ddrbin_param.txt "$DDR_BIN"
+          fi
+          export ROCKCHIP_TPL=../$DDR_BIN
+          if [ "${{ inputs.use_arm_tf }}" = "true" ]; then
+            export BL31=../arm-trusted-firmware/build/rk3568/release/bl31/bl31.elf
+          else
+            export BL31=../rkbin/$(awk -F'=' '$1 == "[BL31_OPTION]" {f=1; next} f && $1 == "PATH" {print $2; exit}' rkbin/RKTRUST/RK3568TRUST.ini)
+          fi
+          cd u-boot
+          make mrproper
+          make ${{ matrix.board.config }}
+          make -j$(nproc) KCFLAGS="-Werror"
+          tools/mkimage -l u-boot.itb
+          sha256sum idbloader.img u-boot.itb u-boot-rockchip.bin \
+            $(test -f u-boot-rockchip-spi.bin && echo u-boot-rockchip-spi.bin) > sha256sums.txt 2>/dev/null
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.board.name }}
+          path: |
+            u-boot/idbloader.img
+            u-boot/u-boot.itb
+            u-boot/u-boot-rockchip.bin
+            u-boot/u-boot-rockchip-spi.bin
+            u-boot/sha256sums.txt
+          if-no-files-found: error

@@ -1,0 +1,142 @@
+name: Build u-boot for RK3399
+run-name: u-boot ${{ inputs.uboot_ref }} for RK3399
+on:
+  workflow_dispatch:
+    inputs:
+      uboot_ref:
+        description: Enter a u-boot git tag (or branch/commit)
+        required: true
+        default: v2025.04
+        type: string
+      use_arm_tf:
+        description: Use ARM Trusted Firmware for BL31 (if unchecked, uses Rockchip BL31)
+        required: true
+        default: true
+        type: boolean
+
+jobs:
+  build:
+    name: ${{ matrix.board.name }}
+    runs-on: ubuntu-24.04-arm
+    strategy:
+      matrix:
+        board:
+          - name: rk3399-eaidk-610
+            config: eaidk-610-rk3399_defconfig
+          - name: rk3399-evb
+            config: evb-rk3399_defconfig
+          - name: rk3399-ficus
+            config: ficus-rk3399_defconfig
+          - name: rk3399-firefly
+            config: firefly-rk3399_defconfig
+          - name: rk3399-khadas-edge-captain
+            config: khadas-edge-captain-rk3399_defconfig
+          - name: rk3399-khadas-edge
+            config: khadas-edge-rk3399_defconfig
+          - name: rk3399-khadas-edge-v
+            config: khadas-edge-v-rk3399_defconfig
+          - name: rk3399-leez
+            config: leez-rk3399_defconfig
+          - name: rk3399-nanopc-t4
+            config: nanopc-t4-rk3399_defconfig
+          - name: rk3399-nanopi-m4-2gb
+            config: nanopi-m4-2gb-rk3399_defconfig
+          - name: rk3399-nanopi-m4
+            config: nanopi-m4-rk3399_defconfig
+          - name: rk3399-nanopi-m4b
+            config: nanopi-m4b-rk3399_defconfig
+          - name: rk3399-nanopi-neo4
+            config: nanopi-neo4-rk3399_defconfig
+          - name: rk3399-nanopi-r4s
+            config: nanopi-r4s-rk3399_defconfig
+          - name: rk3399-orangepi
+            config: orangepi-rk3399_defconfig
+          - name: rk3399-pinebook-pro
+            config: pinebook-pro-rk3399_defconfig
+          - name: rk3399-pinephone-pro
+            config: pinephone-pro-rk3399_defconfig
+          - name: rk3399-puma
+            config: puma-rk3399_defconfig
+          - name: rk3399-roc-pc-mezzanine
+            config: roc-pc-mezzanine-rk3399_defconfig
+          - name: rk3399-roc-pc
+            config: roc-pc-rk3399_defconfig
+          - name: rk3399-rock-4c-plus
+            config: rock-4c-plus-rk3399_defconfig
+          - name: rk3399-rock-4se
+            config: rock-4se-rk3399_defconfig
+          - name: rk3399-rock-pi-4
+            config: rock-pi-4-rk3399_defconfig
+          - name: rk3399-rock-pi-4c
+            config: rock-pi-4c-rk3399_defconfig
+          - name: rk3399-rock-pi-n10
+            config: rock-pi-n10-rk3399pro_defconfig
+          - name: rk3399-rock960
+            config: rock960-rk3399_defconfig
+          - name: rk3399-rockpro64
+            config: rockpro64-rk3399_defconfig
+      fail-fast: true
+
+    steps:
+      - name: Toolchain
+        run: |
+          sudo apt update
+          sudo apt install gcc python3-pyelftools libgnutls28-dev gcc-arm-none-eabi binutils-arm-none-eabi
+          gcc --version
+
+      - name: Checkout rockchip rkbin
+        uses: actions/checkout@v4
+        with:
+          repository: rockchip-linux/rkbin
+          ref: master
+          path: rkbin
+
+      - name: Checkout ARM Trusted Firmware
+        if: inputs.use_arm_tf
+        uses: actions/checkout@v4
+        with:
+          repository: ARM-software/arm-trusted-firmware
+          ref: master
+          path: arm-trusted-firmware
+
+      - name: Build BL31
+        if: inputs.use_arm_tf
+        run: |
+          cd arm-trusted-firmware
+          make PLAT=rk3399 bl31
+          ls -l build/rk3399/release/bl31/bl31.elf
+
+      - name: Checkout u-boot ${{ inputs.uboot_ref }}
+        uses: actions/checkout@v4
+        with:
+          repository: u-boot/u-boot
+          ref: ${{ inputs.uboot_ref }}
+          path: u-boot
+
+      - name: "Configure and build u-boot config: ${{ matrix.board.config }}"
+        run: |
+          set -e
+          if [ "${{ inputs.use_arm_tf }}" = "true" ]; then
+            export BL31=../arm-trusted-firmware/build/rk3399/release/bl31/bl31.elf
+          else
+            export BL31=../rkbin/$(awk -F'=' '$1 == "[BL31_OPTION]" {f=1; next} f && $1 == "PATH" {print $2; exit}' rkbin/RKTRUST/RK3399TRUST.ini)
+          fi
+          cd u-boot
+          make mrproper
+          make ${{ matrix.board.config }}
+          make -j$(nproc) KCFLAGS="-Werror"
+          tools/mkimage -l u-boot.itb
+          sha256sum idbloader.img u-boot.itb u-boot-rockchip.bin \
+            $(test -f u-boot-rockchip-spi.bin && echo u-boot-rockchip-spi.bin) > sha256sums.txt 2>/dev/null
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.board.name }}
+          path: |
+            u-boot/idbloader.img
+            u-boot/u-boot.itb
+            u-boot/u-boot-rockchip.bin
+            u-boot/u-boot-rockchip-spi.bin
+            u-boot/sha256sums.txt
+          if-no-files-found: error

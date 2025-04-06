@@ -1,0 +1,111 @@
+name: Build u-boot for RK3328
+run-name: u-boot ${{ inputs.uboot_ref }} for RK3328
+on:
+  workflow_dispatch:
+    inputs:
+      uboot_ref:
+        description: Enter a u-boot git tag (or branch/commit)
+        required: true
+        default: v2025.04
+        type: string
+      use_arm_tf:
+        description: Use ARM Trusted Firmware for BL31 (if unchecked, uses Rockchip BL31)
+        required: true
+        default: true
+        type: boolean
+
+jobs:
+  build:
+    name: ${{ matrix.board.name }}
+    runs-on: ubuntu-24.04-arm
+    strategy:
+      matrix:
+        board:
+          - name: rk3328-evb
+            config: evb-rk3328_defconfig
+          - name: rk3328-nanopi-r2c-plus
+            config: nanopi-r2c-plus-rk3328_defconfig
+          - name: rk3328-nanopi-r2c
+            config: nanopi-r2c-rk3328_defconfig
+          - name: rk3328-nanopi-r2s-plus
+            config: nanopi-r2s-plus-rk3328_defconfig
+          - name: rk3328-nanopi-r2s
+            config: nanopi-r2s-rk3328_defconfig
+          - name: rk3328-orangepi-r1-plus-lts
+            config: orangepi-r1-plus-lts-rk3328_defconfig
+          - name: rk3328-orangepi-r1-plus
+            config: orangepi-r1-plus-rk3328_defconfig
+          - name: rk3328-roc-cc
+            config: roc-cc-rk3328_defconfig
+          - name: rk3328-rock-pi-e
+            config: rock-pi-e-rk3328_defconfig
+          - name: rk3328-rock-pi-e-v3
+            config: rock-pi-e-v3-rk3328_defconfig
+          - name: rk3328-rock64
+            config: rock64-rk3328_defconfig
+      fail-fast: true
+
+    steps:
+      - name: Toolchain
+        run: |
+          sudo apt update
+          sudo apt install gcc python3-pyelftools libgnutls28-dev
+          gcc --version
+
+      - name: Checkout rockchip rkbin
+        uses: actions/checkout@v4
+        with:
+          repository: rockchip-linux/rkbin
+          ref: master
+          path: rkbin
+
+      - name: Checkout ARM Trusted Firmware
+        if: inputs.use_arm_tf
+        uses: actions/checkout@v4
+        with:
+          repository: ARM-software/arm-trusted-firmware
+          ref: master
+          path: arm-trusted-firmware
+
+      - name: Build BL31
+        if: inputs.use_arm_tf
+        run: |
+          cd arm-trusted-firmware
+          make PLAT=rk3328 bl31
+          ls -l build/rk3328/release/bl31/bl31.elf
+
+      - name: Checkout u-boot ${{ inputs.uboot_ref }}
+        uses: actions/checkout@v4
+        with:
+          repository: u-boot/u-boot
+          ref: ${{ inputs.uboot_ref }}
+          path: u-boot
+
+      - name: "Configure and build u-boot config: ${{ matrix.board.config }}"
+        run: |
+          set -e
+          export ROCKCHIP_TPL=../rkbin/$(awk -F'=' '$1 == "[LOADER_OPTION]" {f=1; next} f && $1 == "FlashData" {print $2; exit}' rkbin/RKBOOT/RK3328MINIALL.ini)
+          if [ "${{ inputs.use_arm_tf }}" = "true" ]; then
+            export BL31=../arm-trusted-firmware/build/rk3328/release/bl31/bl31.elf
+          else
+            export BL31=../rkbin/$(awk -F'=' '$1 == "[BL31_OPTION]" {f=1; next} f && $1 == "PATH" {print $2; exit}' rkbin/RKTRUST/RK3328TRUST.ini)
+          fi
+          cd u-boot
+          make mrproper
+          make ${{ matrix.board.config }}
+          make -j$(nproc) KCFLAGS="-Werror"
+          tools/mkimage -l u-boot.itb
+          sha256sum idbloader.img u-boot.itb u-boot-rockchip.bin \
+            $(test -f u-boot-rockchip-spi.bin && echo u-boot-rockchip-spi.bin) > sha256sums.txt 2>/dev/null
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.board.name }}
+          path: |
+            u-boot/idbloader.img
+            u-boot/u-boot.itb
+            u-boot/u-boot-rockchip.bin
+            u-boot/u-boot-rockchip-spi.bin
+            u-boot/sha256sums.txt
+          if-no-files-found: error
