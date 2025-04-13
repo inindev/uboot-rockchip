@@ -1,90 +1,132 @@
 
-# Copyright (C) 2024, John Clark <inindev@gmail.com>
+# Copyright (C) 2025, John Clark <inindev@gmail.com>
 
-UBOOT_TAG  := v2024.07
+UBOOT_REF := v2025.04
+RKBIN_REF := master
+ATF_REF := master
 
-RKBASE := https://raw.githubusercontent.com/rockchip-linux/rkbin/master
+# 1 = use atf bl31, 0 = use rockchip bl31
+USE_ARM_TF := 1
 
-RK3568_BL31 := downloads/rk3568_bl31_v*.elf
-RK3568_DDR  := downloads/rk3568_ddr_*.bin
+# directory paths for repositories
+RKBIN_DIR := rkbin
+ATF_DIR := arm-trusted-firmware
+UBOOT_DIR := u-boot
 
-RK3588_BL31 := downloads/rk3588_bl31_v*.elf
-RK3588_DDR  := downloads/rk3588_ddr_lp4_*.bin
+# list of supported boards and their configurations
+BOARDS_RAW = $(shell find u-boot/configs -type f -name '*rk3[5][0-9][0-9]*_defconfig' -exec basename {} \; | \
+	awk '/rk3[3,5][0-9][0-9][0-9]?s?_defconfig/ { \
+	    filename = $$0; \
+	    soc_match = match($$0, /rk3[3,5][0-9][0-9][0-9]?s?/); \
+	    if (soc_match) { \
+	        soc = substr($$0, soc_match, RLENGTH); \
+	        board = $$0; \
+	        sub(/-rk3[3,5][0-9][0-9][0-9]?s?_defconfig/, "", board); \
+	        print soc "-" board ":" filename; \
+	    } \
+	}' | sort)
 
-UBOOT_BRANCH := $(UBOOT_TAG:v%=%)
+# format BOARDS as a space-separated list
+BOARDS = $(strip $(BOARDS_RAW))
 
-TARGETS := target_nanopi-r5c target_nanopi-r5s target_odroid-m1 target_radxa-e25 \
-           target_orangepi-5 target_orangepi-5-plus target_nanopc-t6 target_rock-5b
+# extract board names for validation
+BOARD_NAMES = $(sort $(patsubst %:%,%,$(BOARDS)))
 
+# get the defconfig for the specified board
+BOARD_CONFIG = $(word 2,$(subst :, ,$(filter $(BOARD):%,$(BOARDS))))
 
-all: $(TARGETS)
+# determine platform based on BOARD
+PLAT =	$(strip \
+	$(if $(filter rk356% ,$(BOARD)),rk3568, \
+	$(if $(filter rk3576%,$(BOARD)),rk3576, \
+	$(if $(filter rk3588%,$(BOARD)),rk3588, \
+	$(error Unsupported platform for BOARD '$(BOARD)')))))
+RKBIN_PREFIX = $(shell echo $(PLAT) | sed 's/rk/RK/')
+ROCKCHIP_TPL = $(RKBIN_DIR)/$(shell awk -F'=' '$$1 == "[LOADER_OPTION]" {f=1; next} f && $$1 == "FlashData" {print $$2; exit}' $(RKBIN_DIR)/RKBOOT/$(RKBIN_PREFIX)MINIALL.ini)
 
-configure: u-boot patch
-	@echo "\n$(h1)configuring source tree...$(rst)"
-	@rm -fv "outbin/$(BRD)_idbloader.img" "outbin/$(BRD)_u-boot.itb"
-	$(MAKE) -C u-boot $(CFG)
+# default target
+.PHONY: all
+all: build
 
-build: configure
+# clone repositories
+$(RKBIN_DIR):
+	@echo "\n$(h1)cloning rockchip rkbin...$(rst)"
+	git clone --depth 1 --branch $(RKBIN_REF) https://github.com/rockchip-linux/rkbin.git $(RKBIN_DIR)
+
+$(ATF_DIR):
+ifeq ($(USE_ARM_TF),1)
+	@echo "\n$(h1)cloning arm trusted firmware...$(rst)"
+	git clone --depth 1 --branch $(ATF_REF) https://github.com/ARM-software/arm-trusted-firmware.git $(ATF_DIR)
+endif
+
+$(UBOOT_DIR):
+	@echo "\n$(h1)cloning u-boot...$(rst)"
+	git clone --depth 1 --branch $(UBOOT_REF) https://github.com/u-boot/u-boot.git $(UBOOT_DIR)
+
+# build bl31 with arm trusted firmware
+.PHONY: bl31
+bl31: $(ATF_DIR)
+ifeq ($(USE_ARM_TF),1)
+	@echo "\n$(h1)building arm trusted firmware...$(rst)"
+	$(MAKE) -C $(ATF_DIR) PLAT=$(PLAT) bl31
+	$(eval BL31 := $(ATF_DIR)/build/$(PLAT)/release/bl31/bl31.elf)
+else
+	$(eval BL31 := $(RKBIN_DIR)/$(shell awk -F'=' '$$1 == "[BL31_OPTION]" {f=1; next} f && $$1 == "PATH" {print $$2; exit}' $(RKBIN_DIR)/RKTRUST/$(RKBIN_PREFIX)TRUST.ini))
+endif
+
+# main build target
+.PHONY: build
+build: validate_board check_prereqs $(RKBIN_DIR) $(UBOOT_DIR) bl31
 	@echo "\n$(h1)beginning compile...$(rst)"
-	$(MAKE) -C u-boot -j$$(nproc)
+	$(MAKE) -C $(UBOOT_DIR) mrproper
+	$(MAKE) -C $(UBOOT_DIR) $(BOARD_CONFIG)
+	$(MAKE) -C $(UBOOT_DIR) -j$(shell nproc) KCFLAGS="-Werror" ROCKCHIP_TPL=../$(ROCKCHIP_TPL) BL31=../$(BL31) TEE=
+	@echo "$(grn)"
+	$(UBOOT_DIR)/tools/mkimage -l $(UBOOT_DIR)/u-boot.itb
+	@echo "$(cya)"
+	@rm -rf $(BOARD) && mkdir -p $(BOARD)
+	@cp $(UBOOT_DIR)/idbloader*.img $(UBOOT_DIR)/u-boot.itb $(UBOOT_DIR)/u-boot-rockchip*.bin $(BOARD)/
+	@cd $(BOARD) && sha256sum * | tee sha256sums.txt
+	@cp readme.txt $(BOARD)
+	@zip -r $(BOARD).zip $(BOARD)
+	@rm -rf $(BOARD)
+	@echo "\nbuild complete: $(yel)$(BOARD).zip$(rst)\n"
 
-	@echo "\n$(h1)success, $(BRD) build complete:$(rst)"
-	@echo "$(bld)$(red)"
-	@install -Dvm 644 "u-boot/idbloader.img" "outbin/$(BRD)_idbloader.img";
-	@install -Dvm 644 "u-boot/u-boot.itb" "outbin/$(BRD)_u-boot.itb"
-	@echo "$(rst)"
+# clean repositories
+.PHONY: clean
+clean:
+	[ ! -d $(UBOOT_DIR) ] || $(MAKE) -C $(UBOOT_DIR) mrproper
+	[ ! -d $(ATF_DIR) ] || $(MAKE) -C $(ATF_DIR) clean
+	rm -f $(UBOOT_DIR)/sha256sums.txt
 
-	@$(MAKE) --no-print-directory help_block
+# distclean: remove cloned repositories
+.PHONY: distclean
+distclean:
+	rm -rf $(RKBIN_DIR) $(ATF_DIR) $(UBOOT_DIR)
 
-u-boot: | check_prereqs
-	git clone "https://github.com/u-boot/u-boot.git"
-	git -C u-boot fetch --tags
+# list all BOARD targets
+.PHONY: list
+list:
+	@echo "$(BOARD_NAMES)" | tr ' ' '\n'
 
-target_nanopi-r5c: $(RK3568_BL31) $(RK3568_DDR)
-	$(MAKE) CFG=nanopi-r5c-rk3568_defconfig BL31=$$(realpath $(RK3568_BL31)) ROCKCHIP_TPL=$$(realpath $(RK3568_DDR)) BRD=$(@:target_%=%) build
-
-target_nanopi-r5s: $(RK3568_BL31) $(RK3568_DDR)
-	$(MAKE) CFG=nanopi-r5s-rk3568_defconfig BL31=$$(realpath $(RK3568_BL31)) ROCKCHIP_TPL=$$(realpath $(RK3568_DDR)) BRD=$(@:target_%=%) build
-
-target_odroid-m1: $(RK3568_BL31) $(RK3568_DDR)
-	$(MAKE) CFG=odroid-m1-rk3568_defconfig BL31=$$(realpath $(RK3568_BL31)) ROCKCHIP_TPL=$$(realpath $(RK3568_DDR)) BRD=$(@:target_%=%) build
-	@$(MAKE) --no-print-directory help_spi
-
-target_radxa-e25: $(RK3568_BL31) $(RK3568_DDR)
-	$(MAKE) CFG=radxa-e25-rk3568_defconfig BL31=$$(realpath $(RK3568_BL31)) ROCKCHIP_TPL=$$(realpath $(RK3568_DDR)) BRD=$(@:target_%=%) build
-
-target_orangepi-5: $(RK3588_BL31) $(RK3588_DDR)
-	$(MAKE) CFG=orangepi-5-rk3588s_defconfig BL31=$$(realpath $(RK3588_BL31)) ROCKCHIP_TPL=$$(realpath $(RK3588_DDR)) BRD=$(@:target_%=%) build
-
-target_orangepi-5-plus: $(RK3588_BL31) $(RK3588_DDR)
-	$(MAKE) CFG=orangepi-5-plus-rk3588_defconfig BL31=$$(realpath $(RK3588_BL31)) ROCKCHIP_TPL=$$(realpath $(RK3588_DDR)) BRD=$(@:target_%=%) build
-
-target_nanopc-t6: $(RK3588_BL31) $(RK3588_DDR)
-	$(MAKE) CFG=nanopc-t6-rk3588_defconfig BL31=$$(realpath $(RK3588_BL31)) ROCKCHIP_TPL=$$(realpath $(RK3588_DDR)) BRD=$(@:target_%=%) build
-	@$(MAKE) --no-print-directory help_spi
-
-target_rock-5b: $(RK3588_BL31) $(RK3588_DDR)
-	$(MAKE) CFG=rock5b-rk3588_defconfig BL31=$$(realpath $(RK3588_BL31)) ROCKCHIP_TPL=$$(realpath $(RK3588_DDR)) BRD=$(@:target_%=%) build
-	@$(MAKE) --no-print-directory help_spi
-
-patch:
-	@git -C u-boot rev-parse $(UBOOT_TAG) >/dev/null
-	@if ! git -C u-boot branch | grep -q $(UBOOT_BRANCH); then \
-	    git -C u-boot checkout -b $(UBOOT_BRANCH) $(UBOOT_TAG); \
-	    \
-	    patches="$$(find patches -maxdepth 2 -name '*.patch' 2>/dev/null | sort)"; \
-	    test -z "$$patches" || echo "\n$(h1)patching...$(rst)"; \
-	    for patch in $$patches; do \
-	        echo "\n$(grn)$$patch$(rst)"; \
-	        git -C u-boot am "../$$patch"; \
-	    done; \
-	elif test _$(UBOOT_BRANCH) != _$$(git -C u-boot branch --show-current); then \
-	    git -C u-boot checkout $(UBOOT_BRANCH); \
+# validate BOARD variable
+.PHONY: validate_board
+validate_board:
+	@if [ -z "$(BOARD)" ]; then \
+	    echo "BOARD is not set. Please specify a board, e.g., 'make BOARD=rk3588-nanopc-t6'. Supported boards: $(BOARD_NAMES)"; \
+	    exit 1; \
+	fi
+	@if [ -z "$(BOARD_CONFIG)" ]; then \
+	    echo "Invalid BOARD: '$(BOARD)'"; \
+	    echo "Supported boards: $(BOARD_NAMES)"; \
+	    exit 1; \
 	fi
 
+# check_prereqs: check toolchain
+.PHONY: check_prereqs
 check_prereqs:
 	@todo=""; \
-	for item in screen bc bison flex libssl-dev make python3-dev python3-pyelftools python3-setuptools swig; do \
+	for item in screen bc bison flex libssl-dev libgnutls28-dev make python3-dev python3-pyelftools python3-setuptools swig; do \
 	    dpkg -l "$$item" 2>/dev/null | grep -q "ii  $$item" || todo="$$todo $$item"; \
 	done; \
 	\
@@ -94,80 +136,14 @@ check_prereqs:
 	    exit 1; \
 	fi
 
-rk_bl31:
-	@bl31_val="$$(curl -s "$(RKBASE)/RKTRUST/RK$${rkmodel}TRUST.ini" | sed -rn 's/PATH=(.*\.elf)/\1/p')"; \
-	bl31_rel="downloads/$$(basename "$$bl31_val")"; \
-	if ! [ -e "$$bl31_rel" ]; then \
-	    mkdir -p 'downloads'; \
-	    wget -P 'downloads' "$(RKBASE)/$$bl31_val"; \
-	fi
-
-rk_ddr:
-	@ddr_val="$$(curl -s "$(RKBASE)/RKBOOT/RK$${rkmodel}MINIALL.ini" | sed -rn 's/FlashData=(.*)/\1/p')"; \
-	ddr_rel="downloads/$$(basename "$$ddr_val")"; \
-	if ! [ -e "$$ddr_rel" ]; then \
-	    mkdir -p 'downloads'; \
-	    wget -P 'downloads' "$(RKBASE)/$$ddr_val"; \
-	fi
-
-$(RK3568_BL31):
-	@$(MAKE) rkmodel=3568 rk_bl31
-
-$(RK3568_DDR):
-	@$(MAKE) rkmodel=3568 rk_ddr
-
-$(RK3588_BL31):
-	@$(MAKE) rkmodel=3588 rk_bl31
-
-$(RK3588_DDR):
-	@$(MAKE) rkmodel=3588 rk_ddr
-
-clean: | $(wildcard u-boot)_clean
-	@rm -rf outbin
-	@echo "\nclean complete\n"
-
-mrproper: | $(wildcard u-boot)_clean
-	@rm -rf downloads
-	@rm -rf outbin
-	@echo "\nclean complete\n"
-
-u-boot_clean:
-	@echo "\n$(h1)cleaning...$(rst)"
-	@rm -f 'u-boot/mkimage-in-simple-bin'*
-	@rm -f 'u-boot/simple-bin.fit'*
-	$(MAKE) -C u-boot distclean
-	@git -C u-boot clean -f
-	@git -C u-boot checkout master
-	@-git -C u-boot branch -D $(UBOOT_BRANCH) 2>/dev/null
-	@git -C u-boot pull --ff-only
-
-help: help_block help_spi
-
-help_block:
-	@echo "$(cya)"
-	@echo "copy u-boot to block media (replace sdX)"
-	@echo "  sudo dd bs=4K seek=8 if=idbloader.img of=/dev/sdX conv=notrunc"
-	@echo "  sudo dd bs=4K seek=2048 if=u-boot.itb of=/dev/sdX conv=notrunc,fsync"
-	@echo "$(rst)"
-
-help_spi:
-	@echo "$(blu)"
-	@echo "copy u-boot to spi flash mtd media (apt install mtd-utils)"
-	@echo "  sudo flashcp -Av idbloader.img /dev/mtd0"
-	@echo "  sudo flashcp -Av u-boot.itb /dev/mtd2"
-	@echo "$(rst)"
-
-
-.PHONY: all configure build $(TARGETS) patch check_prereqs rk_bl31 rk_ddr clean mrproper _clean u-boot_clean help help_block help_spi
-
-
 # colors
-rst := [m
-bld := [1m
-red := [31m
-grn := [32m
-yel := [33m
-blu := [34m
-mag := [35m
-cya := [36m
+rst := \033[m
+bld := \033[1m
+red := \033[31m
+grn := \033[32m
+yel := \033[33m
+blu := \033[34m
+mag := \033[35m
+cya := \033[36m
 h1  := $(blu)==>$(rst) $(bld)
+
