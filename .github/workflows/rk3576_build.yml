@@ -21,11 +21,11 @@ jobs:
     strategy:
       matrix:
         board:
-          - name: rk3576-omni3576
+          - name: rk3576-luckfox-omni3576
             config: omni3576-rk3576_defconfig
           - name: rk3576-roc-pc
             config: roc-pc-rk3576_defconfig
-          - name: rk3576-sige5
+          - name: rk3576-armsom-sige5
             config: sige5-rk3576_defconfig
       fail-fast: true
 
