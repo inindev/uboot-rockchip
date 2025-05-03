@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       uboot_ref:
-        description: Enter a kwiboo u-boot git tag (or branch/commit)
+        description: Enter an inindev u-boot git tag (or branch/commit)
         required: true
-        default: rk3576-2025.04-wip
+        default: master
         type: string
       use_arm_tf:
         description: Use ARM Trusted Firmware for BL31 (if unchecked, uses Rockchip BL31)
@@ -21,12 +21,12 @@ jobs:
     strategy:
       matrix:
         board:
-          - name: rk3576-generic
-            config: generic-rk3576_defconfig
-          - name: rk3576-armsom-sige5
-            config: sige5-rk3576_defconfig
+          - name: rk3576-omni3576
+            config: omni3576-rk3576_defconfig
           - name: rk3576-roc-pc
             config: roc-pc-rk3576_defconfig
+          - name: rk3576-sige5
+            config: sige5-rk3576_defconfig
       fail-fast: true
 
     steps:
@@ -36,7 +36,7 @@ jobs:
           sudo apt install gcc python3-pyelftools libgnutls28-dev
           gcc --version
 
-      - name: Checkout Rockchip rkbin
+      - name: Checkout rockchip rkbin
         uses: actions/checkout@v4
         with:
           repository: rockchip-linux/rkbin
@@ -61,7 +61,7 @@ jobs:
       - name: Checkout u-boot ${{ inputs.uboot_ref }}
         uses: actions/checkout@v4
         with:
-          repository: Kwiboo/u-boot-rockchip
+          repository: inindev/u-boot
           ref: ${{ inputs.uboot_ref }}
           path: u-boot
 
