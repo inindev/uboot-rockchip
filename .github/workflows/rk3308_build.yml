@@ -43,6 +43,9 @@ jobs:
           sudo apt install gcc-aarch64-linux-gnu python3-pyelftools libgnutls28-dev
           aarch64-linux-gnu-gcc --version
 
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Checkout rockchip rkbin
         uses: actions/checkout@v4
         with:
@@ -102,16 +105,14 @@ jobs:
           tools/mkimage -l u-boot.itb
           sha256sum idbloader.img u-boot.itb u-boot-rockchip.bin \
             $(test -f u-boot-rockchip-spi.bin && echo u-boot-rockchip-spi.bin) > sha256sums.txt 2>/dev/null
+          mkdir -p ../${{ matrix.board.name }}
+          cp idbloader.img u-boot.itb u-boot-rockchip.bin \
+            $(test -f u-boot-rockchip-spi.bin && echo u-boot-rockchip-spi.bin) sha256sums.txt ../${{ matrix.board.name }}/
+          cp ../../uboot-rockchip/readme.txt ../${{ matrix.board.name }}/
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.board.name }}
-          path: |
-            u-boot/idbloader.img
-            u-boot/u-boot.itb
-            u-boot/u-boot-rockchip.bin
-            u-boot/u-boot-rockchip-spi.bin
-            u-boot/sha256sums.txt
+          path: ${{ matrix.board.name }}/
           if-no-files-found: error
-
