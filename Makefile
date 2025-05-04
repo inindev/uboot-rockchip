@@ -61,7 +61,8 @@ endif
 
 $(UBOOT_DIR):
 	@echo "\n$(h1)cloning u-boot...$(rst)"
-	git clone --depth 1 --branch $(UBOOT_REF) https://github.com/u-boot/u-boot.git $(UBOOT_DIR)
+#	git clone --depth 1 --branch $(UBOOT_REF) https://github.com/u-boot/u-boot.git $(UBOOT_DIR)
+	git clone --depth 1 --branch $(UBOOT_REF) https://github.com/inindev/u-boot.git $(UBOOT_DIR)
 
 # build bl31 with arm trusted firmware
 .PHONY: bl31
@@ -112,13 +113,20 @@ list:
 # validate BOARD variable
 .PHONY: validate_board
 validate_board:
-	@if [ -z "$(BOARD)" ]; then \
-	    echo "BOARD is not set. Please specify a board, e.g., 'make BOARD=rk3588-nanopc-t6'. Supported boards: $(BOARD_NAMES)"; \
+	@print_boards() { \
+	    echo "Supported boards:"; \
+	    for board in $(BOARD_NAMES); do \
+	        echo "  $$board" | cut -d':' -f1; \
+	    done; \
+	}; \
+	if [ -z "$(BOARD)" ]; then \
+	    echo "BOARD is not set. Please specify a board, e.g., 'make BOARD=rk3588-nanopc-t6'."; \
+	    print_boards; \
 	    exit 1; \
-	fi
-	@if [ -z "$(BOARD_CONFIG)" ]; then \
+	fi; \
+	if [ -z "$(BOARD_CONFIG)" ]; then \
 	    echo "Invalid BOARD: '$(BOARD)'"; \
-	    echo "Supported boards: $(BOARD_NAMES)"; \
+	    print_boards; \
 	    exit 1; \
 	fi
 
