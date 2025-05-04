@@ -104,16 +104,18 @@ jobs:
           make ${{ matrix.board.config }}
           make -j$(nproc) KCFLAGS="-Werror"
           tools/mkimage -l u-boot.itb
-          sha256sum idbloader.img u-boot.itb u-boot-rockchip.bin \
-            $(test -f u-boot-rockchip-spi.bin && echo u-boot-rockchip-spi.bin) > sha256sums.txt 2>/dev/null
-          mkdir -p ../${{ matrix.board.name }}
-          cp idbloader.img u-boot.itb u-boot-rockchip.bin \
-            $(test -f u-boot-rockchip-spi.bin && echo u-boot-rockchip-spi.bin) sha256sums.txt ../${{ matrix.board.name }}/
-          cp ../../uboot-rockchip/readme.txt ../${{ matrix.board.name }}/
+          mkdir -p ../output/${{ matrix.board.name }}/base-files
+          cp idbloader*.img u-boot.itb ../output/${{ matrix.board.name }}/base-files/ 2>/dev/null || true
+          cp u-boot-rockchip*.bin ../output/${{ matrix.board.name }}/ 2>/dev/null || true
+          cp ../../uboot-rockchip/readme.txt ../output/${{ matrix.board.name }}/
+          cd ../output/${{ matrix.board.name }}
+          sha256sum u-boot-rockchip*.bin > sha256sums.txt 2>/dev/null || true
+          cd base-files
+          sha256sum idbloader*.img u-boot.itb > sha256sums.txt 2>/dev/null || true
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.board.name }}
-          path: ${{ matrix.board.name }}/
+          path: output/
           if-no-files-found: error
