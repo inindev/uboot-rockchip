@@ -14,17 +14,13 @@ ATF_DIR := arm-trusted-firmware
 UBOOT_DIR := u-boot
 
 # list of supported boards and their configurations
-BOARDS_RAW = $(shell find u-boot/configs -type f -name '*rk3[5][0-9][0-9]*_defconfig' -exec basename {} \; | \
-	awk '/rk3[3,5][0-9][0-9][0-9]?s?_defconfig/ { \
-	    filename = $$0; \
-	    soc_match = match($$0, /rk3[3,5][0-9][0-9][0-9]?s?/); \
-	    if (soc_match) { \
-	        soc = substr($$0, soc_match, RLENGTH); \
-	        board = $$0; \
-	        sub(/-rk3[3,5][0-9][0-9][0-9]?s?_defconfig/, "", board); \
-	        print soc "-" board ":" filename; \
-	    } \
-	}' | sort)
+BOARDS_RAW = $(shell for file in $$(find u-boot/configs -type f -name '*rk3[3,5][0-9][0-9]*_defconfig'); do \
+	    filename=$$(basename $$file); \
+	    dts=$$(grep '^CONFIG_DEFAULT_DEVICE_TREE=' $$file | sed 's/.*="//;s/.*[:\/]//;s/"$$//'); \
+	    if [ -n "$$dts" ]; then \
+	        echo "$$dts:$$filename"; \
+	    fi; \
+	done | sort)
 
 # format BOARDS as a space-separated list
 BOARDS = $(strip $(BOARDS_RAW))
