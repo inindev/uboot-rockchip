@@ -85,12 +85,14 @@ build: validate_board check_prereqs $(RKBIN_DIR) $(UBOOT_DIR) bl31
 	@echo "$(grn)"
 	$(UBOOT_DIR)/tools/mkimage -l $(UBOOT_DIR)/u-boot.itb
 	@echo "$(cya)"
-	@rm -rf $(BOARD) && mkdir -p $(BOARD)
-	@cp $(UBOOT_DIR)/idbloader*.img $(UBOOT_DIR)/u-boot.itb $(UBOOT_DIR)/u-boot-rockchip*.bin $(BOARD)/
-	@cd $(BOARD) && sha256sum * | tee sha256sums.txt
-	@cp readme.txt $(BOARD)
-	@zip -r $(BOARD).zip $(BOARD)
-	@rm -rf $(BOARD)
+	@rm -rf output/$(BOARD) && mkdir -p output/$(BOARD)/base-files
+	@cp $(UBOOT_DIR)/idbloader*.img $(UBOOT_DIR)/u-boot.itb output/$(BOARD)/base-files/ 2>/dev/null || true
+	@cp $(UBOOT_DIR)/u-boot-rockchip*.bin output/$(BOARD)/ 2>/dev/null || true
+	@cp readme.txt output/$(BOARD)/
+	@cd output/$(BOARD) && sha256sum u-boot-rockchip*.bin > sha256sums.txt 2>/dev/null || true
+	@cd output/$(BOARD)/base-files && sha256sum idbloader*.img u-boot.itb > sha256sums.txt 2>/dev/null || true
+	@cd output && zip -r ../$(BOARD).zip $(BOARD)
+	@rm -rf output
 	@echo "\nbuild complete: $(yel)$(BOARD).zip$(rst)\n"
 
 # clean repositories
