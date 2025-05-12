@@ -1,7 +1,8 @@
 
 # Copyright (C) 2025, John Clark <inindev@gmail.com>
 
-UBOOT_REF := v2025.04
+UBOOT_REF := master
+#UBOOT_REF := v2025.04
 RKBIN_REF := master
 ATF_REF := master
 
@@ -13,14 +14,36 @@ RKBIN_DIR := rkbin
 ATF_DIR := arm-trusted-firmware
 UBOOT_DIR := u-boot
 
-# list of supported boards and their configurations
-BOARDS_RAW = $(shell for file in $$(find u-boot/configs -type f -name '*rk3[3,5][0-9][0-9]*_defconfig'); do \
+# default target
+.PHONY: all
+all: build
+
+# clone repositories
+$(RKBIN_DIR):
+	@echo "\n$(h1)cloning rockchip rkbin...$(rst)"
+	git clone --depth 1 --branch $(RKBIN_REF) https://github.com/rockchip-linux/rkbin.git $(RKBIN_DIR)
+#	git clone --depth 1 --branch $(UBOOT_REF) https://github.com/u-boot/u-boot.git $(UBOOT_DIR)
+
+$(ATF_DIR):
+ifeq ($(USE_ARM_TF),1)
+	@echo "\n$(h1)cloning arm trusted firmware...$(rst)"
+	git clone --depth 1 --branch $(ATF_REF) https://github.com/ARM-software/arm-trusted-firmware.git $(ATF_DIR)
+endif
+
+$(UBOOT_DIR):
+	@echo "\n$(h1)cloning u-boot...$(rst)"
+	git clone --depth 1 --branch $(UBOOT_REF) https://github.com/inindev/u-boot.git $(UBOOT_DIR)
+
+# list of supported boards and their configurations (evaluated after u-boot is cloned)
+.PHONY: boards_raw
+boards_raw: $(UBOOT_DIR)
+	$(eval BOARDS_RAW := $(shell for file in $$(find u-boot/configs -type f -name '*rk3[3,5][0-9][0-9]*_defconfig'); do \
 	    filename=$$(basename $$file); \
 	    dts=$$(grep '^CONFIG_DEFAULT_DEVICE_TREE=' $$file | sed 's/.*="//;s/.*[:\/]//;s/"$$//'); \
 	    if [ -n "$$dts" ]; then \
 	        echo "$$dts:$$filename"; \
 	    fi; \
-	done | sort)
+	done | sort))
 
 # format BOARDS as a space-separated list
 BOARDS = $(strip $(BOARDS_RAW))
@@ -40,26 +63,6 @@ PLAT =	$(strip \
 RKBIN_PREFIX = $(shell echo $(PLAT) | sed 's/rk/RK/')
 ROCKCHIP_TPL = $(RKBIN_DIR)/$(shell awk -F'=' '$$1 == "[LOADER_OPTION]" {f=1; next} f && $$1 == "FlashData" {print $$2; exit}' $(RKBIN_DIR)/RKBOOT/$(RKBIN_PREFIX)MINIALL.ini)
 
-# default target
-.PHONY: all
-all: build
-
-# clone repositories
-$(RKBIN_DIR):
-	@echo "\n$(h1)cloning rockchip rkbin...$(rst)"
-	git clone --depth 1 --branch $(RKBIN_REF) https://github.com/rockchip-linux/rkbin.git $(RKBIN_DIR)
-
-$(ATF_DIR):
-ifeq ($(USE_ARM_TF),1)
-	@echo "\n$(h1)cloning arm trusted firmware...$(rst)"
-	git clone --depth 1 --branch $(ATF_REF) https://github.com/ARM-software/arm-trusted-firmware.git $(ATF_DIR)
-endif
-
-$(UBOOT_DIR):
-	@echo "\n$(h1)cloning u-boot...$(rst)"
-#	git clone --depth 1 --branch $(UBOOT_REF) https://github.com/u-boot/u-boot.git $(UBOOT_DIR)
-	git clone --depth 1 --branch $(UBOOT_REF) https://github.com/inindev/u-boot.git $(UBOOT_DIR)
-
 # build bl31 with arm trusted firmware
 .PHONY: bl31
 bl31: $(ATF_DIR)
@@ -73,7 +76,7 @@ endif
 
 # main build target
 .PHONY: build
-build: validate_board check_prereqs $(RKBIN_DIR) $(UBOOT_DIR) bl31
+build: validate_board check_prereqs boards_raw $(RKBIN_DIR) $(UBOOT_DIR) bl31
 	@echo "\n$(h1)beginning compile...$(rst)"
 	$(MAKE) -C $(UBOOT_DIR) mrproper
 	$(MAKE) -C $(UBOOT_DIR) $(BOARD_CONFIG)
@@ -105,12 +108,12 @@ distclean:
 
 # list all BOARD targets
 .PHONY: list
-list:
+list: boards_raw
 	@echo "$(BOARD_NAMES)" | tr ' ' '\n'
 
 # validate BOARD variable
 .PHONY: validate_board
-validate_board:
+validate_board: boards_raw
 	@print_boards() { \
 	    echo "Supported boards:"; \
 	    for board in $(BOARD_NAMES); do \
@@ -120,11 +123,13 @@ validate_board:
 	if [ -z "$(BOARD)" ]; then \
 	    echo "BOARD is not set. Please specify a board, e.g., 'make BOARD=rk3588-nanopc-t6'."; \
 	    print_boards; \
+	    echo "BOARD is not set. Please specify a board, e.g., 'make BOARD=rk3588-nanopc-t6'."; \
 	    exit 1; \
 	fi; \
 	if [ -z "$(BOARD_CONFIG)" ]; then \
 	    echo "Invalid BOARD: '$(BOARD)'"; \
 	    print_boards; \
+	    echo "Invalid BOARD: '$(BOARD)'"; \
 	    exit 1; \
 	fi
 
@@ -152,4 +157,3 @@ blu := \033[34m
 mag := \033[35m
 cya := \033[36m
 h1  := $(blu)==>$(rst) $(bld)
-
