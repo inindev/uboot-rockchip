@@ -1,16 +1,15 @@
 
 # Copyright (C) 2025, John Clark <inindev@gmail.com>
 
-UBOOT_REF := master
-#UBOOT_REF := v2025.04
 RKBIN_REF := master
 ATF_REF := master
+UBOOT_REF := v2025.07-rc2
 
 # 1 = use atf bl31, 0 = use rockchip bl31
 USE_ARM_TF := 1
 
 # directory paths for repositories
-RKBIN_DIR := rkbin
+RKBIN_DIR := rockchip-rkbin
 ATF_DIR := arm-trusted-firmware
 UBOOT_DIR := u-boot
 
@@ -22,7 +21,6 @@ all: build
 $(RKBIN_DIR):
 	@echo "\n$(h1)cloning rockchip rkbin...$(rst)"
 	git clone --depth 1 --branch $(RKBIN_REF) https://github.com/rockchip-linux/rkbin.git $(RKBIN_DIR)
-#	git clone --depth 1 --branch $(UBOOT_REF) https://github.com/u-boot/u-boot.git $(UBOOT_DIR)
 
 $(ATF_DIR):
 ifeq ($(USE_ARM_TF),1)
@@ -32,7 +30,17 @@ endif
 
 $(UBOOT_DIR):
 	@echo "\n$(h1)cloning u-boot...$(rst)"
-	git clone --depth 1 --branch $(UBOOT_REF) https://github.com/inindev/u-boot.git $(UBOOT_DIR)
+	git clone --no-checkout https://github.com/u-boot/u-boot.git $(UBOOT_DIR)
+	cd $(UBOOT_DIR) && git fetch --depth 1 origin refs/tags/$(UBOOT_REF):refs/tags/$(UBOOT_REF) && git checkout $(UBOOT_REF) 2>/dev/null && git checkout -b $(UBOOT_REF:v%=%)
+	@patches="$$(find patches -maxdepth 2 -name '*.patch' 2>/dev/null | sort)"; \
+	if [ -n "$$patches" ]; then \
+	    echo "\n$(h1)applying patches...$(rst)"; \
+	    cd $(UBOOT_DIR) && for patch in $$patches; do \
+	        echo "Applying $$patch"; \
+	        git am ../$$patch || { echo "failed to apply: $(yel)$$patch$(rst)"; exit 1; }; \
+	    done; \
+	    echo; \
+	fi
 
 # list of supported boards and their configurations (evaluated after u-boot is cloned)
 .PHONY: boards_raw
@@ -121,15 +129,15 @@ validate_board: boards_raw
 	    done; \
 	}; \
 	if [ -z "$(BOARD)" ]; then \
-	    echo "BOARD is not set. Please specify a board, e.g., 'make BOARD=rk3588-nanopc-t6'."; \
+	    echo "$(yel)BOARD is not set. Please specify a board, e.g., $(grn)'make BOARD=rk3588-nanopc-t6'$(rst)"; \
 	    print_boards; \
-	    echo "BOARD is not set. Please specify a board, e.g., 'make BOARD=rk3588-nanopc-t6'."; \
+	    echo "$(yel)BOARD is not set. Please specify a board, e.g., $(grn)'make BOARD=rk3588-nanopc-t6'$(rst)"; \
 	    exit 1; \
 	fi; \
 	if [ -z "$(BOARD_CONFIG)" ]; then \
-	    echo "Invalid BOARD: '$(BOARD)'"; \
+	    echo "$(yel)Invalid BOARD: '$(BOARD)'$(rst)"; \
 	    print_boards; \
-	    echo "Invalid BOARD: '$(BOARD)'"; \
+	    echo "$(yel)Invalid BOARD: '$(BOARD)'$(rst)"; \
 	    exit 1; \
 	fi
 
