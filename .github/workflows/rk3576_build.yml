@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       uboot_ref:
-        description: Enter an inindev u-boot git tag (or branch/commit)
+        description: Enter a u-boot git tag (or branch/commit)
         required: true
-        default: master
+        default: v2025.07-rc2
         type: string
       use_arm_tf:
         description: Use ARM Trusted Firmware for BL31 (if unchecked, uses Rockchip BL31)
@@ -64,9 +64,30 @@ jobs:
       - name: Checkout u-boot ${{ inputs.uboot_ref }}
         uses: actions/checkout@v4
         with:
-          repository: inindev/u-boot
+          repository: u-boot/u-boot
           ref: ${{ inputs.uboot_ref }}
           path: u-boot
+          fetch-depth: 1
+
+      - name: Checkout inindev uboot-rockchip patches
+        uses: actions/checkout@v4
+        with:
+          repository: inindev/uboot-rockchip
+          ref: main
+          path: uboot-rockchip
+
+      - name: Apply patches
+        run: |
+          cd u-boot
+          patches=$(find ../uboot-rockchip/patches -maxdepth 2 -name '*.patch' | sort)
+          if [ -n "$patches" ]; then
+            git config user.name "GitHub Actions"
+            git config user.email "actions@github.com"
+            for patch in $patches; do
+              echo "Applying $patch"
+              git am "$patch" || { echo "Failed to apply: $patch"; exit 1; }
+            done
+          fi
 
       - name: "Configure and build u-boot config: ${{ matrix.board.config }}"
         run: |
