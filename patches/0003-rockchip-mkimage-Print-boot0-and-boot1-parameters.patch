@@ -1,7 +1,7 @@
-From f43de6ee5c958763c9493c5bfee0e5f5257929b4 Mon Sep 17 00:00:00 2001
+From 64c82848e0392ff40726ebd3549d990de76d6042 Mon Sep 17 00:00:00 2001
 From: Jonas Karlman <jonas@kwiboo.se>
 Date: Wed, 29 Jan 2025 22:36:29 +0000
-Subject: [PATCH 03/11] rockchip: mkimage: Print boot0 and boot1 parameters
+Subject: [PATCH 03/12] rockchip: mkimage: Print boot0 and boot1 parameters
 
 The v2 image format embeds boot0 and boot1 parameters, the vendor tool
 boot_merger may write these parameters based on the rkboot miniall.ini

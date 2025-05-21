@@ -1,7 +1,7 @@
-From 789157b8a14bcd5a3a8096d531249d82f5422975 Mon Sep 17 00:00:00 2001
+From fab43fd0b92ac4db02f0a38acd4a0708c7060a66 Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Fri, 2 May 2025 20:53:53 -0400
-Subject: [PATCH 09/11] rockchip: rk3576: Add support for ArmSoM Sige5 with
+Subject: [PATCH 10/12] rockchip: rk3576: Add support for ArmSoM Sige5 with
  Rockchip RK3576
 
 Add support for the ArmSoM Sige5 carrier board, powered by the 8nm
@@ -16,10 +16,10 @@ Signed-off-by: John Clark <inindev@gmail.com>
  arch/arm/mach-rockchip/rk3576/Kconfig        |  8 +++
  board/armsom/sige5-rk3576/Kconfig            | 12 ++++
  board/armsom/sige5-rk3576/MAINTAINERS        |  7 +++
- configs/sige5-rk3576_defconfig               | 62 ++++++++++++++++++++
+ configs/sige5-rk3576_defconfig               | 61 ++++++++++++++++++++
  doc/board/rockchip/rockchip.rst              |  1 +
  include/configs/sige5-rk3576.h               | 15 +++++
- 7 files changed, 123 insertions(+)
+ 7 files changed, 122 insertions(+)
  create mode 100644 arch/arm/dts/rk3576-armsom-sige5-u-boot.dtsi
  create mode 100644 board/armsom/sige5-rk3576/Kconfig
  create mode 100644 board/armsom/sige5-rk3576/MAINTAINERS
@@ -51,13 +51,13 @@ index 00000000000..30df20aef3e
 +	cap-mmc-highspeed;
 +};
 diff --git a/arch/arm/mach-rockchip/rk3576/Kconfig b/arch/arm/mach-rockchip/rk3576/Kconfig
-index e9e59c4d6b5..0d177084c93 100644
+index e9e59c4d6b5..6ca50bea15f 100644
 --- a/arch/arm/mach-rockchip/rk3576/Kconfig
 +++ b/arch/arm/mach-rockchip/rk3576/Kconfig
 @@ -1,5 +1,13 @@
  if ROCKCHIP_RK3576
  
-+config TARGET_ARMSOM_SIGE5
++config TARGET_SIGE5_RK3576
 +	bool "ArmSoM Sige5 with Rockchip RK3576"
 +	help
 +	  Enable support for the ArmSoM Sige5, powered by the 8nm Rockchip RK3576
@@ -101,10 +101,10 @@ index 00000000000..4c872f9083e
 +F:	arch/arm/dts/rk3576-armsom-sige5*
 diff --git a/configs/sige5-rk3576_defconfig b/configs/sige5-rk3576_defconfig
 new file mode 100644
-index 00000000000..abe00bc90f3
+index 00000000000..156760dda76
 --- /dev/null
 +++ b/configs/sige5-rk3576_defconfig
-@@ -0,0 +1,62 @@
+@@ -0,0 +1,61 @@
 +CONFIG_ARM=y
 +CONFIG_SKIP_LOWLEVEL_INIT=y
 +CONFIG_COUNTER_FREQUENCY=24000000
@@ -121,7 +121,6 @@ index 00000000000..abe00bc90f3
 +# CONFIG_DISPLAY_CPUINFO is not set
 +CONFIG_DISPLAY_BOARDINFO_LATE=y
 +CONFIG_SPL_MAX_SIZE=0x40000
-+CONFIG_SPL_PAD_TO=0x7f8000
 +# CONFIG_SPL_RAW_IMAGE_SUPPORT is not set
 +CONFIG_CMD_GPIO=y
 +CONFIG_CMD_GPT=y

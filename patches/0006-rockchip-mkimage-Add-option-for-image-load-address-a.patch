@@ -1,7 +1,7 @@
-From 15d13db02e37fae22117256e44a74a441d5806f5 Mon Sep 17 00:00:00 2001
+From 4a83b134c7ac3e37e1054f57d864c1f5e87b66b0 Mon Sep 17 00:00:00 2001
 From: Jonas Karlman <jonas@kwiboo.se>
 Date: Wed, 29 Jan 2025 22:36:32 +0000
-Subject: [PATCH 06/11] rockchip: mkimage: Add option for image load address
+Subject: [PATCH 06/12] rockchip: mkimage: Add option for image load address
  and flag
 
 The v2 image format supports defining a load address and flag for each

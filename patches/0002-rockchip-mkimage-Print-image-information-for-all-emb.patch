@@ -1,7 +1,7 @@
-From 282431cf1fe8339eea76c5ffacd355b702a1c436 Mon Sep 17 00:00:00 2001
+From 05ff8648d7941a84c7378059cc72ed72cb997338 Mon Sep 17 00:00:00 2001
 From: Jonas Karlman <jonas@kwiboo.se>
 Date: Wed, 29 Jan 2025 22:36:28 +0000
-Subject: [PATCH 02/11] rockchip: mkimage: Print image information for all
+Subject: [PATCH 02/12] rockchip: mkimage: Print image information for all
  embedded images
 
 The v2 image format can embed up to 4 data files compared to the two

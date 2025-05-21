@@ -1,7 +1,7 @@
-From 87f511dd234716753fe5de9aa7e5ad2a6200ebd4 Mon Sep 17 00:00:00 2001
+From 2b0f7db3f81f8081976e7484450a13098c984b57 Mon Sep 17 00:00:00 2001
 From: Jonas Karlman <jonas@kwiboo.se>
 Date: Wed, 29 Jan 2025 22:36:30 +0000
-Subject: [PATCH 04/11] rockchip: mkimage: Add option to change image offset
+Subject: [PATCH 04/12] rockchip: mkimage: Add option to change image offset
  alignment
 
 The vendor boot_merger tool support a ALIGN parameter that is used to

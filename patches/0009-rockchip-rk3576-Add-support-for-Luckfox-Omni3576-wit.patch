@@ -1,7 +1,7 @@
-From 1f2d36cc811df727ad9adcf2f1a8c77854275a4c Mon Sep 17 00:00:00 2001
+From f2cab4270a263b83852736a5d22c068a70bd2672 Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Fri, 2 May 2025 08:19:27 -0400
-Subject: [PATCH 08/11] rockchip: rk3576: Add support for Luckfox Omni3576 with
+Subject: [PATCH 09/12] rockchip: rk3576: Add support for Luckfox Omni3576 with
  Core3576 module
 
 Add support for the Luckfox Omni3576 carrier board, paired with the
@@ -15,10 +15,10 @@ Signed-off-by: John Clark <inindev@gmail.com>
  arch/arm/mach-rockchip/rk3576/Kconfig         |  9 +++
  board/luckfox/omni3576-rk3576/Kconfig         | 12 ++++
  board/luckfox/omni3576-rk3576/MAINTAINERS     |  8 +++
- configs/omni3576-rk3576_defconfig             | 62 +++++++++++++++++++
+ configs/omni3576-rk3576_defconfig             | 61 +++++++++++++++++++
  doc/board/rockchip/rockchip.rst               |  1 +
  include/configs/omni3576-rk3576.h             | 15 +++++
- 7 files changed, 125 insertions(+)
+ 7 files changed, 124 insertions(+)
  create mode 100644 arch/arm/dts/rk3576-luckfox-omni3576-u-boot.dtsi
  create mode 100644 board/luckfox/omni3576-rk3576/Kconfig
  create mode 100644 board/luckfox/omni3576-rk3576/MAINTAINERS
@@ -109,10 +109,10 @@ index 00000000000..4ebe2aecabe
 +F:	arch/arm/dts/rk3576-luckfox-omni3576*
 diff --git a/configs/omni3576-rk3576_defconfig b/configs/omni3576-rk3576_defconfig
 new file mode 100644
-index 00000000000..8086e79b709
+index 00000000000..15aeaae9c71
 --- /dev/null
 +++ b/configs/omni3576-rk3576_defconfig
-@@ -0,0 +1,62 @@
+@@ -0,0 +1,61 @@
 +CONFIG_ARM=y
 +CONFIG_SKIP_LOWLEVEL_INIT=y
 +CONFIG_COUNTER_FREQUENCY=24000000
@@ -129,7 +129,6 @@ index 00000000000..8086e79b709
 +# CONFIG_DISPLAY_CPUINFO is not set
 +CONFIG_DISPLAY_BOARDINFO_LATE=y
 +CONFIG_SPL_MAX_SIZE=0x40000
-+CONFIG_SPL_PAD_TO=0x7f8000
 +# CONFIG_SPL_RAW_IMAGE_SUPPORT is not set
 +CONFIG_CMD_GPIO=y
 +CONFIG_CMD_GPT=y

@@ -1,7 +1,7 @@
-From 34ebe443604f3d007674c865b6e5e8a0d7049384 Mon Sep 17 00:00:00 2001
+From dd7f2223dc8c275f7e85163888cf9b6cfd0803c2 Mon Sep 17 00:00:00 2001
 From: Jonas Karlman <jonas@kwiboo.se>
 Date: Wed, 29 Jan 2025 22:36:27 +0000
-Subject: [PATCH 01/11] rockchip: mkimage: Split size_and_off and
+Subject: [PATCH 01/12] rockchip: mkimage: Split size_and_off and
  size_and_nimage
 
 Split 32-bit size_and_off and size_and_nimage fields of the v2 image

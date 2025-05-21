@@ -1,7 +1,7 @@
-From b533449a396439575c67b80ea3f5d4fa73450c02 Mon Sep 17 00:00:00 2001
+From 978e0030b5e37f7ca7c15df594dfbac3a90b6ee3 Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Mon, 19 May 2025 18:43:01 -0400
-Subject: [PATCH 11/11] sync device tree bindings with linux 6.15-rc7
+Subject: [PATCH 12/12] sync device tree bindings with linux 6.15-rc7
 
 Signed-off-by: John Clark <inindev@gmail.com>
 ---
