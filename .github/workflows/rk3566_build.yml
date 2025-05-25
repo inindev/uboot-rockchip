@@ -1,5 +1,7 @@
 name: Build u-boot for RK3566
 run-name: u-boot ${{ inputs.uboot_ref }} for RK3566
+permissions:
+  contents: write
 on:
   workflow_dispatch:
     inputs:
@@ -17,6 +19,11 @@ on:
         description: Enter u-boot commit(s) to cherry-pick (optional, comma-separated)
         required: false
         type: string
+      upload_release:
+        description: Upload artifacts to GitHub Release
+        required: true
+        default: false
+        type: boolean
 
 jobs:
   build:
@@ -124,6 +131,8 @@ jobs:
           sha256sum u-boot-rockchip*.bin > sha256sums.txt 2>/dev/null || true
           cd base-files
           sha256sum idbloader*.img u-boot.itb > sha256sums.txt 2>/dev/null || true
+          cd ../..
+          zip -r ${{ matrix.board.name }}.zip ${{ matrix.board.name }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -131,3 +140,16 @@ jobs:
           name: ${{ matrix.board.name }}
           path: output/
           if-no-files-found: error
+
+      - name: Upload Release Artifacts
+        if: inputs.upload_release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.uboot_ref }}
+          name: u-boot arm64 ${{ inputs.uboot_ref }}
+          draft: true
+          prerelease: ${{ contains(inputs.uboot_ref, '-rc') }}
+          files: output/${{ matrix.board.name }}.zip
+          fail_on_unmatched_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
