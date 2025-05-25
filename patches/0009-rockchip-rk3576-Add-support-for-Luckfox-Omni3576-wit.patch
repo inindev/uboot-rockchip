@@ -1,4 +1,4 @@
-From f2cab4270a263b83852736a5d22c068a70bd2672 Mon Sep 17 00:00:00 2001
+From 84a5d957be3c795b71986b6a108226f148342c96 Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Fri, 2 May 2025 08:19:27 -0400
 Subject: [PATCH 09/12] rockchip: rk3576: Add support for Luckfox Omni3576 with

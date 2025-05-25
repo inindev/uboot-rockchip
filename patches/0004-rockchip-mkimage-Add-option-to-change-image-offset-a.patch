@@ -1,4 +1,4 @@
-From 2b0f7db3f81f8081976e7484450a13098c984b57 Mon Sep 17 00:00:00 2001
+From c797eb7581c141bd0df474f664cae052f25dc7cb Mon Sep 17 00:00:00 2001
 From: Jonas Karlman <jonas@kwiboo.se>
 Date: Wed, 29 Jan 2025 22:36:30 +0000
 Subject: [PATCH 04/12] rockchip: mkimage: Add option to change image offset

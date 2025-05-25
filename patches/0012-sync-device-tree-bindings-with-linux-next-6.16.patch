@@ -1,10 +1,11 @@
-From 978e0030b5e37f7ca7c15df594dfbac3a90b6ee3 Mon Sep 17 00:00:00 2001
+From 1dc7cf0a69c8decb035a718241b345d6bed74c3c Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
-Date: Mon, 19 May 2025 18:43:01 -0400
-Subject: [PATCH 12/12] sync device tree bindings with linux 6.15-rc7
+Date: Sun, 25 May 2025 12:35:02 -0400
+Subject: [PATCH 12/12] sync device tree bindings with linux next / 6.16
 
 Signed-off-by: John Clark <inindev@gmail.com>
 ---
+ .../include/dt-bindings/arm/qcom,ids.h        |   1 +
  .../dt-bindings/clock/mediatek,mt8188-clk.h   |   2 +-
  .../dt-bindings/clock/mediatek,mtmips-sysc.h  | 130 ++++++
  .../dt-bindings/clock/qcom,dsi-phy-28nm.h     |   9 +
@@ -12,53 +13,93 @@ Signed-off-by: John Clark <inindev@gmail.com>
  .../dt-bindings/clock/qcom,ipq9574-gcc.h      |   1 +
  .../dt-bindings/clock/qcom,ipq9574-nsscc.h    | 152 ++++++
  .../include/dt-bindings/clock/qcom,rpmcc.h    |   4 +
+ .../dt-bindings/clock/qcom,sm6350-videocc.h   |  27 ++
+ .../dt-bindings/clock/renesas,r9a09g047-cpg.h |   3 +
+ .../dt-bindings/clock/renesas,r9a09g056-cpg.h |  24 +
+ .../dt-bindings/clock/renesas,r9a09g057-cpg.h |   4 +
+ .../include/dt-bindings/clock/rk3036-cru.h    |   1 +
  .../dt-bindings/clock/rk3188-cru-common.h     |   2 +
+ .../dt-bindings/clock/rockchip,rk3528-cru.h   |   6 +
  .../dt-bindings/clock/rockchip,rk3562-cru.h   | 379 +++++++++++++++
  .../dt-bindings/clock/rockchip,rk3576-cru.h   |  15 +
  .../clock/samsung,exynos2200-cmu.h            | 431 ++++++++++++++++++
  .../clock/samsung,exynos7870-cmu.h            | 324 +++++++++++++
  .../dt-bindings/clock/samsung,exynos990.h     |  21 +
+ .../clock/samsung,exynosautov920.h            |  51 +++
+ .../dt-bindings/clock/spacemit,k1-syscon.h    | 247 ++++++++++
+ .../include/dt-bindings/clock/stm32h7-clks.h  |   4 +-
  .../dt-bindings/clock/sun50i-h616-ccu.h       |   4 +
  .../dt-bindings/clock/sun55i-a523-ccu.h       | 189 ++++++++
  .../dt-bindings/clock/sun55i-a523-r-ccu.h     |  37 ++
+ .../dt-bindings/clock/thead,th1520-clk-ap.h   |  34 ++
  .../dt-bindings/clock/xlnx-zynqmp-clk.h       |   7 +
  .../include/dt-bindings/iio/adc/adi,ad4695.h  |   7 +
+ .../include/dt-bindings/iio/adc/adi,ad7606.h  |   9 +
+ .../dt-bindings/input/linux-event-codes.h     |   3 +-
+ .../interconnect/qcom,sm8650-rpmh.h           |   1 +
+ .../memory/mediatek,mt6893-memory-port.h      | 288 ++++++++++++
  .../dt-bindings/pinctrl/amlogic,pinctrl.h     |  46 ++
  .../dt-bindings/pinctrl/pinctrl-sg2042.h      | 196 ++++++++
  .../dt-bindings/pinctrl/pinctrl-sg2044.h      | 221 +++++++++
  .../power/allwinner,sun8i-v853-ppu.h          |  10 +
+ .../dt-bindings/power/mediatek,mt6893-power.h |  35 ++
  .../include/dt-bindings/power/qcom-rpmpd.h    |   2 +-
+ .../dt-bindings/power/rockchip,rk3562-power.h |  35 ++
  .../dt-bindings/power/thead,th1520-power.h    |  19 +
  .../dt-bindings/reset/imx8mp-reset-audiomix.h |  13 +
  .../dt-bindings/reset/qcom,ipq9574-nsscc.h    | 134 ++++++
  .../dt-bindings/reset/rockchip,rk3562-cru.h   | 358 +++++++++++++++
  .../dt-bindings/reset/rockchip,rk3588-cru.h   |  41 +-
- .../dt-bindings/reset/sun50i-h616-ccu.h       |   2 +
+ .../dt-bindings/reset/sun50i-h616-ccu.h       |   3 +
  .../dt-bindings/reset/sun55i-a523-ccu.h       |  88 ++++
  .../dt-bindings/reset/sun55i-a523-r-ccu.h     |  25 +
+ .../dt-bindings/reset/thead,th1520-reset.h    |  16 +
  .../dt-bindings/soc/samsung,exynos-usi.h      |  17 +-
+ .../include/dt-bindings/sound/cs48l32.h       |  20 +
+ .../sound/qcom,q6dsp-lpass-ports.h            |   1 +
  .../include/dt-bindings/sound/qcom,wcd934x.h  |  16 +
- 33 files changed, 2897 insertions(+), 7 deletions(-)
+ 53 files changed, 3705 insertions(+), 10 deletions(-)
  create mode 100644 dts/upstream/include/dt-bindings/clock/mediatek,mtmips-sysc.h
  create mode 100644 dts/upstream/include/dt-bindings/clock/qcom,dsi-phy-28nm.h
  create mode 100644 dts/upstream/include/dt-bindings/clock/qcom,ipq9574-nsscc.h
+ create mode 100644 dts/upstream/include/dt-bindings/clock/qcom,sm6350-videocc.h
+ create mode 100644 dts/upstream/include/dt-bindings/clock/renesas,r9a09g056-cpg.h
  create mode 100644 dts/upstream/include/dt-bindings/clock/rockchip,rk3562-cru.h
  create mode 100644 dts/upstream/include/dt-bindings/clock/samsung,exynos2200-cmu.h
  create mode 100644 dts/upstream/include/dt-bindings/clock/samsung,exynos7870-cmu.h
+ create mode 100644 dts/upstream/include/dt-bindings/clock/spacemit,k1-syscon.h
  create mode 100644 dts/upstream/include/dt-bindings/clock/sun55i-a523-ccu.h
  create mode 100644 dts/upstream/include/dt-bindings/clock/sun55i-a523-r-ccu.h
+ create mode 100644 dts/upstream/include/dt-bindings/iio/adc/adi,ad7606.h
+ create mode 100644 dts/upstream/include/dt-bindings/memory/mediatek,mt6893-memory-port.h
  create mode 100644 dts/upstream/include/dt-bindings/pinctrl/amlogic,pinctrl.h
  create mode 100644 dts/upstream/include/dt-bindings/pinctrl/pinctrl-sg2042.h
  create mode 100644 dts/upstream/include/dt-bindings/pinctrl/pinctrl-sg2044.h
  create mode 100644 dts/upstream/include/dt-bindings/power/allwinner,sun8i-v853-ppu.h
+ create mode 100644 dts/upstream/include/dt-bindings/power/mediatek,mt6893-power.h
+ create mode 100644 dts/upstream/include/dt-bindings/power/rockchip,rk3562-power.h
  create mode 100644 dts/upstream/include/dt-bindings/power/thead,th1520-power.h
  create mode 100644 dts/upstream/include/dt-bindings/reset/imx8mp-reset-audiomix.h
  create mode 100644 dts/upstream/include/dt-bindings/reset/qcom,ipq9574-nsscc.h
  create mode 100644 dts/upstream/include/dt-bindings/reset/rockchip,rk3562-cru.h
  create mode 100644 dts/upstream/include/dt-bindings/reset/sun55i-a523-ccu.h
  create mode 100644 dts/upstream/include/dt-bindings/reset/sun55i-a523-r-ccu.h
+ create mode 100644 dts/upstream/include/dt-bindings/reset/thead,th1520-reset.h
+ create mode 100644 dts/upstream/include/dt-bindings/sound/cs48l32.h
  create mode 100644 dts/upstream/include/dt-bindings/sound/qcom,wcd934x.h
 
+diff --git a/dts/upstream/include/dt-bindings/arm/qcom,ids.h b/dts/upstream/include/dt-bindings/arm/qcom,ids.h
+index 1b3e0176dcb..897b8135dc1 100644
+--- a/dts/upstream/include/dt-bindings/arm/qcom,ids.h
++++ b/dts/upstream/include/dt-bindings/arm/qcom,ids.h
+@@ -277,6 +277,7 @@
+ #define QCOM_ID_IPQ5302			595
+ #define QCOM_ID_QCS8550			603
+ #define QCOM_ID_QCM8550			604
++#define QCOM_ID_SM8750			618
+ #define QCOM_ID_IPQ5300			624
+ #define QCOM_ID_IPQ5321			650
+ #define QCOM_ID_IPQ5424			651
 diff --git a/dts/upstream/include/dt-bindings/clock/mediatek,mt8188-clk.h b/dts/upstream/include/dt-bindings/clock/mediatek,mt8188-clk.h
 index bd5cd100b79..0e87f61c90f 100644
 --- a/dts/upstream/include/dt-bindings/clock/mediatek,mt8188-clk.h
@@ -416,6 +457,108 @@ index 46309c9953b..1477a75e7f6 100644
 +#define RPM_SMD_BB_CLK3_A_PIN			130
  
  #endif
+diff --git a/dts/upstream/include/dt-bindings/clock/qcom,sm6350-videocc.h b/dts/upstream/include/dt-bindings/clock/qcom,sm6350-videocc.h
+new file mode 100644
+index 00000000000..2af7f91fa02
+--- /dev/null
++++ b/dts/upstream/include/dt-bindings/clock/qcom,sm6350-videocc.h
+@@ -0,0 +1,27 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++/*
++ * Copyright (c) 2021, The Linux Foundation. All rights reserved.
++ * Copyright (c) 2021, Konrad Dybcio <konrad.dybcio@somainline.org>
++ */
++
++#ifndef _DT_BINDINGS_CLK_QCOM_VIDEO_CC_SM6350_H
++#define _DT_BINDINGS_CLK_QCOM_VIDEO_CC_SM6350_H
++
++/* VIDEO_CC clocks */
++#define VIDEO_PLL0			0
++#define VIDEO_PLL0_OUT_EVEN             1
++#define VIDEO_CC_IRIS_AHB_CLK		2
++#define VIDEO_CC_IRIS_CLK_SRC		3
++#define VIDEO_CC_MVS0_AXI_CLK		4
++#define VIDEO_CC_MVS0_CORE_CLK		5
++#define VIDEO_CC_MVSC_CORE_CLK		6
++#define VIDEO_CC_MVSC_CTL_AXI_CLK	7
++#define VIDEO_CC_SLEEP_CLK		8
++#define VIDEO_CC_SLEEP_CLK_SRC		9
++#define VIDEO_CC_VENUS_AHB_CLK		10
++
++/* GDSCs */
++#define MVSC_GDSC			0
++#define MVS0_GDSC			1
++
++#endif
+diff --git a/dts/upstream/include/dt-bindings/clock/renesas,r9a09g047-cpg.h b/dts/upstream/include/dt-bindings/clock/renesas,r9a09g047-cpg.h
+index 1d031bf6bf0..a27132f9a6c 100644
+--- a/dts/upstream/include/dt-bindings/clock/renesas,r9a09g047-cpg.h
++++ b/dts/upstream/include/dt-bindings/clock/renesas,r9a09g047-cpg.h
+@@ -17,5 +17,8 @@
+ #define R9A09G047_CM33_CLK0			6
+ #define R9A09G047_CST_0_SWCLKTCK		7
+ #define R9A09G047_IOTOP_0_SHCLK			8
++#define R9A09G047_SPI_CLK_SPI			9
++#define R9A09G047_GBETH_0_CLK_PTP_REF_I		10
++#define R9A09G047_GBETH_1_CLK_PTP_REF_I		11
+ 
+ #endif /* __DT_BINDINGS_CLOCK_RENESAS_R9A09G047_CPG_H__ */
+diff --git a/dts/upstream/include/dt-bindings/clock/renesas,r9a09g056-cpg.h b/dts/upstream/include/dt-bindings/clock/renesas,r9a09g056-cpg.h
+new file mode 100644
+index 00000000000..f4905b27f8d
+--- /dev/null
++++ b/dts/upstream/include/dt-bindings/clock/renesas,r9a09g056-cpg.h
+@@ -0,0 +1,24 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++ *
++ * Copyright (C) 2025 Renesas Electronics Corp.
++ */
++#ifndef __DT_BINDINGS_CLOCK_RENESAS_R9A09G056_CPG_H__
++#define __DT_BINDINGS_CLOCK_RENESAS_R9A09G056_CPG_H__
++
++#include <dt-bindings/clock/renesas-cpg-mssr.h>
++
++/* Core Clock list */
++#define R9A09G056_SYS_0_PCLK			0
++#define R9A09G056_CA55_0_CORE_CLK0		1
++#define R9A09G056_CA55_0_CORE_CLK1		2
++#define R9A09G056_CA55_0_CORE_CLK2		3
++#define R9A09G056_CA55_0_CORE_CLK3		4
++#define R9A09G056_CA55_0_PERIPHCLK		5
++#define R9A09G056_CM33_CLK0			6
++#define R9A09G056_CST_0_SWCLKTCK		7
++#define R9A09G056_IOTOP_0_SHCLK			8
++#define R9A09G056_USB2_0_CLK_CORE0		9
++#define R9A09G056_GBETH_0_CLK_PTP_REF_I		10
++#define R9A09G056_GBETH_1_CLK_PTP_REF_I		11
++
++#endif /* __DT_BINDINGS_CLOCK_RENESAS_R9A09G056_CPG_H__ */
+diff --git a/dts/upstream/include/dt-bindings/clock/renesas,r9a09g057-cpg.h b/dts/upstream/include/dt-bindings/clock/renesas,r9a09g057-cpg.h
+index 541e6d719bd..884dbeb1e13 100644
+--- a/dts/upstream/include/dt-bindings/clock/renesas,r9a09g057-cpg.h
++++ b/dts/upstream/include/dt-bindings/clock/renesas,r9a09g057-cpg.h
+@@ -17,5 +17,9 @@
+ #define R9A09G057_CM33_CLK0			6
+ #define R9A09G057_CST_0_SWCLKTCK		7
+ #define R9A09G057_IOTOP_0_SHCLK			8
++#define R9A09G057_USB2_0_CLK_CORE0		9
++#define R9A09G057_USB2_0_CLK_CORE1		10
++#define R9A09G057_GBETH_0_CLK_PTP_REF_I		11
++#define R9A09G057_GBETH_1_CLK_PTP_REF_I		12
+ 
+ #endif /* __DT_BINDINGS_CLOCK_RENESAS_R9A09G057_CPG_H__ */
+diff --git a/dts/upstream/include/dt-bindings/clock/rk3036-cru.h b/dts/upstream/include/dt-bindings/clock/rk3036-cru.h
+index 99cc617e1e5..5cbc0e2b08f 100644
+--- a/dts/upstream/include/dt-bindings/clock/rk3036-cru.h
++++ b/dts/upstream/include/dt-bindings/clock/rk3036-cru.h
+@@ -47,6 +47,7 @@
+ #define SCLK_MACREF		152
+ #define SCLK_MACPLL		153
+ #define SCLK_SFC		160
++#define SCLK_USB480M		161
+ 
+ /* aclk gates */
+ #define ACLK_DMAC2		194
 diff --git a/dts/upstream/include/dt-bindings/clock/rk3188-cru-common.h b/dts/upstream/include/dt-bindings/clock/rk3188-cru-common.h
 index 01e14ab252a..dd988cc9d58 100644
 --- a/dts/upstream/include/dt-bindings/clock/rk3188-cru-common.h
@@ -429,6 +572,23 @@ index 01e14ab252a..dd988cc9d58 100644
  
  /* hclk gates */
  #define HCLK_SDMMC		448
+diff --git a/dts/upstream/include/dt-bindings/clock/rockchip,rk3528-cru.h b/dts/upstream/include/dt-bindings/clock/rockchip,rk3528-cru.h
+index 55a448f5ed6..0245a53fc33 100644
+--- a/dts/upstream/include/dt-bindings/clock/rockchip,rk3528-cru.h
++++ b/dts/upstream/include/dt-bindings/clock/rockchip,rk3528-cru.h
+@@ -414,6 +414,12 @@
+ #define MCLK_I2S2_2CH_SAI_SRC_PRE	402
+ #define MCLK_I2S3_8CH_SAI_SRC_PRE	403
+ #define MCLK_SDPDIF_SRC_PRE		404
++#define SCLK_SDMMC_DRV			405
++#define SCLK_SDMMC_SAMPLE		406
++#define SCLK_SDIO0_DRV			407
++#define SCLK_SDIO0_SAMPLE		408
++#define SCLK_SDIO1_DRV			409
++#define SCLK_SDIO1_SAMPLE		410
+ 
+ /* scmi-clocks indices */
+ #define SCMI_PCLK_KEYREADER		0
 diff --git a/dts/upstream/include/dt-bindings/clock/rockchip,rk3562-cru.h b/dts/upstream/include/dt-bindings/clock/rockchip,rk3562-cru.h
 new file mode 100644
 index 00000000000..a5b0b153209
@@ -1635,6 +1795,336 @@ index 307215a3f3e..6b9df09d282 100644
 +#define CLK_GOUT_PERIS_OTP_CON_TOP_OSCCLK	19
 +
  #endif
+diff --git a/dts/upstream/include/dt-bindings/clock/samsung,exynosautov920.h b/dts/upstream/include/dt-bindings/clock/samsung,exynosautov920.h
+index 0c681f2ba3d..5e6896e9627 100644
+--- a/dts/upstream/include/dt-bindings/clock/samsung,exynosautov920.h
++++ b/dts/upstream/include/dt-bindings/clock/samsung,exynosautov920.h
+@@ -162,6 +162,57 @@
+ #define DOUT_CLKCMU_TAA_NOC		146
+ #define DOUT_TCXO_DIV2			147
+ 
++/* CMU_CPUCL0 */
++#define CLK_FOUT_CPUCL0_PLL		1
++
++#define CLK_MOUT_PLL_CPUCL0		2
++#define CLK_MOUT_CPUCL0_CLUSTER_USER	3
++#define CLK_MOUT_CPUCL0_DBG_USER	4
++#define CLK_MOUT_CPUCL0_SWITCH_USER	5
++#define CLK_MOUT_CPUCL0_CLUSTER		6
++#define CLK_MOUT_CPUCL0_CORE		7
++
++#define CLK_DOUT_CLUSTER0_ACLK		8
++#define CLK_DOUT_CLUSTER0_ATCLK		9
++#define CLK_DOUT_CLUSTER0_MPCLK		10
++#define CLK_DOUT_CLUSTER0_PCLK		11
++#define CLK_DOUT_CLUSTER0_PERIPHCLK	12
++#define CLK_DOUT_CPUCL0_DBG_NOC		13
++#define CLK_DOUT_CPUCL0_DBG_PCLKDBG	14
++#define CLK_DOUT_CPUCL0_NOCP		15
++
++/* CMU_CPUCL1 */
++#define CLK_FOUT_CPUCL1_PLL		1
++
++#define CLK_MOUT_PLL_CPUCL1		2
++#define CLK_MOUT_CPUCL1_CLUSTER_USER	3
++#define CLK_MOUT_CPUCL1_SWITCH_USER	4
++#define CLK_MOUT_CPUCL1_CLUSTER		5
++#define CLK_MOUT_CPUCL1_CORE		6
++
++#define CLK_DOUT_CLUSTER1_ACLK		7
++#define CLK_DOUT_CLUSTER1_ATCLK		8
++#define CLK_DOUT_CLUSTER1_MPCLK		9
++#define CLK_DOUT_CLUSTER1_PCLK		10
++#define CLK_DOUT_CLUSTER1_PERIPHCLK	11
++#define CLK_DOUT_CPUCL1_NOCP		12
++
++/* CMU_CPUCL2 */
++#define CLK_FOUT_CPUCL2_PLL		1
++
++#define CLK_MOUT_PLL_CPUCL2		2
++#define CLK_MOUT_CPUCL2_CLUSTER_USER	3
++#define CLK_MOUT_CPUCL2_SWITCH_USER	4
++#define CLK_MOUT_CPUCL2_CLUSTER		5
++#define CLK_MOUT_CPUCL2_CORE		6
++
++#define CLK_DOUT_CLUSTER2_ACLK		7
++#define CLK_DOUT_CLUSTER2_ATCLK		8
++#define CLK_DOUT_CLUSTER2_MPCLK		9
++#define CLK_DOUT_CLUSTER2_PCLK		10
++#define CLK_DOUT_CLUSTER2_PERIPHCLK	11
++#define CLK_DOUT_CPUCL2_NOCP		12
++
+ /* CMU_PERIC0 */
+ #define CLK_MOUT_PERIC0_IP_USER		1
+ #define CLK_MOUT_PERIC0_NOC_USER	2
+diff --git a/dts/upstream/include/dt-bindings/clock/spacemit,k1-syscon.h b/dts/upstream/include/dt-bindings/clock/spacemit,k1-syscon.h
+new file mode 100644
+index 00000000000..35968ae9824
+--- /dev/null
++++ b/dts/upstream/include/dt-bindings/clock/spacemit,k1-syscon.h
+@@ -0,0 +1,247 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++/*
++ * Copyright (C) 2024-2025 Haylen Chu <heylenay@outlook.com>
++ */
++
++#ifndef _DT_BINDINGS_SPACEMIT_CCU_H_
++#define _DT_BINDINGS_SPACEMIT_CCU_H_
++
++/* APBS (PLL) clocks */
++#define CLK_PLL1		0
++#define CLK_PLL2		1
++#define CLK_PLL3		2
++#define CLK_PLL1_D2		3
++#define CLK_PLL1_D3		4
++#define CLK_PLL1_D4		5
++#define CLK_PLL1_D5		6
++#define CLK_PLL1_D6		7
++#define CLK_PLL1_D7		8
++#define CLK_PLL1_D8		9
++#define CLK_PLL1_D11		10
++#define CLK_PLL1_D13		11
++#define CLK_PLL1_D23		12
++#define CLK_PLL1_D64		13
++#define CLK_PLL1_D10_AUD	14
++#define CLK_PLL1_D100_AUD	15
++#define CLK_PLL2_D1		16
++#define CLK_PLL2_D2		17
++#define CLK_PLL2_D3		18
++#define CLK_PLL2_D4		19
++#define CLK_PLL2_D5		20
++#define CLK_PLL2_D6		21
++#define CLK_PLL2_D7		22
++#define CLK_PLL2_D8		23
++#define CLK_PLL3_D1		24
++#define CLK_PLL3_D2		25
++#define CLK_PLL3_D3		26
++#define CLK_PLL3_D4		27
++#define CLK_PLL3_D5		28
++#define CLK_PLL3_D6		29
++#define CLK_PLL3_D7		30
++#define CLK_PLL3_D8		31
++#define CLK_PLL3_80		32
++#define CLK_PLL3_40		33
++#define CLK_PLL3_20		34
++
++/* MPMU clocks */
++#define CLK_PLL1_307P2		0
++#define CLK_PLL1_76P8		1
++#define CLK_PLL1_61P44		2
++#define CLK_PLL1_153P6		3
++#define CLK_PLL1_102P4		4
++#define CLK_PLL1_51P2		5
++#define CLK_PLL1_51P2_AP	6
++#define CLK_PLL1_57P6		7
++#define CLK_PLL1_25P6		8
++#define CLK_PLL1_12P8		9
++#define CLK_PLL1_12P8_WDT	10
++#define CLK_PLL1_6P4		11
++#define CLK_PLL1_3P2		12
++#define CLK_PLL1_1P6		13
++#define CLK_PLL1_0P8		14
++#define CLK_PLL1_409P6		15
++#define CLK_PLL1_204P8		16
++#define CLK_PLL1_491		17
++#define CLK_PLL1_245P76		18
++#define CLK_PLL1_614		19
++#define CLK_PLL1_47P26		20
++#define CLK_PLL1_31P5		21
++#define CLK_PLL1_819		22
++#define CLK_PLL1_1228		23
++#define CLK_SLOW_UART		24
++#define CLK_SLOW_UART1		25
++#define CLK_SLOW_UART2		26
++#define CLK_WDT			27
++#define CLK_RIPC		28
++#define CLK_I2S_SYSCLK		29
++#define CLK_I2S_BCLK		30
++#define CLK_APB			31
++#define CLK_WDT_BUS		32
++
++/* APBC clocks */
++#define CLK_UART0		0
++#define CLK_UART2		1
++#define CLK_UART3		2
++#define CLK_UART4		3
++#define CLK_UART5		4
++#define CLK_UART6		5
++#define CLK_UART7		6
++#define CLK_UART8		7
++#define CLK_UART9		8
++#define CLK_GPIO		9
++#define CLK_PWM0		10
++#define CLK_PWM1		11
++#define CLK_PWM2		12
++#define CLK_PWM3		13
++#define CLK_PWM4		14
++#define CLK_PWM5		15
++#define CLK_PWM6		16
++#define CLK_PWM7		17
++#define CLK_PWM8		18
++#define CLK_PWM9		19
++#define CLK_PWM10		20
++#define CLK_PWM11		21
++#define CLK_PWM12		22
++#define CLK_PWM13		23
++#define CLK_PWM14		24
++#define CLK_PWM15		25
++#define CLK_PWM16		26
++#define CLK_PWM17		27
++#define CLK_PWM18		28
++#define CLK_PWM19		29
++#define CLK_SSP3		30
++#define CLK_RTC			31
++#define CLK_TWSI0		32
++#define CLK_TWSI1		33
++#define CLK_TWSI2		34
++#define CLK_TWSI4		35
++#define CLK_TWSI5		36
++#define CLK_TWSI6		37
++#define CLK_TWSI7		38
++#define CLK_TWSI8		39
++#define CLK_TIMERS1		40
++#define CLK_TIMERS2		41
++#define CLK_AIB			42
++#define CLK_ONEWIRE		43
++#define CLK_SSPA0		44
++#define CLK_SSPA1		45
++#define CLK_DRO			46
++#define CLK_IR			47
++#define CLK_TSEN		48
++#define CLK_IPC_AP2AUD		49
++#define CLK_CAN0		50
++#define CLK_CAN0_BUS		51
++#define CLK_UART0_BUS		52
++#define CLK_UART2_BUS		53
++#define CLK_UART3_BUS		54
++#define CLK_UART4_BUS		55
++#define CLK_UART5_BUS		56
++#define CLK_UART6_BUS		57
++#define CLK_UART7_BUS		58
++#define CLK_UART8_BUS		59
++#define CLK_UART9_BUS		60
++#define CLK_GPIO_BUS		61
++#define CLK_PWM0_BUS		62
++#define CLK_PWM1_BUS		63
++#define CLK_PWM2_BUS		64
++#define CLK_PWM3_BUS		65
++#define CLK_PWM4_BUS		66
++#define CLK_PWM5_BUS		67
++#define CLK_PWM6_BUS		68
++#define CLK_PWM7_BUS		69
++#define CLK_PWM8_BUS		70
++#define CLK_PWM9_BUS		71
++#define CLK_PWM10_BUS		72
++#define CLK_PWM11_BUS		73
++#define CLK_PWM12_BUS		74
++#define CLK_PWM13_BUS		75
++#define CLK_PWM14_BUS		76
++#define CLK_PWM15_BUS		77
++#define CLK_PWM16_BUS		78
++#define CLK_PWM17_BUS		79
++#define CLK_PWM18_BUS		80
++#define CLK_PWM19_BUS		81
++#define CLK_SSP3_BUS		82
++#define CLK_RTC_BUS		83
++#define CLK_TWSI0_BUS		84
++#define CLK_TWSI1_BUS		85
++#define CLK_TWSI2_BUS		86
++#define CLK_TWSI4_BUS		87
++#define CLK_TWSI5_BUS		88
++#define CLK_TWSI6_BUS		89
++#define CLK_TWSI7_BUS		90
++#define CLK_TWSI8_BUS		91
++#define CLK_TIMERS1_BUS		92
++#define CLK_TIMERS2_BUS		93
++#define CLK_AIB_BUS		94
++#define CLK_ONEWIRE_BUS		95
++#define CLK_SSPA0_BUS		96
++#define CLK_SSPA1_BUS		97
++#define CLK_TSEN_BUS		98
++#define CLK_IPC_AP2AUD_BUS	99
++
++/* APMU clocks */
++#define CLK_CCI550		0
++#define CLK_CPU_C0_HI		1
++#define CLK_CPU_C0_CORE		2
++#define CLK_CPU_C0_ACE		3
++#define CLK_CPU_C0_TCM		4
++#define CLK_CPU_C1_HI		5
++#define CLK_CPU_C1_CORE		6
++#define CLK_CPU_C1_ACE		7
++#define CLK_CCIC_4X		8
++#define CLK_CCIC1PHY		9
++#define CLK_SDH_AXI		10
++#define CLK_SDH0		11
++#define CLK_SDH1		12
++#define CLK_SDH2		13
++#define CLK_USB_P1		14
++#define CLK_USB_AXI		15
++#define CLK_USB30		16
++#define CLK_QSPI		17
++#define CLK_QSPI_BUS		18
++#define CLK_DMA			19
++#define CLK_AES			20
++#define CLK_VPU			21
++#define CLK_GPU			22
++#define CLK_EMMC		23
++#define CLK_EMMC_X		24
++#define CLK_AUDIO		25
++#define CLK_HDMI		26
++#define CLK_PMUA_ACLK		27
++#define CLK_PCIE0_MASTER	28
++#define CLK_PCIE0_SLAVE		29
++#define CLK_PCIE0_DBI		30
++#define CLK_PCIE1_MASTER	31
++#define CLK_PCIE1_SLAVE		32
++#define CLK_PCIE1_DBI		33
++#define CLK_PCIE2_MASTER	34
++#define CLK_PCIE2_SLAVE		35
++#define CLK_PCIE2_DBI		36
++#define CLK_EMAC0_BUS		37
++#define CLK_EMAC0_PTP		38
++#define CLK_EMAC1_BUS		39
++#define CLK_EMAC1_PTP		40
++#define CLK_JPG			41
++#define CLK_CCIC2PHY		42
++#define CLK_CCIC3PHY		43
++#define CLK_CSI			44
++#define CLK_CAMM0		45
++#define CLK_CAMM1		46
++#define CLK_CAMM2		47
++#define CLK_ISP_CPP		48
++#define CLK_ISP_BUS		49
++#define CLK_ISP			50
++#define CLK_DPU_MCLK		51
++#define CLK_DPU_ESC		52
++#define CLK_DPU_BIT		53
++#define CLK_DPU_PXCLK		54
++#define CLK_DPU_HCLK		55
++#define CLK_DPU_SPI		56
++#define CLK_DPU_SPI_HBUS	57
++#define CLK_DPU_SPIBUS		58
++#define CLK_DPU_SPI_ACLK	59
++#define CLK_V2D			60
++#define CLK_EMMC_BUS		61
++
++#endif /* _DT_BINDINGS_SPACEMIT_CCU_H_ */
+diff --git a/dts/upstream/include/dt-bindings/clock/stm32h7-clks.h b/dts/upstream/include/dt-bindings/clock/stm32h7-clks.h
+index 6637272b324..330b39c2c30 100644
+--- a/dts/upstream/include/dt-bindings/clock/stm32h7-clks.h
++++ b/dts/upstream/include/dt-bindings/clock/stm32h7-clks.h
+@@ -126,8 +126,8 @@
+ #define ADC3_CK 128
+ #define DSI_CK 129
+ #define LTDC_CK 130
+-#define USART8_CK 131
+-#define USART7_CK 132
++#define UART8_CK 131
++#define UART7_CK 132
+ #define HDMICEC_CK 133
+ #define I2C3_CK 134
+ #define I2C2_CK 135
 diff --git a/dts/upstream/include/dt-bindings/clock/sun50i-h616-ccu.h b/dts/upstream/include/dt-bindings/clock/sun50i-h616-ccu.h
 index ebb146ab7f8..6889405f9fe 100644
 --- a/dts/upstream/include/dt-bindings/clock/sun50i-h616-ccu.h
@@ -1887,6 +2377,49 @@ index 00000000000..365647499b9
 +#define CLK_BUS_R_CPUCFG	26
 +
 +#endif /* _DT_BINDINGS_CLK_SUN55I_A523_R_CCU_H_ */
+diff --git a/dts/upstream/include/dt-bindings/clock/thead,th1520-clk-ap.h b/dts/upstream/include/dt-bindings/clock/thead,th1520-clk-ap.h
+index a199784b351..09a9aa7b3ab 100644
+--- a/dts/upstream/include/dt-bindings/clock/thead,th1520-clk-ap.h
++++ b/dts/upstream/include/dt-bindings/clock/thead,th1520-clk-ap.h
+@@ -93,4 +93,38 @@
+ #define CLK_SRAM3		83
+ #define CLK_PLL_GMAC_100M	84
+ #define CLK_UART_SCLK		85
++
++/* VO clocks */
++#define CLK_AXI4_VO_ACLK		0
++#define CLK_GPU_MEM			1
++#define CLK_GPU_CORE			2
++#define CLK_GPU_CFG_ACLK		3
++#define CLK_DPU_PIXELCLK0		4
++#define CLK_DPU_PIXELCLK1		5
++#define CLK_DPU_HCLK			6
++#define CLK_DPU_ACLK			7
++#define CLK_DPU_CCLK			8
++#define CLK_HDMI_SFR			9
++#define CLK_HDMI_PCLK			10
++#define CLK_HDMI_CEC			11
++#define CLK_MIPI_DSI0_PCLK		12
++#define CLK_MIPI_DSI1_PCLK		13
++#define CLK_MIPI_DSI0_CFG		14
++#define CLK_MIPI_DSI1_CFG		15
++#define CLK_MIPI_DSI0_REFCLK		16
++#define CLK_MIPI_DSI1_REFCLK		17
++#define CLK_HDMI_I2S			18
++#define CLK_X2H_DPU1_ACLK		19
++#define CLK_X2H_DPU_ACLK		20
++#define CLK_AXI4_VO_PCLK		21
++#define CLK_IOPMP_VOSYS_DPU_PCLK	22
++#define CLK_IOPMP_VOSYS_DPU1_PCLK	23
++#define CLK_IOPMP_VOSYS_GPU_PCLK	24
++#define CLK_IOPMP_DPU1_ACLK		25
++#define CLK_IOPMP_DPU_ACLK		26
++#define CLK_IOPMP_GPU_ACLK		27
++#define CLK_MIPIDSI0_PIXCLK		28
++#define CLK_MIPIDSI1_PIXCLK		29
++#define CLK_HDMI_PIXCLK			30
++
+ #endif
 diff --git a/dts/upstream/include/dt-bindings/clock/xlnx-zynqmp-clk.h b/dts/upstream/include/dt-bindings/clock/xlnx-zynqmp-clk.h
 index cdc4c0b9a37..f0f7ddd3dcb 100644
 --- a/dts/upstream/include/dt-bindings/clock/xlnx-zynqmp-clk.h
@@ -1921,6 +2454,340 @@ index 9fbef542bf6..fea4525d271 100644
 +#define AD4695_TRIGGER_PIN_GP3		3
 +
  #endif /* _DT_BINDINGS_ADI_AD4695_H */
+diff --git a/dts/upstream/include/dt-bindings/iio/adc/adi,ad7606.h b/dts/upstream/include/dt-bindings/iio/adc/adi,ad7606.h
+new file mode 100644
+index 00000000000..f38a6d72b6d
+--- /dev/null
++++ b/dts/upstream/include/dt-bindings/iio/adc/adi,ad7606.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++
++#ifndef _DT_BINDINGS_ADI_AD7606_H
++#define _DT_BINDINGS_ADI_AD7606_H
++
++#define AD7606_TRIGGER_EVENT_BUSY	0
++#define AD7606_TRIGGER_EVENT_FRSTDATA	1
++
++#endif /* _DT_BINDINGS_ADI_AD7606_H */
+diff --git a/dts/upstream/include/dt-bindings/input/linux-event-codes.h b/dts/upstream/include/dt-bindings/input/linux-event-codes.h
+index 5a199f3d4a2..3b2524e4b66 100644
+--- a/dts/upstream/include/dt-bindings/input/linux-event-codes.h
++++ b/dts/upstream/include/dt-bindings/input/linux-event-codes.h
+@@ -925,7 +925,8 @@
+ #define SW_MUTE_DEVICE		0x0e  /* set = device disabled */
+ #define SW_PEN_INSERTED		0x0f  /* set = pen inserted */
+ #define SW_MACHINE_COVER	0x10  /* set = cover closed */
+-#define SW_MAX			0x10
++#define SW_USB_INSERT		0x11  /* set = USB audio device connected */
++#define SW_MAX			0x11
+ #define SW_CNT			(SW_MAX+1)
+ 
+ /*
+diff --git a/dts/upstream/include/dt-bindings/interconnect/qcom,sm8650-rpmh.h b/dts/upstream/include/dt-bindings/interconnect/qcom,sm8650-rpmh.h
+index 6c1eaf04e24..1216aa352d5 100644
+--- a/dts/upstream/include/dt-bindings/interconnect/qcom,sm8650-rpmh.h
++++ b/dts/upstream/include/dt-bindings/interconnect/qcom,sm8650-rpmh.h
+@@ -150,5 +150,6 @@
+ #define MASTER_A1NOC_SNOC			0
+ #define MASTER_A2NOC_SNOC			1
+ #define SLAVE_SNOC_GEM_NOC_SF			2
++#define MASTER_APSS_NOC				3
+ 
+ #endif
+diff --git a/dts/upstream/include/dt-bindings/memory/mediatek,mt6893-memory-port.h b/dts/upstream/include/dt-bindings/memory/mediatek,mt6893-memory-port.h
+new file mode 100644
+index 00000000000..26e8b400db0
+--- /dev/null
++++ b/dts/upstream/include/dt-bindings/memory/mediatek,mt6893-memory-port.h
+@@ -0,0 +1,288 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++/*
++ * Copyright (c) 2020 MediaTek Inc.
++ * Copyright (c) 2025 Collabora Ltd
++ *                    AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
++ */
++#ifndef _DT_BINDINGS_MEMORY_MT6893_LARB_PORT_H_
++#define _DT_BINDINGS_MEMORY_MT6893_LARB_PORT_H_
++
++#include <dt-bindings/memory/mtk-memory-port.h>
++
++/*
++ * MM IOMMU supports 16GB dma address.
++ *
++ * The address will preassign like this:
++ *
++ * modules    dma-address-region	larbs-ports
++ * disp         0 ~ 4G                  larb0/2
++ * vcodec      4G ~ 8G                  larb4/5/7
++ * cam/mdp     8G ~ 12G                 larb9/11/13/14/16/17/18/19/20
++ * CCU0    0x4000_0000 ~ 0x43ff_ffff    larb13: port 9/10
++ * CCU1    0x4400_0000 ~ 0x47ff_ffff    larb14: port 4/5
++ *
++ * larb3/6/8/10/12/15 are null.
++ */
++
++/* larb0 */
++#define M4U_PORT_L0_DISP_POSTMASK0		MTK_M4U_DOM_ID(0, 0)
++#define M4U_PORT_L0_MDP_RDMA4			MTK_M4U_DOM_ID(0, 1)
++#define M4U_PORT_L0_OVL_RDMA0_HDR		MTK_M4U_DOM_ID(0, 2)
++#define M4U_PORT_L0_OVL_2L_RDMA1_HDR		MTK_M4U_DOM_ID(0, 3)
++#define M4U_PORT_L0_OVL_2L_RDMA3_HDR		MTK_M4U_DOM_ID(0, 4)
++#define M4U_PORT_L0_OVL_RDMA0			MTK_M4U_DOM_ID(0, 5)
++#define M4U_PORT_L0_OVL_2L_RDMA1		MTK_M4U_DOM_ID(0, 6)
++#define M4U_PORT_L0_OVL_2L_RDMA3		MTK_M4U_DOM_ID(0, 7)
++#define M4U_PORT_L0_OVL_RDMA1_SYSRAM		MTK_M4U_DOM_ID(0, 8)
++#define M4U_PORT_L0_OVL_2L_RDMA0_SYSRAM		MTK_M4U_DOM_ID(0, 9)
++#define M4U_PORT_L0_OVL_2L_RDMA2_SYSRAM		MTK_M4U_DOM_ID(0, 10)
++#define M4U_PORT_L0_DISP_WDMA0			MTK_M4U_DOM_ID(0, 11)
++#define M4U_PORT_L0_DISP_RDMA0			MTK_M4U_DOM_ID(0, 12)
++#define M4U_PORT_L0_DISP_UFBC_WDMA0		MTK_M4U_DOM_ID(0, 13)
++#define M4U_PORT_L0_DISP_FAKE0			MTK_M4U_DOM_ID(0, 14)
++
++/* larb1 */
++#define M4U_PORT_L1_DISP_POSTMASK1		MTK_M4U_DOM_ID(1, 0)
++#define M4U_PORT_L1_MDP_RDMA5			MTK_M4U_DOM_ID(1, 1)
++#define M4U_PORT_L1_OVL_RDMA1_HDR		MTK_M4U_DOM_ID(1, 2)
++#define M4U_PORT_L1_OVL_2L_RDMA0_HDR		MTK_M4U_DOM_ID(1, 3)
++#define M4U_PORT_L1_OVL_2L_RDMA2_HDR		MTK_M4U_DOM_ID(1, 4)
++#define M4U_PORT_L1_OVL_RDMA1			MTK_M4U_DOM_ID(1, 5)
++#define M4U_PORT_L1_OVL_2L_RDMA0		MTK_M4U_DOM_ID(1, 6)
++#define M4U_PORT_L1_OVL_2L_RDMA2		MTK_M4U_DOM_ID(1, 7)
++#define M4U_PORT_L1_OVL_RDMA0_SYSRAM		MTK_M4U_DOM_ID(1, 8)
++#define M4U_PORT_L1_OVL_2L_RDMA1_SYSRAM		MTK_M4U_DOM_ID(1, 9)
++#define M4U_PORT_L1_OVL_2L_RDMA3_SYSRAM		MTK_M4U_DOM_ID(1, 10)
++#define M4U_PORT_L1_DISP_WDMA1			MTK_M4U_DOM_ID(1, 11)
++#define M4U_PORT_L1_DISP_RDMA1			MTK_M4U_DOM_ID(1, 12)
++#define M4U_PORT_L1_DISP_UFBC_WDMA1		MTK_M4U_DOM_ID(1, 13)
++#define M4U_PORT_L1_DISP_FAKE1			MTK_M4U_DOM_ID(1, 14)
++
++/* larb2 */
++#define M4U_PORT_L2_MDP_RDMA0			MTK_M4U_DOM_ID(2, 0)
++#define M4U_PORT_L2_MDP_RDMA2			MTK_M4U_DOM_ID(2, 1)
++#define M4U_PORT_L2_MDP_WROT0			MTK_M4U_DOM_ID(2, 2)
++#define M4U_PORT_L2_MDP_WROT2			MTK_M4U_DOM_ID(2, 3)
++#define M4U_PORT_L2_MDP_FILMGRAIN0		MTK_M4U_DOM_ID(2, 4)
++#define M4U_PORT_L2_MDP_FAKE0			MTK_M4U_DOM_ID(2, 5)
++
++/* larb3: null */
++
++/* larb4 */
++#define M4U_PORT_L4_VDEC_MC_EXT_MDP		MTK_M4U_DOM_ID(4, 0)
++#define M4U_PORT_L4_VDEC_UFO_EXT_MDP		MTK_M4U_DOM_ID(4, 1)
++#define M4U_PORT_L4_VDEC_PP_EXT_MDP		MTK_M4U_DOM_ID(4, 2)
++#define M4U_PORT_L4_VDEC_PRED_RD_EXT_MDP	MTK_M4U_DOM_ID(4, 3)
++#define M4U_PORT_L4_VDEC_PRED_WR_EXT_MDP	MTK_M4U_DOM_ID(4, 4)
++#define M4U_PORT_L4_VDEC_PPWRAP_EXT_MDP		MTK_M4U_DOM_ID(4, 5)
++#define M4U_PORT_L4_VDEC_TILE_EXT_MDP		MTK_M4U_DOM_ID(4, 6)
++#define M4U_PORT_L4_VDEC_VLD_EXT_MDP		MTK_M4U_DOM_ID(4, 7)
++#define M4U_PORT_L4_VDEC_VLD2_EXT_MDP		MTK_M4U_DOM_ID(4, 8)
++#define M4U_PORT_L4_VDEC_AVC_MV_EXT_MDP		MTK_M4U_DOM_ID(4, 9)
++#define M4U_PORT_L4_VDEC_RG_CTRL_DMA_EXT_MDP	MTK_M4U_DOM_ID(4, 10)
++
++/* larb5 */
++#define M4U_PORT_L5_VDEC_LAT0_VLD_EXT_DISP	MTK_M4U_DOM_ID(5, 0)
++#define M4U_PORT_L5_VDEC_LAT0_VLD2_EXT_DISP	MTK_M4U_DOM_ID(5, 1)
++#define M4U_PORT_L5_VDEC_LAT0_AVC_MV_EXT_DISP	MTK_M4U_DOM_ID(5, 2)
++#define M4U_PORT_L5_VDEC_LAT0_PRED_RD_EXT_DISP	MTK_M4U_DOM_ID(5, 3)
++#define M4U_PORT_L5_VDEC_LAT0_TILE_EXT_DISP	MTK_M4U_DOM_ID(5, 4)
++#define M4U_PORT_L5_VDEC_LAT0_WDMA_EXT_DISP	MTK_M4U_DOM_ID(5, 5)
++#define M4U_PORT_L5_VDEC_LAT0_RG_CTRL_DMA_EXT_DISP MTK_M4U_DOM_ID(5, 6)
++#define M4U_PORT_L5_VDEC_UFO_ENC_EXT_DISP	MTK_M4U_DOM_ID(5, 7)
++
++/* larb6: null */
++
++/* larb7 */
++#define M4U_PORT_L7_VENC_RCPU_DISP		MTK_M4U_DOM_ID(7, 0)
++#define M4U_PORT_L7_VENC_REC_DISP		MTK_M4U_DOM_ID(7, 1)
++#define M4U_PORT_L7_VENC_BSDMA_DISP		MTK_M4U_DOM_ID(7, 2)
++#define M4U_PORT_L7_VENC_SV_COMV_DISP		MTK_M4U_DOM_ID(7, 3)
++#define M4U_PORT_L7_VENC_RD_COMV_DISP		MTK_M4U_DOM_ID(7, 4)
++#define M4U_PORT_L7_VENC_NBM_RDMA_DISP		MTK_M4U_DOM_ID(7, 5)
++#define M4U_PORT_L7_VENC_NBM_RDMA_LITE_DISP	MTK_M4U_DOM_ID(7, 6)
++#define M4U_PORT_L7_JPGENC_Y_RDMA_DISP		MTK_M4U_DOM_ID(7, 7)
++#define M4U_PORT_L7_JPGENC_C_RDMA_DISP		MTK_M4U_DOM_ID(7, 8)
++#define M4U_PORT_L7_JPGENC_Q_TABLE_DISP		MTK_M4U_DOM_ID(7, 9)
++#define M4U_PORT_L7_JPGENC_BSDMA_DISP		MTK_M4U_DOM_ID(7, 10)
++#define M4U_PORT_L7_JPGENC_WDMA0_DISP		MTK_M4U_DOM_ID(7, 11)
++#define M4U_PORT_L7_JPGENC_BSDMA0_DISP		MTK_M4U_DOM_ID(7, 12)
++#define M4U_PORT_L7_VENC_NBM_WDMA_DISP		MTK_M4U_DOM_ID(7, 13)
++#define M4U_PORT_L7_VENC_NBM_WDMA_LITE_DISP	MTK_M4U_DOM_ID(7, 14)
++#define M4U_PORT_L7_VENC_CUR_LUMA_DISP		MTK_M4U_DOM_ID(7, 15)
++#define M4U_PORT_L7_VENC_CUR_CHROMA_DISP	MTK_M4U_DOM_ID(7, 16)
++#define M4U_PORT_L7_VENC_REF_LUMA_DISP		MTK_M4U_DOM_ID(7, 17)
++#define M4U_PORT_L7_VENC_REF_CHROMA_DISP	MTK_M4U_DOM_ID(7, 18)
++#define M4U_PORT_L7_VENC_SUB_R_LUMA_DISP	MTK_M4U_DOM_ID(7, 19)
++#define M4U_PORT_L7_VENC_SUB_W_LUMA_DISP	MTK_M4U_DOM_ID(7, 20)
++#define M4U_PORT_L7_VENC_FCS_NBM_RDMA_DISP	MTK_M4U_DOM_ID(7, 21)
++#define M4U_PORT_L7_VENC_FCS_NBM_WDMA_DISP	MTK_M4U_DOM_ID(7, 22)
++#define M4U_PORT_L7_JPGENC_WDMA1_DISP		MTK_M4U_DOM_ID(7, 23)
++#define M4U_PORT_L7_JPGENC_BSDMA1_DISP		MTK_M4U_DOM_ID(7, 24)
++#define M4U_PORT_L7_JPGENC_HUFF_OFFSET1_DISP	MTK_M4U_DOM_ID(7, 25)
++#define M4U_PORT_L7_JPGENC_HUFF_OFFSET0_DISP	MTK_M4U_DOM_ID(7, 26)
++
++/* larb8: null */
++
++/* larb9 */
++#define M4U_PORT_L9_IMG_IMGI_D1_MDP		MTK_M4U_DOM_ID(9, 0)
++#define M4U_PORT_L9_IMG_IMGBI_D1_MDP		MTK_M4U_DOM_ID(9, 1)
++#define M4U_PORT_L9_IMG_DMGI_D1_MDP		MTK_M4U_DOM_ID(9, 2)
++#define M4U_PORT_L9_IMG_DEPI_D1_MDP		MTK_M4U_DOM_ID(9, 3)
++#define M4U_PORT_L9_IMG_ICE_D1_MDP		MTK_M4U_DOM_ID(9, 4)
++#define M4U_PORT_L9_IMG_SMTI_D1_MDP		MTK_M4U_DOM_ID(9, 5)
++#define M4U_PORT_L9_IMG_SMTO_D2_MDP		MTK_M4U_DOM_ID(9, 6)
++#define M4U_PORT_L9_IMG_SMTO_D1_MDP		MTK_M4U_DOM_ID(9, 7)
++#define M4U_PORT_L9_IMG_CRZO_D1_MDP		MTK_M4U_DOM_ID(9, 8)
++#define M4U_PORT_L9_IMG_IMG3O_D1_MDP		MTK_M4U_DOM_ID(9, 9)
++#define M4U_PORT_L9_IMG_VIPI_D1_MDP		MTK_M4U_DOM_ID(9, 10)
++#define M4U_PORT_L9_IMG_SMTI_D5_MDP		MTK_M4U_DOM_ID(9, 11)
++#define M4U_PORT_L9_IMG_TIMGO_D1_MDP		MTK_M4U_DOM_ID(9, 12)
++#define M4U_PORT_L9_IMG_UFBC_W0_MDP		MTK_M4U_DOM_ID(9, 13)
++#define M4U_PORT_L9_IMG_UFBC_R0_MDP		MTK_M4U_DOM_ID(9, 14)
++#define M4U_PORT_L9_IMG_WPE_RDMA1_MDP		MTK_M4U_DOM_ID(9, 15)
++#define M4U_PORT_L9_IMG_WPE_RDMA0_MDP		MTK_M4U_DOM_ID(9, 16)
++#define M4U_PORT_L9_IMG_WPE_WDMA_MDP		MTK_M4U_DOM_ID(9, 17)
++#define M4U_PORT_L9_IMG_MFB_RDMA0_MDP		MTK_M4U_DOM_ID(9, 18)
++#define M4U_PORT_L9_IMG_MFB_RDMA1_MDP		MTK_M4U_DOM_ID(9, 19)
++#define M4U_PORT_L9_IMG_MFB_RDMA2_MDP		MTK_M4U_DOM_ID(9, 20)
++#define M4U_PORT_L9_IMG_MFB_RDMA3_MDP		MTK_M4U_DOM_ID(9, 21)
++#define M4U_PORT_L9_IMG_MFB_RDMA4_MDP		MTK_M4U_DOM_ID(9, 22)
++#define M4U_PORT_L9_IMG_MFB_RDMA5_MDP		MTK_M4U_DOM_ID(9, 23)
++#define M4U_PORT_L9_IMG_MFB_WDMA0_MDP		MTK_M4U_DOM_ID(9, 24)
++#define M4U_PORT_L9_IMG_MFB_WDMA1_MDP		MTK_M4U_DOM_ID(9, 25)
++#define M4U_PORT_L9_IMG_RESERVE6_MDP		MTK_M4U_DOM_ID(9, 26)
++#define M4U_PORT_L9_IMG_RESERVE7_MDP		MTK_M4U_DOM_ID(9, 27)
++#define M4U_PORT_L9_IMG_RESERVE8_MDP		MTK_M4U_DOM_ID(9, 28)
++
++/* larb10: null */
++
++/* larb11 */
++#define M4U_PORT_L11_IMG_IMGI_D1_DISP		MTK_M4U_DOM_ID(11, 0)
++#define M4U_PORT_L11_IMG_IMGBI_D1_DISP		MTK_M4U_DOM_ID(11, 1)
++#define M4U_PORT_L11_IMG_DMGI_D1_DISP		MTK_M4U_DOM_ID(11, 2)
++#define M4U_PORT_L11_IMG_DEPI_D1_DISP		MTK_M4U_DOM_ID(11, 3)
++#define M4U_PORT_L11_IMG_ICE_D1_DISP		MTK_M4U_DOM_ID(11, 4)
++#define M4U_PORT_L11_IMG_SMTI_D1_DISP		MTK_M4U_DOM_ID(11, 5)
++#define M4U_PORT_L11_IMG_SMTO_D2_DISP		MTK_M4U_DOM_ID(11, 6)
++#define M4U_PORT_L11_IMG_SMTO_D1_DISP		MTK_M4U_DOM_ID(11, 7)
++#define M4U_PORT_L11_IMG_CRZO_D1_DISP		MTK_M4U_DOM_ID(11, 8)
++#define M4U_PORT_L11_IMG_IMG3O_D1_DISP		MTK_M4U_DOM_ID(11, 9)
++#define M4U_PORT_L11_IMG_VIPI_D1_DISP		MTK_M4U_DOM_ID(11, 10)
++#define M4U_PORT_L11_IMG_SMTI_D5_DISP		MTK_M4U_DOM_ID(11, 11)
++#define M4U_PORT_L11_IMG_TIMGO_D1_DISP		MTK_M4U_DOM_ID(11, 12)
++#define M4U_PORT_L11_IMG_UFBC_W0_DISP		MTK_M4U_DOM_ID(11, 13)
++#define M4U_PORT_L11_IMG_UFBC_R0_DISP		MTK_M4U_DOM_ID(11, 14)
++#define M4U_PORT_L11_IMG_WPE_RDMA1_DISP		MTK_M4U_DOM_ID(11, 15)
++#define M4U_PORT_L11_IMG_WPE_RDMA0_DISP		MTK_M4U_DOM_ID(11, 16)
++#define M4U_PORT_L11_IMG_WPE_WDMA_DISP		MTK_M4U_DOM_ID(11, 17)
++#define M4U_PORT_L11_IMG_MFB_RDMA0_DISP		MTK_M4U_DOM_ID(11, 18)
++#define M4U_PORT_L11_IMG_MFB_RDMA1_DISP		MTK_M4U_DOM_ID(11, 19)
++#define M4U_PORT_L11_IMG_MFB_RDMA2_DISP		MTK_M4U_DOM_ID(11, 20)
++#define M4U_PORT_L11_IMG_MFB_RDMA3_DISP		MTK_M4U_DOM_ID(11, 21)
++#define M4U_PORT_L11_IMG_MFB_RDMA4_DISP		MTK_M4U_DOM_ID(11, 22)
++#define M4U_PORT_L11_IMG_MFB_RDMA5_DISP		MTK_M4U_DOM_ID(11, 23)
++#define M4U_PORT_L11_IMG_MFB_WDMA0_DISP		MTK_M4U_DOM_ID(11, 24)
++#define M4U_PORT_L11_IMG_MFB_WDMA1_DISP		MTK_M4U_DOM_ID(11, 25)
++#define M4U_PORT_L11_IMG_RESERVE6_DISP		MTK_M4U_DOM_ID(11, 26)
++#define M4U_PORT_L11_IMG_RESERVE7_DISP		MTK_M4U_DOM_ID(11, 27)
++#define M4U_PORT_L11_IMG_RESERVE8_DISP		MTK_M4U_DOM_ID(11, 28)
++
++/* larb12: null */
++
++/* larb13 */
++#define M4U_PORT_L13_CAM_MRAWI_MDP		MTK_M4U_DOM_ID(13, 0)
++#define M4U_PORT_L13_CAM_MRAWO0_MDP		MTK_M4U_DOM_ID(13, 1)
++#define M4U_PORT_L13_CAM_MRAWO1_MDP		MTK_M4U_DOM_ID(13, 2)
++#define M4U_PORT_L13_CAM_CAMSV1_MDP		MTK_M4U_DOM_ID(13, 3)
++#define M4U_PORT_L13_CAM_CAMSV2_MDP		MTK_M4U_DOM_ID(13, 4)
++#define M4U_PORT_L13_CAM_CAMSV3_MDP		MTK_M4U_DOM_ID(13, 5)
++#define M4U_PORT_L13_CAM_CAMSV4_MDP		MTK_M4U_DOM_ID(13, 6)
++#define M4U_PORT_L13_CAM_CAMSV5_MDP		MTK_M4U_DOM_ID(13, 7)
++#define M4U_PORT_L13_CAM_CAMSV6_MDP		MTK_M4U_DOM_ID(13, 8)
++#define M4U_PORT_L13_CAM_CCUI_MDP		MTK_M4U_DOM_ID(13, 9)
++#define M4U_PORT_L13_CAM_CCUO_MDP		MTK_M4U_DOM_ID(13, 10)
++#define M4U_PORT_L13_CAM_FAKE_MDP		MTK_M4U_DOM_ID(13, 11)
++
++/* larb14 */
++#define M4U_PORT_L14_CAM_MRAWI_DISP		MTK_M4U_DOM_ID(14, 0)
++#define M4U_PORT_L14_CAM_MRAWO0_DISP		MTK_M4U_DOM_ID(14, 1)
++#define M4U_PORT_L14_CAM_MRAWO1_DISP		MTK_M4U_DOM_ID(14, 2)
++#define M4U_PORT_L14_CAM_CAMSV0_DISP		MTK_M4U_DOM_ID(14, 3)
++#define M4U_PORT_L14_CAM_CCUI_DISP		MTK_M4U_DOM_ID(14, 4)
++#define M4U_PORT_L14_CAM_CCUO_DISP		MTK_M4U_DOM_ID(14, 5)
++
++/* larb15: null */
++
++/* larb16 */
++#define M4U_PORT_L16_CAM_IMGO_R1_A_MDP		MTK_M4U_DOM_ID(16, 0)
++#define M4U_PORT_L16_CAM_RRZO_R1_A_MDP		MTK_M4U_DOM_ID(16, 1)
++#define M4U_PORT_L16_CAM_CQI_R1_A_MDP		MTK_M4U_DOM_ID(16, 2)
++#define M4U_PORT_L16_CAM_BPCI_R1_A_MDP		MTK_M4U_DOM_ID(16, 3)
++#define M4U_PORT_L16_CAM_YUVO_R1_A_MDP		MTK_M4U_DOM_ID(16, 4)
++#define M4U_PORT_L16_CAM_UFDI_R2_A_MDP		MTK_M4U_DOM_ID(16, 5)
++#define M4U_PORT_L16_CAM_RAWI_R2_A_MDP		MTK_M4U_DOM_ID(16, 6)
++#define M4U_PORT_L16_CAM_RAWI_R3_A_MDP		MTK_M4U_DOM_ID(16, 7)
++#define M4U_PORT_L16_CAM_AAO_R1_A_MDP		MTK_M4U_DOM_ID(16, 8)
++#define M4U_PORT_L16_CAM_AFO_R1_A_MDP		MTK_M4U_DOM_ID(16, 9)
++#define M4U_PORT_L16_CAM_FLKO_R1_A_MDP		MTK_M4U_DOM_ID(16, 10)
++#define M4U_PORT_L16_CAM_LCESO_R1_A_MDP		MTK_M4U_DOM_ID(16, 11)
++#define M4U_PORT_L16_CAM_CRZO_R1_A_MDP		MTK_M4U_DOM_ID(16, 12)
++#define M4U_PORT_L16_CAM_LTMSO_R1_A_MDP		MTK_M4U_DOM_ID(16, 13)
++#define M4U_PORT_L16_CAM_RSSO_R1_A_MDP		MTK_M4U_DOM_ID(16, 14)
++#define M4U_PORT_L16_CAM_AAHO_R1_A_MDP		MTK_M4U_DOM_ID(16, 15)
++#define M4U_PORT_L16_CAM_LSCI_R1_A_MDP		MTK_M4U_DOM_ID(16, 16)
++
++/* larb17 */
++#define M4U_PORT_L17_CAM_IMGO_R1_B_DISP		MTK_M4U_DOM_ID(17, 0)
++#define M4U_PORT_L17_CAM_RRZO_R1_B_DISP		MTK_M4U_DOM_ID(17, 1)
++#define M4U_PORT_L17_CAM_CQI_R1_B_DISP		MTK_M4U_DOM_ID(17, 2)
++#define M4U_PORT_L17_CAM_BPCI_R1_B_DISP		MTK_M4U_DOM_ID(17, 3)
++#define M4U_PORT_L17_CAM_YUVO_R1_B_DISP		MTK_M4U_DOM_ID(17, 4)
++#define M4U_PORT_L17_CAM_UFDI_R2_B_DISP		MTK_M4U_DOM_ID(17, 5)
++#define M4U_PORT_L17_CAM_RAWI_R2_B_DISP		MTK_M4U_DOM_ID(17, 6)
++#define M4U_PORT_L17_CAM_RAWI_R3_B_DISP		MTK_M4U_DOM_ID(17, 7)
++#define M4U_PORT_L17_CAM_AAO_R1_B_DISP		MTK_M4U_DOM_ID(17, 8)
++#define M4U_PORT_L17_CAM_AFO_R1_B_DISP		MTK_M4U_DOM_ID(17, 9)
++#define M4U_PORT_L17_CAM_FLKO_R1_B_DISP		MTK_M4U_DOM_ID(17, 10)
++#define M4U_PORT_L17_CAM_LCESO_R1_B_DISP	MTK_M4U_DOM_ID(17, 11)
++#define M4U_PORT_L17_CAM_CRZO_R1_B_DISP		MTK_M4U_DOM_ID(17, 12)
++#define M4U_PORT_L17_CAM_LTMSO_R1_B_DISP	MTK_M4U_DOM_ID(17, 13)
++#define M4U_PORT_L17_CAM_RSSO_R1_B_DISP		MTK_M4U_DOM_ID(17, 14)
++#define M4U_PORT_L17_CAM_AAHO_R1_B_DISP		MTK_M4U_DOM_ID(17, 15)
++#define M4U_PORT_L17_CAM_LSCI_R1_B_DISP		MTK_M4U_DOM_ID(17, 16)
++
++/* larb18 */
++#define M4U_PORT_L18_CAM_IMGO_R1_C_MDP		MTK_M4U_DOM_ID(18, 0)
++#define M4U_PORT_L18_CAM_RRZO_R1_C_MDP		MTK_M4U_DOM_ID(18, 1)
++#define M4U_PORT_L18_CAM_CQI_R1_C_MDP		MTK_M4U_DOM_ID(18, 2)
++#define M4U_PORT_L18_CAM_BPCI_R1_C_MDP		MTK_M4U_DOM_ID(18, 3)
++#define M4U_PORT_L18_CAM_YUVO_R1_C_MDP		MTK_M4U_DOM_ID(18, 4)
++#define M4U_PORT_L18_CAM_UFDI_R2_C_MDP		MTK_M4U_DOM_ID(18, 5)
++#define M4U_PORT_L18_CAM_RAWI_R2_C_MDP		MTK_M4U_DOM_ID(18, 6)
++#define M4U_PORT_L18_CAM_RAWI_R3_C_MDP		MTK_M4U_DOM_ID(18, 7)
++#define M4U_PORT_L18_CAM_AAO_R1_C_MDP		MTK_M4U_DOM_ID(18, 8)
++#define M4U_PORT_L18_CAM_AFO_R1_C_MDP		MTK_M4U_DOM_ID(18, 9)
++#define M4U_PORT_L18_CAM_FLKO_R1_C_MDP		MTK_M4U_DOM_ID(18, 10)
++#define M4U_PORT_L18_CAM_LCESO_R1_C_MDP		MTK_M4U_DOM_ID(18, 11)
++#define M4U_PORT_L18_CAM_CRZO_R1_C_MDP		MTK_M4U_DOM_ID(18, 12)
++#define M4U_PORT_L18_CAM_LTMSO_R1_C_MDP		MTK_M4U_DOM_ID(18, 13)
++#define M4U_PORT_L18_CAM_RSSO_R1_C_MDP		MTK_M4U_DOM_ID(18, 14)
++#define M4U_PORT_L18_CAM_AAHO_R1_C_MDP		MTK_M4U_DOM_ID(18, 15)
++#define M4U_PORT_L18_CAM_LSCI_R1_C_MDP		MTK_M4U_DOM_ID(18, 16)
++
++/* larb19 */
++#define M4U_PORT_L19_IPE_DVS_RDMA_DISP		MTK_M4U_DOM_ID(19, 0)
++#define M4U_PORT_L19_IPE_DVS_WDMA_DISP		MTK_M4U_DOM_ID(19, 1)
++#define M4U_PORT_L19_IPE_DVP_RDMA_DISP		MTK_M4U_DOM_ID(19, 2)
++#define M4U_PORT_L19_IPE_DVP_WDMA_DISP		MTK_M4U_DOM_ID(19, 3)
++
++/* larb20 */
++#define M4U_PORT_L20_IPE_FDVT_RDA_DISP		MTK_M4U_DOM_ID(20, 0)
++#define M4U_PORT_L20_IPE_FDVT_RDB_DISP		MTK_M4U_DOM_ID(20, 1)
++#define M4U_PORT_L20_IPE_FDVT_WRA_DISP		MTK_M4U_DOM_ID(20, 2)
++#define M4U_PORT_L20_IPE_FDVT_WRB_DISP		MTK_M4U_DOM_ID(20, 3)
++#define M4U_PORT_L20_IPE_RSC_RDMA0_DISP		MTK_M4U_DOM_ID(20, 4)
++#define M4U_PORT_L20_IPE_RSC_WDMA_DISP		MTK_M4U_DOM_ID(20, 5)
++
++#endif
 diff --git a/dts/upstream/include/dt-bindings/pinctrl/amlogic,pinctrl.h b/dts/upstream/include/dt-bindings/pinctrl/amlogic,pinctrl.h
 new file mode 100644
 index 00000000000..7d40aecc714
@@ -2418,6 +3285,47 @@ index 00000000000..b1c18a49061
 +#define PD_VE			2
 +
 +#endif
+diff --git a/dts/upstream/include/dt-bindings/power/mediatek,mt6893-power.h b/dts/upstream/include/dt-bindings/power/mediatek,mt6893-power.h
+new file mode 100644
+index 00000000000..aeab51bb2ad
+--- /dev/null
++++ b/dts/upstream/include/dt-bindings/power/mediatek,mt6893-power.h
+@@ -0,0 +1,35 @@
++/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
++/*
++ * Copyright (c) 2025 Collabora Ltd
++ *                    AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
++ */
++
++#ifndef _DT_BINDINGS_POWER_MT6893_POWER_H
++#define _DT_BINDINGS_POWER_MT6893_POWER_H
++
++#define MT6893_POWER_DOMAIN_CONN		0
++#define MT6893_POWER_DOMAIN_MFG0		1
++#define MT6893_POWER_DOMAIN_MFG1		2
++#define MT6893_POWER_DOMAIN_MFG2		3
++#define MT6893_POWER_DOMAIN_MFG3		4
++#define MT6893_POWER_DOMAIN_MFG4		5
++#define MT6893_POWER_DOMAIN_MFG5		6
++#define MT6893_POWER_DOMAIN_MFG6		7
++#define MT6893_POWER_DOMAIN_ISP			8
++#define MT6893_POWER_DOMAIN_ISP2		9
++#define MT6893_POWER_DOMAIN_IPE			10
++#define MT6893_POWER_DOMAIN_VDEC0		11
++#define MT6893_POWER_DOMAIN_VDEC1		12
++#define MT6893_POWER_DOMAIN_VENC0		13
++#define MT6893_POWER_DOMAIN_VENC1		14
++#define MT6893_POWER_DOMAIN_MDP			15
++#define MT6893_POWER_DOMAIN_DISP		16
++#define MT6893_POWER_DOMAIN_AUDIO		17
++#define MT6893_POWER_DOMAIN_ADSP		18
++#define MT6893_POWER_DOMAIN_CAM			19
++#define MT6893_POWER_DOMAIN_CAM_RAWA		20
++#define MT6893_POWER_DOMAIN_CAM_RAWB		21
++#define MT6893_POWER_DOMAIN_CAM_RAWC		22
++#define MT6893_POWER_DOMAIN_DP_TX		23
++
++#endif /* _DT_BINDINGS_POWER_MT6893_POWER_H */
 diff --git a/dts/upstream/include/dt-bindings/power/qcom-rpmpd.h b/dts/upstream/include/dt-bindings/power/qcom-rpmpd.h
 index df599bf4622..d9b7bac3095 100644
 --- a/dts/upstream/include/dt-bindings/power/qcom-rpmpd.h
@@ -2431,6 +3339,47 @@ index df599bf4622..d9b7bac3095 100644
  #define SM6375_VDDCX		0
  #define SM6375_VDDCX_AO	1
  #define SM6375_VDDCX_VFL	2
+diff --git a/dts/upstream/include/dt-bindings/power/rockchip,rk3562-power.h b/dts/upstream/include/dt-bindings/power/rockchip,rk3562-power.h
+new file mode 100644
+index 00000000000..5182c2427a5
+--- /dev/null
++++ b/dts/upstream/include/dt-bindings/power/rockchip,rk3562-power.h
+@@ -0,0 +1,35 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++/*
++ * Copyright (c) 2022-2024 Rockchip Electronics Co., Ltd.
++ */
++#ifndef __DT_BINDINGS_POWER_RK3562_POWER_H__
++#define __DT_BINDINGS_POWER_RK3562_POWER_H__
++
++/* VD_CORE */
++#define RK3562_PD_CPU_0		0
++#define RK3562_PD_CPU_1		1
++#define RK3562_PD_CPU_2		2
++#define RK3562_PD_CPU_3		3
++#define RK3562_PD_CORE_ALIVE	4
++
++/* VD_PMU */
++#define RK3562_PD_PMU		5
++#define RK3562_PD_PMU_ALIVE	6
++
++/* VD_NPU */
++#define RK3562_PD_NPU		7
++
++/* VD_GPU */
++#define RK3562_PD_GPU		8
++
++/* VD_LOGIC */
++#define RK3562_PD_DDR		9
++#define RK3562_PD_VEPU		10
++#define RK3562_PD_VDPU		11
++#define RK3562_PD_VI		12
++#define RK3562_PD_VO		13
++#define RK3562_PD_RGA		14
++#define RK3562_PD_PHP		15
++#define RK3562_PD_LOGIC_ALIVE	16
++
++#endif
 diff --git a/dts/upstream/include/dt-bindings/power/thead,th1520-power.h b/dts/upstream/include/dt-bindings/power/thead,th1520-power.h
 new file mode 100644
 index 00000000000..8395bd1459f
@@ -3036,15 +3985,16 @@ index e2fe4bd5f7f..878beae6dc3 100644
 +
  #endif
 diff --git a/dts/upstream/include/dt-bindings/reset/sun50i-h616-ccu.h b/dts/upstream/include/dt-bindings/reset/sun50i-h616-ccu.h
-index ed177c04afd..81b1eba2a7f 100644
+index ed177c04afd..ba626f7015b 100644
 --- a/dts/upstream/include/dt-bindings/reset/sun50i-h616-ccu.h
 +++ b/dts/upstream/include/dt-bindings/reset/sun50i-h616-ccu.h
-@@ -67,5 +67,7 @@
+@@ -67,5 +67,8 @@
  #define RST_BUS_HDCP		58
  #define RST_BUS_KEYADC		59
  #define RST_BUS_GPADC		60
 +#define RST_BUS_TCON_LCD0	61
 +#define RST_BUS_TCON_LCD1	62
++#define RST_BUS_LVDS		63
  
  #endif /* _DT_BINDINGS_RESET_SUN50I_H616_H_ */
 diff --git a/dts/upstream/include/dt-bindings/reset/sun55i-a523-ccu.h b/dts/upstream/include/dt-bindings/reset/sun55i-a523-ccu.h
@@ -3172,6 +4122,28 @@ index 00000000000..dd6fbb372e1
 +#define RST_BUS_R_CPUCFG	14
 +
 +#endif /* _DT_BINDINGS_RST_SUN55I_A523_R_CCU_H_ */
+diff --git a/dts/upstream/include/dt-bindings/reset/thead,th1520-reset.h b/dts/upstream/include/dt-bindings/reset/thead,th1520-reset.h
+new file mode 100644
+index 00000000000..00459f16048
+--- /dev/null
++++ b/dts/upstream/include/dt-bindings/reset/thead,th1520-reset.h
+@@ -0,0 +1,16 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++/*
++ * Copyright (c) 2024 Samsung Electronics Co., Ltd.
++ * Author: Michal Wilczynski <m.wilczynski@samsung.com>
++ */
++
++#ifndef _DT_BINDINGS_TH1520_RESET_H
++#define _DT_BINDINGS_TH1520_RESET_H
++
++#define TH1520_RESET_ID_GPU		0
++#define TH1520_RESET_ID_GPU_CLKGEN	1
++#define TH1520_RESET_ID_NPU		2
++#define TH1520_RESET_ID_WDT0		3
++#define TH1520_RESET_ID_WDT1		4
++
++#endif /* _DT_BINDINGS_TH1520_RESET_H */
 diff --git a/dts/upstream/include/dt-bindings/soc/samsung,exynos-usi.h b/dts/upstream/include/dt-bindings/soc/samsung,exynos-usi.h
 index a01af169d24..b46de214dd0 100644
 --- a/dts/upstream/include/dt-bindings/soc/samsung,exynos-usi.h
@@ -3199,6 +4171,44 @@ index a01af169d24..b46de214dd0 100644
 +#define USI_V2_I2C		USI_MODE_I2C
  
  #endif /* __DT_BINDINGS_SAMSUNG_EXYNOS_USI_H */
+diff --git a/dts/upstream/include/dt-bindings/sound/cs48l32.h b/dts/upstream/include/dt-bindings/sound/cs48l32.h
+new file mode 100644
+index 00000000000..4e82260fff6
+--- /dev/null
++++ b/dts/upstream/include/dt-bindings/sound/cs48l32.h
+@@ -0,0 +1,20 @@
++/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
++/*
++ * Device Tree defines for CS48L32 DSP.
++ *
++ * Copyright (C) 2016-2018, 2022, 2025 Cirrus Logic, Inc. and
++ *               Cirrus Logic International Semiconductor Ltd.
++ */
++
++#ifndef DT_BINDINGS_SOUND_CS48L32_H
++#define DT_BINDINGS_SOUND_CS48L32_H
++
++/* Values for cirrus,in-type */
++#define CS48L32_IN_TYPE_DIFF		0
++#define CS48L32_IN_TYPE_SE		1
++
++/* Values for cirrus,pdm-sup */
++#define CS48L32_PDM_SUP_VOUT_MIC	0
++#define CS48L32_PDM_SUP_MICBIAS1	1
++
++#endif
+diff --git a/dts/upstream/include/dt-bindings/sound/qcom,q6dsp-lpass-ports.h b/dts/upstream/include/dt-bindings/sound/qcom,q6dsp-lpass-ports.h
+index 39f203256c4..6d1ce7f5da5 100644
+--- a/dts/upstream/include/dt-bindings/sound/qcom,q6dsp-lpass-ports.h
++++ b/dts/upstream/include/dt-bindings/sound/qcom,q6dsp-lpass-ports.h
+@@ -139,6 +139,7 @@
+ #define DISPLAY_PORT_RX_5	133
+ #define DISPLAY_PORT_RX_6	134
+ #define DISPLAY_PORT_RX_7	135
++#define USB_RX			136
+ 
+ #define LPASS_CLK_ID_PRI_MI2S_IBIT	1
+ #define LPASS_CLK_ID_PRI_MI2S_EBIT	2
 diff --git a/dts/upstream/include/dt-bindings/sound/qcom,wcd934x.h b/dts/upstream/include/dt-bindings/sound/qcom,wcd934x.h
 new file mode 100644
 index 00000000000..8b30d34fcc8

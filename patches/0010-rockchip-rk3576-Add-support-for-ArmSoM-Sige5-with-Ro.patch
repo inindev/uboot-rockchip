@@ -1,4 +1,4 @@
-From fab43fd0b92ac4db02f0a38acd4a0708c7060a66 Mon Sep 17 00:00:00 2001
+From 390eaf20124d3855b27f8b73047663cb25662555 Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Fri, 2 May 2025 20:53:53 -0400
 Subject: [PATCH 10/12] rockchip: rk3576: Add support for ArmSoM Sige5 with

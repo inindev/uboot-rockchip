@@ -1,4 +1,4 @@
-From 95831c3682e0fc1647afea640f5743d7b9eca83c Mon Sep 17 00:00:00 2001
+From fa5fd0dbf0ed281be4bf6af6ea236bd0afaa2289 Mon Sep 17 00:00:00 2001
 From: Jonas Karlman <jonas@kwiboo.se>
 Date: Wed, 29 Jan 2025 22:36:31 +0000
 Subject: [PATCH 05/12] rockchip: mkimage: Add support for up to 4 input files
