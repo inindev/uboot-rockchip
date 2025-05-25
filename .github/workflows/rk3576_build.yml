@@ -13,6 +13,10 @@ on:
         required: true
         default: true
         type: boolean
+      cherry_pick_commit:
+        description: Enter u-boot commit(s) to cherry-pick (optional, comma-separated)
+        required: false
+        type: string
 
 jobs:
   build:
@@ -88,6 +92,16 @@ jobs:
               git am "$patch" || { echo "Failed to apply: $patch"; exit 1; }
             done
           fi
+
+      - name: Cherry-pick commits
+        if: inputs.cherry_pick_commit != ''
+        run: |
+          cd u-boot
+          git fetch origin
+          IFS=',' read -ra COMMITS <<< "${{ inputs.cherry_pick_commit }}"
+          for COMMIT in "${COMMITS[@]}"; do
+            git cherry-pick $(echo $COMMIT) || (echo "Cherry-pick failed for $COMMIT"; exit 1)
+          done
 
       - name: "Configure and build u-boot config: ${{ matrix.board.config }}"
         run: |
