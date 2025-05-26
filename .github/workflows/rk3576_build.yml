@@ -56,6 +56,7 @@ jobs:
           repository: rockchip-linux/rkbin
           ref: master
           path: rkbin
+          fetch-depth: 1
 
       - name: Checkout ARM Trusted Firmware
         if: inputs.use_arm_tf
@@ -64,6 +65,7 @@ jobs:
           repository: ARM-software/arm-trusted-firmware
           ref: master
           path: arm-trusted-firmware
+          fetch-depth: 1
 
       - name: Build BL31
         if: inputs.use_arm_tf
@@ -86,6 +88,7 @@ jobs:
           repository: inindev/uboot-rockchip
           ref: main
           path: uboot-rockchip
+          fetch-depth: 1
 
       - name: Apply patches
         run: |
