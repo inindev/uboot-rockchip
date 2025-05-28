@@ -1,7 +1,7 @@
-From 0df256bb03623b45ff90b45229173bac43cb9adc Mon Sep 17 00:00:00 2001
+From 199f1695becf0e8153dce33a71eb7e40007dc95d Mon Sep 17 00:00:00 2001
 From: Jonas Karlman <jonas@kwiboo.se>
 Date: Tue, 28 Jan 2025 01:30:12 +0000
-Subject: [PATCH 07/12] WIP: rockchip: mkimage: Add rk3576 align and sd-card
+Subject: [PATCH 07/14] WIP: rockchip: mkimage: Add rk3576 align and sd-card
  workaround
 
 The BootROM on RK3576 has an issue loading boot images from an SD-card.

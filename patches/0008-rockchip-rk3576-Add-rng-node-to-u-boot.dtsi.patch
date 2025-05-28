@@ -1,0 +1,47 @@
+From 35135bf3d73c7511d32224502b6fc5d6d22390aa Mon Sep 17 00:00:00 2001
+From: Jonas Karlman <jonas@kwiboo.se>
+Date: Tue, 22 Apr 2025 21:12:06 +0000
+Subject: [PATCH 08/14] rockchip: rk3576: Add rng node to u-boot.dtsi
+
+The RK3576 SoC contains a RKRNG block that can be used to generate
+random numbers using the rockchip_rng driver.
+
+  => rng list
+  RNG #0 - rng@2a410000
+
+  => rng
+  00000000: 36 dd ab 98 ec fb fe d1 cf 36 b3 e1 9b 3d 00 90  6........6...=..
+  00000010: f5 84 de 75 6b 27 48 9e 13 62 12 6c 50 ca 47 1a  ...uk'H..b.lP.G.
+  00000020: b3 4d fc 43 c5 b5 2d be 07 27 03 26 bb 69 61 2a  .M.C..-..'.&.ia*
+  00000030: 6f 70 01 83 4e ce 91 7a 5a 6c 7c 00 43 87 3e c5  op..N..zZl|.C.>.
+
+Add a rng node to the SoC specific u-boot.dtsi until full support has
+landed in a device tree from dts/upstream.
+
+Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
+Reviewed-by: Kever Yang <kever.yang@rock-chips.com>
+---
+ arch/arm/dts/rk3576-u-boot.dtsi | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/arch/arm/dts/rk3576-u-boot.dtsi b/arch/arm/dts/rk3576-u-boot.dtsi
+index be99a48a630..92896086259 100644
+--- a/arch/arm/dts/rk3576-u-boot.dtsi
++++ b/arch/arm/dts/rk3576-u-boot.dtsi
+@@ -14,6 +14,13 @@
+ 		compatible = "rockchip,rk3576-dmc";
+ 		bootph-all;
+ 	};
++
++	soc {
++		rng: rng@2a410000 {
++			compatible = "rockchip,rkrng";
++			reg = <0x0 0x2a410000 0x0 0x200>;
++		};
++	};
+ };
+ 
+ &cru {
+-- 
+2.39.5
+

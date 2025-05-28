@@ -1,7 +1,7 @@
-From 41af2dfafd8fcfc1fa16d7edfc96dc09dc8ee82a Mon Sep 17 00:00:00 2001
+From c0050eb7ee8c8848cf60e82cd1dab9184a042888 Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Wed, 21 May 2025 07:22:59 -0400
-Subject: [PATCH 08/12] gitconfig: ignore binman-fake build artifact
+Subject: [PATCH 12/14] gitconfig: ignore binman-fake build artifact
 
 Signed-off-by: John Clark <inindev@gmail.com>
 ---

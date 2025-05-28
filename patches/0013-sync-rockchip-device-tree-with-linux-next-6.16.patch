@@ -1,7 +1,7 @@
-From 6432e18d26a16fc0fcb716b218043b8e849ba656 Mon Sep 17 00:00:00 2001
+From 4e977628775ca2207dff8ee49767c53a89e342e4 Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Sun, 25 May 2025 12:26:20 -0400
-Subject: [PATCH 11/12] sync rockchip device tree with linux next / 6.16
+Subject: [PATCH 13/14] sync rockchip device tree with linux next / 6.16
 
 Signed-off-by: John Clark <inindev@gmail.com>
 ---
