@@ -3,7 +3,7 @@
 /arm-trusted-firmware
 /downloads
 /outbin
-/u-boot
+/u-boot*
 rk3*
 /rkbin
 /rockchip-rkbin
