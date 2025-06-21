@@ -1,7 +1,7 @@
-From 1cf5419bfa517005d57a116fb0c92b9c0fd791f4 Mon Sep 17 00:00:00 2001
+From 13b46faed921f1b6dcc000a0d4b52c54de0bd6b1 Mon Sep 17 00:00:00 2001
 From: Jonas Karlman <jonas@kwiboo.se>
 Date: Tue, 22 Apr 2025 21:12:08 +0000
-Subject: [PATCH 09/14] board: rockchip: Add minimal generic RK3576 board
+Subject: [PATCH 09/17] board: rockchip: Add minimal generic RK3576 board
 
 Add a minimal generic RK3576 board that only have eMMC and SDMMC
 enabled. This defconfig can be used to boot from eMMC or SD-card on most

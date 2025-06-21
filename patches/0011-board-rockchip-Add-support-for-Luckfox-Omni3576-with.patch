@@ -1,7 +1,7 @@
-From 7943bf2d6b57a7fba09114f6eb38626c1e0bdf6a Mon Sep 17 00:00:00 2001
+From d28be8eaf4f84dcfd2d830fe9b82be3fb3d59eb1 Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Tue, 27 May 2025 21:18:50 -0400
-Subject: [PATCH 11/14] board: rockchip: Add support for Luckfox Omni3576 with
+Subject: [PATCH 11/17] board: rockchip: Add support for Luckfox Omni3576 with
  Core3576 module
 
 Add support for the Luckfox Omni3576 carrier board, paired with the

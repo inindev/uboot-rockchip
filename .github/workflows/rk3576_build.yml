@@ -38,6 +38,8 @@ jobs:
             config: sige5-rk3576_defconfig
           - name: rk3576-luckfox-omni3576
             config: omni3576-rk3576_defconfig
+          - name: rk3576-nanopi-m5
+            config: nanopi-m5-rk3576_defconfig
           - name: rk3576-roc-pc
             config: roc-pc-rk3576_defconfig
       fail-fast: true
@@ -138,7 +140,7 @@ jobs:
           cd base-files
           sha256sum idbloader*.img u-boot.itb > sha256sums.txt 2>/dev/null || true
           cd ../..
-          zip -r ${{ matrix.board.name }}.zip ${{ matrix.board.name }}
+          zip -r ../${{ matrix.board.name }}.zip ${{ matrix.board.name }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -155,7 +157,7 @@ jobs:
           name: u-boot arm64 ${{ inputs.uboot_ref }}
           draft: true
           prerelease: ${{ contains(inputs.uboot_ref, '-rc') }}
-          files: output/${{ matrix.board.name }}.zip
+          files: ${{ matrix.board.name }}.zip
           fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

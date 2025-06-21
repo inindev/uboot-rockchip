@@ -135,7 +135,7 @@ jobs:
           cd base-files
           sha256sum idbloader*.img u-boot.itb > sha256sums.txt 2>/dev/null || true
           cd ../..
-          zip -r ${{ matrix.board.name }}.zip ${{ matrix.board.name }}
+          zip -r ../${{ matrix.board.name }}.zip ${{ matrix.board.name }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -152,7 +152,7 @@ jobs:
           name: u-boot arm64 ${{ inputs.uboot_ref }}
           draft: true
           prerelease: ${{ contains(inputs.uboot_ref, '-rc') }}
-          files: output/${{ matrix.board.name }}.zip
+          files: ${{ matrix.board.name }}.zip
           fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

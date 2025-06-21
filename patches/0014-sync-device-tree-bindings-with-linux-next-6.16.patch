@@ -1,7 +1,7 @@
-From 5c9c7c6b42f4099631197c0cd4a9b53637f39cba Mon Sep 17 00:00:00 2001
+From 06a4f9a587eab907cc1bfee38ed8ffd31bc5b032 Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Sun, 25 May 2025 12:35:02 -0400
-Subject: [PATCH 14/14] sync device tree bindings with linux next / 6.16
+Subject: [PATCH 14/17] sync device tree bindings with linux next / 6.16
 
 Signed-off-by: John Clark <inindev@gmail.com>
 ---
