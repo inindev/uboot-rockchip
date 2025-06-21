@@ -1,0 +1,28 @@
+From feb64ab3ebb9edd5bd37145a49d190d7e7df4ab3 Mon Sep 17 00:00:00 2001
+From: John Clark <inindev@gmail.com>
+Date: Fri, 30 May 2025 18:33:59 -0400
+Subject: [PATCH 15/17] clk: rockchip: Fix VPLL mode register
+
+Correct the VPLL mode register from RK3576_LPLL_MODE_CON0 to RK3576_MODE_CON0 in the RK3576 PLL configuration. This aligns with the RK3588's V0PLL setup and fixes potential misconfiguration of the video PLL.
+
+Signed-off-by: John Clark <inindev@gmail.com>
+---
+ drivers/clk/rockchip/clk_rk3576.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/clk/rockchip/clk_rk3576.c b/drivers/clk/rockchip/clk_rk3576.c
+index e84a0943a94..bd8908e90a5 100644
+--- a/drivers/clk/rockchip/clk_rk3576.c
++++ b/drivers/clk/rockchip/clk_rk3576.c
+@@ -51,7 +51,7 @@ static struct rockchip_pll_clock rk3576_pll_clks[] = {
+ 	[LPLL] = PLL(pll_rk3588, PLL_LPLL, RK3576_LPLL_CON(16),
+ 		     RK3576_LPLL_MODE_CON0, 0, 15, 0, rk3576_24m_pll_rates),
+ 	[VPLL] = PLL(pll_rk3588, PLL_VPLL, RK3576_PLL_CON(88),
+-		      RK3576_LPLL_MODE_CON0, 4, 15, 0, rk3576_24m_pll_rates),
++		      RK3576_MODE_CON0, 4, 15, 0, rk3576_24m_pll_rates),
+ 	[AUPLL] = PLL(pll_rk3588, PLL_AUPLL, RK3576_PLL_CON(96),
+ 		      RK3576_MODE_CON0, 6, 15, 0, rk3576_24m_pll_rates),
+ 	[CPLL] = PLL(pll_rk3588, PLL_CPLL, RK3576_PLL_CON(104),
+-- 
+2.39.5
+

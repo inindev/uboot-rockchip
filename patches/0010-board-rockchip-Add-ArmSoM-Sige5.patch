@@ -1,7 +1,7 @@
-From da5d48ffa7ba41bf47e3fba874cf4f21b9254c6c Mon Sep 17 00:00:00 2001
+From 76c433b8cfdbcd6adf6b03332c0c5cafaced88f0 Mon Sep 17 00:00:00 2001
 From: Jonas Karlman <jonas@kwiboo.se>
 Date: Tue, 22 Apr 2025 21:12:09 +0000
-Subject: [PATCH 10/14] board: rockchip: Add ArmSoM Sige5
+Subject: [PATCH 10/17] board: rockchip: Add ArmSoM Sige5
 
 ArmSoM-Sige5 adopts the second-generation 8nm high-performance AIOT
 platform Rockchip RK3576, with a 6 TOPS computing power NPU and support
