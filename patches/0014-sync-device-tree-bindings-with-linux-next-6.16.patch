@@ -1,4 +1,4 @@
-From 06a4f9a587eab907cc1bfee38ed8ffd31bc5b032 Mon Sep 17 00:00:00 2001
+From f56db9e6bc80a88f8f9553a0f179d68ae9b5d68b Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Sun, 25 May 2025 12:35:02 -0400
 Subject: [PATCH 14/17] sync device tree bindings with linux next / 6.16
@@ -26,6 +26,8 @@ Signed-off-by: John Clark <inindev@gmail.com>
  .../clock/samsung,exynos7870-cmu.h            | 324 +++++++++++++
  .../dt-bindings/clock/samsung,exynos990.h     |  21 +
  .../clock/samsung,exynosautov920.h            |  51 +++
+ .../dt-bindings/clock/sophgo,sg2044-clk.h     | 153 +++++++
+ .../dt-bindings/clock/sophgo,sg2044-pll.h     |  27 ++
  .../dt-bindings/clock/spacemit,k1-syscon.h    | 247 ++++++++++
  .../include/dt-bindings/clock/stm32h7-clks.h  |   4 +-
  .../dt-bindings/clock/sun50i-h616-ccu.h       |   4 +
@@ -44,6 +46,7 @@ Signed-off-by: John Clark <inindev@gmail.com>
  .../power/allwinner,sun8i-v853-ppu.h          |  10 +
  .../dt-bindings/power/mediatek,mt6893-power.h |  35 ++
  .../include/dt-bindings/power/qcom-rpmpd.h    |   2 +-
+ .../dt-bindings/power/rockchip,rk3528-power.h |  19 +
  .../dt-bindings/power/rockchip,rk3562-power.h |  35 ++
  .../dt-bindings/power/thead,th1520-power.h    |  19 +
  .../dt-bindings/reset/imx8mp-reset-audiomix.h |  13 +
@@ -58,7 +61,7 @@ Signed-off-by: John Clark <inindev@gmail.com>
  .../include/dt-bindings/sound/cs48l32.h       |  20 +
  .../sound/qcom,q6dsp-lpass-ports.h            |   1 +
  .../include/dt-bindings/sound/qcom,wcd934x.h  |  16 +
- 53 files changed, 3705 insertions(+), 10 deletions(-)
+ 56 files changed, 3904 insertions(+), 10 deletions(-)
  create mode 100644 dts/upstream/include/dt-bindings/clock/mediatek,mtmips-sysc.h
  create mode 100644 dts/upstream/include/dt-bindings/clock/qcom,dsi-phy-28nm.h
  create mode 100644 dts/upstream/include/dt-bindings/clock/qcom,ipq9574-nsscc.h
@@ -67,6 +70,8 @@ Signed-off-by: John Clark <inindev@gmail.com>
  create mode 100644 dts/upstream/include/dt-bindings/clock/rockchip,rk3562-cru.h
  create mode 100644 dts/upstream/include/dt-bindings/clock/samsung,exynos2200-cmu.h
  create mode 100644 dts/upstream/include/dt-bindings/clock/samsung,exynos7870-cmu.h
+ create mode 100644 dts/upstream/include/dt-bindings/clock/sophgo,sg2044-clk.h
+ create mode 100644 dts/upstream/include/dt-bindings/clock/sophgo,sg2044-pll.h
  create mode 100644 dts/upstream/include/dt-bindings/clock/spacemit,k1-syscon.h
  create mode 100644 dts/upstream/include/dt-bindings/clock/sun55i-a523-ccu.h
  create mode 100644 dts/upstream/include/dt-bindings/clock/sun55i-a523-r-ccu.h
@@ -77,6 +82,7 @@ Signed-off-by: John Clark <inindev@gmail.com>
  create mode 100644 dts/upstream/include/dt-bindings/pinctrl/pinctrl-sg2044.h
  create mode 100644 dts/upstream/include/dt-bindings/power/allwinner,sun8i-v853-ppu.h
  create mode 100644 dts/upstream/include/dt-bindings/power/mediatek,mt6893-power.h
+ create mode 100644 dts/upstream/include/dt-bindings/power/rockchip,rk3528-power.h
  create mode 100644 dts/upstream/include/dt-bindings/power/rockchip,rk3562-power.h
  create mode 100644 dts/upstream/include/dt-bindings/power/thead,th1520-power.h
  create mode 100644 dts/upstream/include/dt-bindings/reset/imx8mp-reset-audiomix.h
@@ -1857,6 +1863,198 @@ index 0c681f2ba3d..5e6896e9627 100644
  /* CMU_PERIC0 */
  #define CLK_MOUT_PERIC0_IP_USER		1
  #define CLK_MOUT_PERIC0_NOC_USER	2
+diff --git a/dts/upstream/include/dt-bindings/clock/sophgo,sg2044-clk.h b/dts/upstream/include/dt-bindings/clock/sophgo,sg2044-clk.h
+new file mode 100644
+index 00000000000..d9adca42548
+--- /dev/null
++++ b/dts/upstream/include/dt-bindings/clock/sophgo,sg2044-clk.h
+@@ -0,0 +1,153 @@
++/* SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause */
++/*
++ * Copyright (C) 2024 Inochi Amaoto <inochiama@gmail.com>
++ */
++
++#ifndef __DT_BINDINGS_SOPHGO_SG2044_CLK_H__
++#define __DT_BINDINGS_SOPHGO_SG2044_CLK_H__
++
++#define CLK_DIV_AP_SYS_FIXED		0
++#define CLK_DIV_AP_SYS_MAIN		1
++#define CLK_DIV_RP_SYS_FIXED		2
++#define CLK_DIV_RP_SYS_MAIN		3
++#define CLK_DIV_TPU_SYS_FIXED		4
++#define CLK_DIV_TPU_SYS_MAIN		5
++#define CLK_DIV_NOC_SYS_FIXED		6
++#define CLK_DIV_NOC_SYS_MAIN		7
++#define CLK_DIV_VC_SRC0_FIXED		8
++#define CLK_DIV_VC_SRC0_MAIN		9
++#define CLK_DIV_VC_SRC1_FIXED		10
++#define CLK_DIV_VC_SRC1_MAIN		11
++#define CLK_DIV_CXP_MAC_FIXED		12
++#define CLK_DIV_CXP_MAC_MAIN		13
++#define CLK_DIV_DDR0_FIXED		14
++#define CLK_DIV_DDR0_MAIN		15
++#define CLK_DIV_DDR1_FIXED		16
++#define CLK_DIV_DDR1_MAIN		17
++#define CLK_DIV_DDR2_FIXED		18
++#define CLK_DIV_DDR2_MAIN		19
++#define CLK_DIV_DDR3_FIXED		20
++#define CLK_DIV_DDR3_MAIN		21
++#define CLK_DIV_DDR4_FIXED		22
++#define CLK_DIV_DDR4_MAIN		23
++#define CLK_DIV_DDR5_FIXED		24
++#define CLK_DIV_DDR5_MAIN		25
++#define CLK_DIV_DDR6_FIXED		26
++#define CLK_DIV_DDR6_MAIN		27
++#define CLK_DIV_DDR7_FIXED		28
++#define CLK_DIV_DDR7_MAIN		29
++#define CLK_DIV_TOP_50M			30
++#define CLK_DIV_TOP_AXI0		31
++#define CLK_DIV_TOP_AXI_HSPERI		32
++#define CLK_DIV_TIMER0			33
++#define CLK_DIV_TIMER1			34
++#define CLK_DIV_TIMER2			35
++#define CLK_DIV_TIMER3			36
++#define CLK_DIV_TIMER4			37
++#define CLK_DIV_TIMER5			38
++#define CLK_DIV_TIMER6			39
++#define CLK_DIV_TIMER7			40
++#define CLK_DIV_CXP_TEST_PHY		41
++#define CLK_DIV_CXP_TEST_ETH_PHY	42
++#define CLK_DIV_C2C0_TEST_PHY		43
++#define CLK_DIV_C2C1_TEST_PHY		44
++#define CLK_DIV_PCIE_1G			45
++#define CLK_DIV_UART_500M		46
++#define CLK_DIV_GPIO_DB			47
++#define CLK_DIV_SD			48
++#define CLK_DIV_SD_100K			49
++#define CLK_DIV_EMMC			50
++#define CLK_DIV_EMMC_100K		51
++#define CLK_DIV_EFUSE			52
++#define CLK_DIV_TX_ETH0			53
++#define CLK_DIV_PTP_REF_I_ETH0		54
++#define CLK_DIV_REF_ETH0		55
++#define CLK_DIV_PKA			56
++#define CLK_MUX_DDR0			57
++#define CLK_MUX_DDR1			58
++#define CLK_MUX_DDR2			59
++#define CLK_MUX_DDR3			60
++#define CLK_MUX_DDR4			61
++#define CLK_MUX_DDR5			62
++#define CLK_MUX_DDR6			63
++#define CLK_MUX_DDR7			64
++#define CLK_MUX_NOC_SYS			65
++#define CLK_MUX_TPU_SYS			66
++#define CLK_MUX_RP_SYS			67
++#define CLK_MUX_AP_SYS			68
++#define CLK_MUX_VC_SRC0			69
++#define CLK_MUX_VC_SRC1			70
++#define CLK_MUX_CXP_MAC			71
++#define CLK_GATE_AP_SYS			72
++#define CLK_GATE_RP_SYS			73
++#define CLK_GATE_TPU_SYS		74
++#define CLK_GATE_NOC_SYS		75
++#define CLK_GATE_VC_SRC0		76
++#define CLK_GATE_VC_SRC1		77
++#define CLK_GATE_DDR0			78
++#define CLK_GATE_DDR1			79
++#define CLK_GATE_DDR2			80
++#define CLK_GATE_DDR3			81
++#define CLK_GATE_DDR4			82
++#define CLK_GATE_DDR5			83
++#define CLK_GATE_DDR6			84
++#define CLK_GATE_DDR7			85
++#define CLK_GATE_TOP_50M		86
++#define CLK_GATE_SC_RX			87
++#define CLK_GATE_SC_RX_X0Y1		88
++#define CLK_GATE_TOP_AXI0		89
++#define CLK_GATE_INTC0			90
++#define CLK_GATE_INTC1			91
++#define CLK_GATE_INTC2			92
++#define CLK_GATE_INTC3			93
++#define CLK_GATE_MAILBOX0		94
++#define CLK_GATE_MAILBOX1		95
++#define CLK_GATE_MAILBOX2		96
++#define CLK_GATE_MAILBOX3		97
++#define CLK_GATE_TOP_AXI_HSPERI		98
++#define CLK_GATE_APB_TIMER		99
++#define CLK_GATE_TIMER0			100
++#define CLK_GATE_TIMER1			101
++#define CLK_GATE_TIMER2			102
++#define CLK_GATE_TIMER3			103
++#define CLK_GATE_TIMER4			104
++#define CLK_GATE_TIMER5			105
++#define CLK_GATE_TIMER6			106
++#define CLK_GATE_TIMER7			107
++#define CLK_GATE_CXP_CFG		108
++#define CLK_GATE_CXP_MAC		109
++#define CLK_GATE_CXP_TEST_PHY		110
++#define CLK_GATE_CXP_TEST_ETH_PHY	111
++#define CLK_GATE_PCIE_1G		112
++#define CLK_GATE_C2C0_TEST_PHY		113
++#define CLK_GATE_C2C1_TEST_PHY		114
++#define CLK_GATE_UART_500M		115
++#define CLK_GATE_APB_UART		116
++#define CLK_GATE_APB_SPI		117
++#define CLK_GATE_AHB_SPIFMC		118
++#define CLK_GATE_APB_I2C		119
++#define CLK_GATE_AXI_DBG_I2C		120
++#define CLK_GATE_GPIO_DB		121
++#define CLK_GATE_APB_GPIO_INTR		122
++#define CLK_GATE_APB_GPIO		123
++#define CLK_GATE_SD			124
++#define CLK_GATE_AXI_SD			125
++#define CLK_GATE_SD_100K		126
++#define CLK_GATE_EMMC			127
++#define CLK_GATE_AXI_EMMC		128
++#define CLK_GATE_EMMC_100K		129
++#define CLK_GATE_EFUSE			130
++#define CLK_GATE_APB_EFUSE		131
++#define CLK_GATE_SYSDMA_AXI		132
++#define CLK_GATE_TX_ETH0		133
++#define CLK_GATE_AXI_ETH0		134
++#define CLK_GATE_PTP_REF_I_ETH0		135
++#define CLK_GATE_REF_ETH0		136
++#define CLK_GATE_APB_RTC		137
++#define CLK_GATE_APB_PWM		138
++#define CLK_GATE_APB_WDT		139
++#define CLK_GATE_AXI_SRAM		140
++#define CLK_GATE_AHB_ROM		141
++#define CLK_GATE_PKA			142
++
++#endif /* __DT_BINDINGS_SOPHGO_SG2044_CLK_H__ */
+diff --git a/dts/upstream/include/dt-bindings/clock/sophgo,sg2044-pll.h b/dts/upstream/include/dt-bindings/clock/sophgo,sg2044-pll.h
+new file mode 100644
+index 00000000000..817d45e700c
+--- /dev/null
++++ b/dts/upstream/include/dt-bindings/clock/sophgo,sg2044-pll.h
+@@ -0,0 +1,27 @@
++/* SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause */
++/*
++ * Copyright (C) 2024 Inochi Amaoto <inochiama@gmail.com>
++ */
++
++#ifndef __DT_BINDINGS_SOPHGO_SG2044_PLL_H__
++#define __DT_BINDINGS_SOPHGO_SG2044_PLL_H__
++
++#define CLK_FPLL0			0
++#define CLK_FPLL1			1
++#define CLK_FPLL2			2
++#define CLK_DPLL0			3
++#define CLK_DPLL1			4
++#define CLK_DPLL2			5
++#define CLK_DPLL3			6
++#define CLK_DPLL4			7
++#define CLK_DPLL5			8
++#define CLK_DPLL6			9
++#define CLK_DPLL7			10
++#define CLK_MPLL0			11
++#define CLK_MPLL1			12
++#define CLK_MPLL2			13
++#define CLK_MPLL3			14
++#define CLK_MPLL4			15
++#define CLK_MPLL5			16
++
++#endif /* __DT_BINDINGS_SOPHGO_SG2044_PLL_H__ */
 diff --git a/dts/upstream/include/dt-bindings/clock/spacemit,k1-syscon.h b/dts/upstream/include/dt-bindings/clock/spacemit,k1-syscon.h
 new file mode 100644
 index 00000000000..35968ae9824
@@ -3339,6 +3537,31 @@ index df599bf4622..d9b7bac3095 100644
  #define SM6375_VDDCX		0
  #define SM6375_VDDCX_AO	1
  #define SM6375_VDDCX_VFL	2
+diff --git a/dts/upstream/include/dt-bindings/power/rockchip,rk3528-power.h b/dts/upstream/include/dt-bindings/power/rockchip,rk3528-power.h
+new file mode 100644
+index 00000000000..318923cdaaf
+--- /dev/null
++++ b/dts/upstream/include/dt-bindings/power/rockchip,rk3528-power.h
+@@ -0,0 +1,19 @@
++/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
++#ifndef __DT_BINDINGS_POWER_RK3528_POWER_H__
++#define __DT_BINDINGS_POWER_RK3528_POWER_H__
++
++#define RK3528_PD_PMU		0
++#define RK3528_PD_BUS		1
++#define RK3528_PD_DDR		2
++#define RK3528_PD_MSCH		3
++
++/* VD_GPU */
++#define RK3528_PD_GPU		4
++
++/* VD_LOGIC */
++#define RK3528_PD_RKVDEC	5
++#define RK3528_PD_RKVENC	6
++#define RK3528_PD_VO		7
++#define RK3528_PD_VPU		8
++
++#endif
 diff --git a/dts/upstream/include/dt-bindings/power/rockchip,rk3562-power.h b/dts/upstream/include/dt-bindings/power/rockchip,rk3562-power.h
 new file mode 100644
 index 00000000000..5182c2427a5
