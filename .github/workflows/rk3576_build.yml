@@ -8,7 +8,7 @@ on:
       uboot_ref:
         description: Enter a u-boot git tag (or branch/commit)
         required: true
-        default: v2025.07-rc3
+        default: v2025.07
         type: string
       use_arm_tf:
         description: Use ARM Trusted Firmware for BL31 (if unchecked, uses Rockchip BL31)
