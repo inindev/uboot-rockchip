@@ -1,7 +1,7 @@
-From 3f63a9991b2f8a61567e45b6146f199246166ef2 Mon Sep 17 00:00:00 2001
+From 2695e11ffcf5619efddfadecf4f4c7a9168eff8e Mon Sep 17 00:00:00 2001
 From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 Date: Sun, 31 Aug 2025 11:20:26 +0000
-Subject: [PATCH 05/14] arm64: dts: rockchip: enable PCIe on ROCK 4D
+Subject: [PATCH 12/21] arm64: dts: rockchip: enable PCIe on ROCK 4D
 
 The RADXA ROCK 4D board has a PCIe controller connected to a flat flex
 connector, compatible with the one the RPi5 uses.

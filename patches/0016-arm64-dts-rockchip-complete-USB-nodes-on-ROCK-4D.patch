@@ -1,7 +1,7 @@
-From 0c5043b37616108de12727e09298836fd1579a9c Mon Sep 17 00:00:00 2001
+From 21da93d9dc8a67944dc6b3ca13c1081f55fda5ff Mon Sep 17 00:00:00 2001
 From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 Date: Sun, 31 Aug 2025 11:20:30 +0000
-Subject: [PATCH 09/14] arm64: dts: rockchip: complete USB nodes on ROCK 4D
+Subject: [PATCH 16/21] arm64: dts: rockchip: complete USB nodes on ROCK 4D
 
 The ROCK 4D uses both USB controllers, and both of which in host mode.
 However, it still names one of the supplies for them "OTG" in the

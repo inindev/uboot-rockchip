@@ -1,7 +1,7 @@
-From dc2ebdb39953ff3addfc6f087231eb27decb56e4 Mon Sep 17 00:00:00 2001
+From d90f28bddd1db38736aabbc880ab429ece00dbdc Mon Sep 17 00:00:00 2001
 From: Jonas Karlman <jonas@kwiboo.se>
 Date: Sun, 31 Aug 2025 11:20:24 +0000
-Subject: [PATCH 03/14] rockchip: rk3528: Implement read_brom_bootsource_id()
+Subject: [PATCH 10/21] rockchip: rk3528: Implement read_brom_bootsource_id()
 
 The bootsource ids reported by BootROM of RK3528 for e.g. USB differs
 compared to prior SoCs:

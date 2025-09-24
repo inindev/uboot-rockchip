@@ -1,7 +1,7 @@
-From 9cae30f121aed648c5542e19975e5905e42938f1 Mon Sep 17 00:00:00 2001
+From 582f7f984c1b94cc44e5143cb0f596674e38a765 Mon Sep 17 00:00:00 2001
 From: Jonas Karlman <jonas@kwiboo.se>
 Date: Sun, 31 Aug 2025 11:20:25 +0000
-Subject: [PATCH 04/14] rockchip: rk3576: Add SPI Flash boot support
+Subject: [PATCH 11/21] rockchip: rk3576: Add SPI Flash boot support
 
 The bootsource ids reported by BootROM of RK3576 for SPI NOR and USB
 differs slightly compared to prior SoCs:

@@ -1,7 +1,7 @@
-From 4cd4415d0301e5c8a6c4f9add33e0a7a1edbc045 Mon Sep 17 00:00:00 2001
+From 0d4ca59f51e8b4b728e1dc72fc2bb6f4c2aed1b5 Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Sun, 31 Aug 2025 11:42:29 +0000
-Subject: [PATCH 13/14] arm64: dts: rockchip: Add FriendlyElec NanoPi M5
+Subject: [PATCH 20/21] arm64: dts: rockchip: Add FriendlyElec NanoPi M5
  support
 
 Add device tree for FriendlyElec NanoPi M5 with Rockchip RK3576 SoC

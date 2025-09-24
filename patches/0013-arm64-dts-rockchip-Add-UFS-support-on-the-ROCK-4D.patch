@@ -1,7 +1,7 @@
-From b5829e6600332e202c48c3c5cd2b67511a3c8eaf Mon Sep 17 00:00:00 2001
+From 23fd42dcb2d2f1f016e5a87bfa0d2f1cd522dd47 Mon Sep 17 00:00:00 2001
 From: Detlev Casanova <detlev.casanova@collabora.com>
 Date: Sun, 31 Aug 2025 11:20:27 +0000
-Subject: [PATCH 06/14] arm64: dts: rockchip: Add UFS support on the ROCK 4D
+Subject: [PATCH 13/21] arm64: dts: rockchip: Add UFS support on the ROCK 4D
 
 This device supports removable UFS chips, add support for it.
 

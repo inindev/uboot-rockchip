@@ -1,7 +1,7 @@
-From e1c61b04da83f1eb1b72b0ef7d2a0363331d60ba Mon Sep 17 00:00:00 2001
+From fbd77ce234fd8817987c162015734006baf93b00 Mon Sep 17 00:00:00 2001
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
 Date: Sun, 31 Aug 2025 11:20:28 +0000
-Subject: [PATCH 07/14] arm64: dts: rockchip: fix PHY handling for ROCK 4D
+Subject: [PATCH 14/21] arm64: dts: rockchip: fix PHY handling for ROCK 4D
 
 Old revisions of the ROCK 4D board have a dedicated crystal to
 supply the RTL8211F PHY's 25MHz clock input. At least some newer

@@ -1,7 +1,7 @@
-From f1f47f597ece999f34e1797ec9d8778d10d9ac75 Mon Sep 17 00:00:00 2001
+From b8f957a30ffdf4ef2c69fcdaed539dafadca6f20 Mon Sep 17 00:00:00 2001
 From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 Date: Sun, 31 Aug 2025 11:20:29 +0000
-Subject: [PATCH 08/14] arm64: dts: rockchip: adjust dcin regulator on ROCK 4D
+Subject: [PATCH 15/21] arm64: dts: rockchip: adjust dcin regulator on ROCK 4D
 
 The ROCK 4D's actual DC input is 5V, and the schematic names it as being
 5V as well.

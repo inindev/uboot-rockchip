@@ -1,7 +1,7 @@
-From 7b48ae42fd1c592eb6358cd5a541954c30321225 Mon Sep 17 00:00:00 2001
+From 9f3e1d3f88dc4687bf3f5751282da206f52447ae Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Sun, 31 Aug 2025 11:42:27 +0000
-Subject: [PATCH 11/14] arm64: dts: rockchip: Add Luckfox Omni3576 Board
+Subject: [PATCH 18/21] arm64: dts: rockchip: Add Luckfox Omni3576 Board
  support
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8

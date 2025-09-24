@@ -1,7 +1,7 @@
-From a49d68ea692ace42cc20a46699d9dcb1536d118b Mon Sep 17 00:00:00 2001
+From a03dd108967ae492dd8a4fe938701d3e05ef2920 Mon Sep 17 00:00:00 2001
 From: Jonas Karlman <jonas@kwiboo.se>
 Date: Sun, 31 Aug 2025 11:20:23 +0000
-Subject: [PATCH 02/14] rockchip: spl: Add a read_brom_bootsource_id() helper
+Subject: [PATCH 09/21] rockchip: spl: Add a read_brom_bootsource_id() helper
 
 The bootsource ids reported by BootROM of RK3528 and RK3576 for e.g.
 SPI NOR and USB differs slightly compared to prior SoCs:
