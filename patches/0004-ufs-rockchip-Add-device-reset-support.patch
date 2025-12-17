@@ -1,0 +1,106 @@
+From 3fa8be9880882337fe9d11b7196b8902d2a34130 Mon Sep 17 00:00:00 2001
+From: Alexey Charkov <alchark@gmail.com>
+Date: Wed, 10 Dec 2025 23:10:49 +0300
+Subject: [PATCH 4/6] ufs: rockchip: Add device reset support
+
+Wire up the GPIO line which Rockchip RK3576 UFS controller uses to reset
+the connected UFS device.
+
+This seems necessary at least for some UFS modules and fixes the following
+error while enumerating UFS storage:
+
+ufshcd-rockchip ufshc@2a2d0000: ufshcd_link_startup: Device not present
+ufshcd-rockchip ufshc@2a2d0000: link startup failed -6
+ufshcd-rockchip ufshc@2a2d0000: ufshcd_pltfrm_init() failed -6
+
+Fixes: 76465ce21ee4 ("ufs: rockchip: Add initial support")
+Signed-off-by: Alexey Charkov <alchark@gmail.com>
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+ drivers/ufs/Kconfig        |  1 +
+ drivers/ufs/ufs-rockchip.c | 25 +++++++++++++++++++++++++
+ drivers/ufs/ufs-rockchip.h |  1 +
+ 3 files changed, 27 insertions(+)
+
+diff --git a/drivers/ufs/Kconfig b/drivers/ufs/Kconfig
+index 445270e8da1..2d9064595e6 100644
+--- a/drivers/ufs/Kconfig
++++ b/drivers/ufs/Kconfig
+@@ -25,6 +25,7 @@ config QCOM_UFS
+ config ROCKCHIP_UFS
+ 	bool "Rockchip specific hooks to UFS controller platform driver"
+ 	depends on UFS
++	select DM_GPIO
+ 	help
+ 	  This selects the Rockchip specific additions to UFSHCD platform driver.
+ 
+diff --git a/drivers/ufs/ufs-rockchip.c b/drivers/ufs/ufs-rockchip.c
+index 0384244387d..48444705fb2 100644
+--- a/drivers/ufs/ufs-rockchip.c
++++ b/drivers/ufs/ufs-rockchip.c
+@@ -5,6 +5,7 @@
+  * Copyright (C) 2025 Rockchip Electronics Co.Ltd.
+  */
+ 
++#include <asm/gpio.h>
+ #include <asm/io.h>
+ #include <clk.h>
+ #include <dm.h>
+@@ -153,11 +154,34 @@ static int ufs_rockchip_common_init(struct ufs_hba *hba)
+ 		return err;
+ 	}
+ 
++	err = gpio_request_by_name(dev, "reset-gpios", 0, &host->device_reset,
++				   GPIOD_IS_OUT | GPIOD_ACTIVE_LOW);
++	if (err) {
++		dev_err(dev, "Warning: cannot get reset GPIO\n");
++		return err;
++	}
++
+ 	host->hba = hba;
+ 
+ 	return 0;
+ }
+ 
++static int ufs_rockchip_device_reset(struct ufs_hba *hba)
++{
++	struct ufs_rockchip_host *host = dev_get_priv(hba->dev);
++
++	if (!dm_gpio_is_valid(&host->device_reset))
++		return 0;
++
++	dm_gpio_set_value(&host->device_reset, true);
++	udelay(20);
++
++	dm_gpio_set_value(&host->device_reset, false);
++	udelay(20);
++
++	return 0;
++}
++
+ static int ufs_rockchip_rk3576_init(struct ufs_hba *hba)
+ {
+ 	int ret = 0;
+@@ -175,6 +199,7 @@ static struct ufs_hba_ops ufs_hba_rk3576_vops = {
+ 	.init = ufs_rockchip_rk3576_init,
+ 	.phy_initialization = ufs_rockchip_rk3576_phy_init,
+ 	.hce_enable_notify = ufs_rockchip_hce_enable_notify,
++	.device_reset = ufs_rockchip_device_reset,
+ };
+ 
+ static const struct udevice_id ufs_rockchip_of_match[] = {
+diff --git a/drivers/ufs/ufs-rockchip.h b/drivers/ufs/ufs-rockchip.h
+index 3dcb80f5702..50c2539da78 100644
+--- a/drivers/ufs/ufs-rockchip.h
++++ b/drivers/ufs/ufs-rockchip.h
+@@ -72,6 +72,7 @@ struct ufs_rockchip_host {
+ 	void __iomem *ufs_sys_ctrl;
+ 	void __iomem *mphy_base;
+ 	struct reset_ctl_bulk rsts;
++	struct gpio_desc device_reset;
+ 	struct clk ref_out_clk;
+ 	uint64_t caps;
+ 	uint32_t phy_config_mode;
+-- 
+2.47.3
+

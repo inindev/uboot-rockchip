@@ -1,0 +1,64 @@
+From 89d23609db157b0a4fb586cf2da357e15c4a70e1 Mon Sep 17 00:00:00 2001
+From: John Clark <inindev@gmail.com>
+Date: Tue, 16 Dec 2025 21:51:54 -0500
+Subject: [PATCH 6/6] arm64: dts: rockchip: Add UFS support for the nanopi-m5
+
+Signed-off-by: John Clark <inindev@gmail.com>
+---
+ configs/nanopi-m5-rk3576_defconfig                   | 5 +++++
+ dts/upstream/src/arm64/rockchip/rk3576-nanopi-m5.dts | 4 ++++
+ 2 files changed, 9 insertions(+)
+
+diff --git a/configs/nanopi-m5-rk3576_defconfig b/configs/nanopi-m5-rk3576_defconfig
+index 28427390a62..78f3d3a19cd 100644
+--- a/configs/nanopi-m5-rk3576_defconfig
++++ b/configs/nanopi-m5-rk3576_defconfig
+@@ -2,6 +2,7 @@ CONFIG_ARM=y
+ CONFIG_SKIP_LOWLEVEL_INIT=y
+ CONFIG_COUNTER_FREQUENCY=24000000
+ CONFIG_ARCH_ROCKCHIP=y
++CONFIG_SPL_GPIO=y
+ CONFIG_SF_DEFAULT_SPEED=50000000
+ CONFIG_SF_DEFAULT_MODE=0x2000
+ CONFIG_DEFAULT_DEVICE_TREE="rockchip/rk3576-nanopi-m5"
+@@ -21,6 +22,7 @@ CONFIG_SPL_MAX_SIZE=0x40000
+ # CONFIG_SPL_RAW_IMAGE_SUPPORT is not set
+ CONFIG_SPL_SPI_LOAD=y
+ CONFIG_SYS_SPI_U_BOOT_OFFS=0x60000
++CONFIG_SPL_UFS_SUPPORT=y
+ CONFIG_CMD_MEMINFO=y
+ CONFIG_CMD_MEMINFO_MAP=y
+ CONFIG_CMD_ADC=y
+@@ -63,6 +65,7 @@ CONFIG_PHY_ROCKCHIP_USBDP=y
+ CONFIG_DM_PMIC=y
+ CONFIG_PMIC_RK8XX=y
+ CONFIG_REGULATOR_RK8XX=y
++CONFIG_SCSI=y
+ CONFIG_BAUDRATE=1500000
+ CONFIG_DEBUG_UART_SHIFT=2
+ CONFIG_SYS_NS16550_MEM32=y
+@@ -75,4 +78,6 @@ CONFIG_USB_DWC3_GENERIC=y
+ CONFIG_USB_GADGET=y
+ CONFIG_USB_GADGET_DOWNLOAD=y
+ CONFIG_USB_FUNCTION_ROCKUSB=y
++CONFIG_UFS=y
++CONFIG_ROCKCHIP_UFS=y
+ CONFIG_ERRNO_STR=y
+diff --git a/dts/upstream/src/arm64/rockchip/rk3576-nanopi-m5.dts b/dts/upstream/src/arm64/rockchip/rk3576-nanopi-m5.dts
+index cce34c541f7..ee779195e38 100644
+--- a/dts/upstream/src/arm64/rockchip/rk3576-nanopi-m5.dts
++++ b/dts/upstream/src/arm64/rockchip/rk3576-nanopi-m5.dts
+@@ -902,6 +902,10 @@
+ 	status = "okay";
+ };
+ 
++&ufshc {
++	status = "okay";
++};
++
+ &uart0 {
+ 	status = "okay";
+ };
+-- 
+2.47.3
+

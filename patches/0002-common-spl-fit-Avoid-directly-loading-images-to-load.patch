@@ -1,0 +1,44 @@
+From 909810610cc5065cf5463b2f186ca4b4bfb51f35 Mon Sep 17 00:00:00 2001
+From: Alexey Charkov <alchark@gmail.com>
+Date: Wed, 10 Dec 2025 23:10:47 +0300
+Subject: [PATCH 2/6] common/spl: fit: Avoid directly loading images to
+ load_addr
+
+Load images unconditionally to a known-safe location (which is
+CONFIG_SYS_LOAD_ADDR) to be later relocated to its desired load address.
+
+Some storage devices may be unable to directly load each of the images
+listed in a FIT to their desired load addresses, as is the case with
+e.g. booting from UFS storage on Rockchip RK3576, where part of the
+ATF should end up in SRAM but the UFS controller cannot directly write
+there.
+
+Furthermore, the code down the line does a memmove or image decompression
+from the original src_ptr, anyway, so there shouldn't be any performance
+implications from this change.
+
+Signed-off-by: Alexey Charkov <alchark@gmail.com>
+---
+ common/spl/spl_fit.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/common/spl/spl_fit.c b/common/spl/spl_fit.c
+index a588d13eb40..f10c0ca7d28 100644
+--- a/common/spl/spl_fit.c
++++ b/common/spl/spl_fit.c
+@@ -291,11 +291,7 @@ static int load_simple_fit(struct spl_load_info *info, ulong fit_offset,
+ 			return 0;
+ 		}
+ 
+-		if (spl_decompression_enabled() &&
+-		    (image_comp == IH_COMP_GZIP || image_comp == IH_COMP_LZMA))
+-			src_ptr = map_sysmem(ALIGN(CONFIG_SYS_LOAD_ADDR, ARCH_DMA_MINALIGN), len);
+-		else
+-			src_ptr = map_sysmem(ALIGN(load_addr, ARCH_DMA_MINALIGN), len);
++		src_ptr = map_sysmem(ALIGN(CONFIG_SYS_LOAD_ADDR, ARCH_DMA_MINALIGN), len);
+ 		length = len;
+ 
+ 		overhead = get_aligned_image_overhead(info, offset);
+-- 
+2.47.3
+
