@@ -125,4 +125,4 @@ make BOARD=<board> # e.g., make BOARD=rk3588-nanopc-t6
 <br/>
 
 ## License
-GNU General Public License v2.0 or later (GPL-2.0-or-later) – see [LICENSE](LICENSE) file.
+GNU General Public License v3.0 (GPL-3.0) – see [LICENSE](LICENSE) file.
