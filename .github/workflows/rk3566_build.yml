@@ -34,6 +34,16 @@ jobs:
         board:
           - name: rk3566-anbernic-rgxx3
             config: anbernic-rgxx3-rk3566_defconfig
+          - name: rk3566-lckfb-tspi
+            config: lckfb-tspi-rk3566_defconfig
+          - name: rk3566-nanopi-r3s
+            config: nanopi-r3s-rk3566_defconfig
+          - name: rk3566-odroid-m1s
+            config: odroid-m1s-rk3566_defconfig
+          - name: rk3566-orangepi-3b
+            config: orangepi-3b-rk3566_defconfig
+          - name: rk3566-anbernic-rgxx3
+            config: anbernic-rgxx3-rk3566_defconfig
           - name: rk3566-odroid-m1s
             config: odroid-m1s-rk3566_defconfig
           - name: rk3566-orangepi-3b
