@@ -44,14 +44,20 @@ jobs:
             config: generic-rk3588_defconfig
           - name: rk3588-jaguar
             config: jaguar-rk3588_defconfig
+          - name: rk3588-mnt-reform2
+            config: mnt-reform2-rk3588_defconfig
           - name: rk3588-nanopc-t6
             config: nanopc-t6-rk3588_defconfig
           - name: rk3588-neu6a-io
             config: neu6a-io-rk3588_defconfig
           - name: rk3588-neu6b-io
             config: neu6b-io-rk3588_defconfig
+          - name: rk3588-orangepi-5-max
+            config: orangepi-5-max-rk3588_defconfig
           - name: rk3588-orangepi-5-plus
             config: orangepi-5-plus-rk3588_defconfig
+          - name: rk3588-orangepi-5-ultra
+            config: orangepi-5-ultra-rk3588_defconfig
           - name: rk3588-quartzpro64
             config: quartzpro64-rk3588_defconfig
           - name: rk3588-rock-5-itx
@@ -68,6 +74,10 @@ jobs:
             config: turing-rk1-rk3588_defconfig
           - name: rk3588s-coolpi-4b
             config: coolpi-4b-rk3588s_defconfig
+          - name: rk3588s-gameforce-ace
+            config: gameforce-ace-rk3588s_defconfig
+          - name: rk3588s-khadas-edge2
+            config: khadas-edge2-rk3588s_defconfig
           - name: rk3588s-nanopi-r6c
             config: nanopi-r6c-rk3588s_defconfig
           - name: rk3588s-nanopi-r6s
@@ -80,6 +90,8 @@ jobs:
             config: orangepi-5-rk3588s_defconfig
           - name: rk3588s-rock-5a
             config: rock5a-rk3588s_defconfig
+          - name: rk3588s-rock-5c
+            config: rock-5c-rk3588s_defconfig
       fail-fast: true
 
     steps:
