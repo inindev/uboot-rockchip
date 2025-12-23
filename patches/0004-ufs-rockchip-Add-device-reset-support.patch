@@ -1,7 +1,7 @@
-From 3fa8be9880882337fe9d11b7196b8902d2a34130 Mon Sep 17 00:00:00 2001
+From 6d2d5d827cf60b3b1d3ac09e58749c43ea8fb3cf Mon Sep 17 00:00:00 2001
 From: Alexey Charkov <alchark@gmail.com>
 Date: Wed, 10 Dec 2025 23:10:49 +0300
-Subject: [PATCH 4/6] ufs: rockchip: Add device reset support
+Subject: [PATCH 4/7] ufs: rockchip: Add device reset support
 
 Wire up the GPIO line which Rockchip RK3576 UFS controller uses to reset
 the connected UFS device.
