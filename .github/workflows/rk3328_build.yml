@@ -34,6 +34,8 @@ jobs:
         board:
           - name: rk3328-evb
             config: evb-rk3328_defconfig
+          - name: rk3328-generic
+            config: generic-rk3328_defconfig
           - name: rk3328-nanopi-r2c-plus
             config: nanopi-r2c-plus-rk3328_defconfig
           - name: rk3328-nanopi-r2c
