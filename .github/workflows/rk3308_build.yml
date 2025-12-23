@@ -32,6 +32,10 @@ jobs:
     strategy:
       matrix:
         board:
+          - name: rk3308-evb
+            config: evb-rk3308_defconfig
+            uart: 4
+            iomux: 0
           - name: rk3308-roc-cc
             config: roc-cc-rk3308_defconfig
             uart: 2
