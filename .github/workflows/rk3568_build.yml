@@ -36,6 +36,8 @@ jobs:
             config: bpi-r2-pro-rk3568_defconfig
           - name: rk3568-evb
             config: evb-rk3568_defconfig
+          - name: rk3568-fastrhino-r66s
+            config: fastrhino-r66s-rk3568_defconfig
           - name: rk3568-generic
             config: generic-rk3568_defconfig
           - name: rk3568-lubancat-2
