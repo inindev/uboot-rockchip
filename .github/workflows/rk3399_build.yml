@@ -40,6 +40,8 @@ jobs:
             config: ficus-rk3399_defconfig
           - name: rk3399-firefly
             config: firefly-rk3399_defconfig
+          - name: rk3399-generic
+            config: generic-rk3399_defconfig
           - name: rk3399-khadas-edge-captain
             config: khadas-edge-captain-rk3399_defconfig
           - name: rk3399-khadas-edge
