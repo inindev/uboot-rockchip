@@ -1,6 +1,6 @@
-From e614f7deebb1d6fa2817a27a7c92494cb264bf19 Mon Sep 17 00:00:00 2001
+From 2833ab451236082a7ad67e52d6d547651025f7cd Mon Sep 17 00:00:00 2001
 From: Alexey Charkov <alchark@gmail.com>
-Date: Mon, 1 Dec 2025 15:35:38 +0400
+Date: Tue, 30 Dec 2025 17:23:34 +0400
 Subject: [PATCH 6/7] arm64: dts: rockchip: enable UFS controller on
  FriendlyElec NanoPi M5
 
@@ -12,14 +12,14 @@ Enable the respective devicetree node and add its supply regulators.
 Link: https://wiki.friendlyelec.com/wiki/images/9/97/NanoPi_M5_LP5_2411_SCH.pdf
 Signed-off-by: Alexey Charkov <alchark@gmail.com>
 ---
- .../src/arm64/rockchip/rk3576-nanopi-m5.dts   | 27 +++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ .../src/arm64/rockchip/rk3576-nanopi-m5.dts   | 25 +++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
 diff --git a/dts/upstream/src/arm64/rockchip/rk3576-nanopi-m5.dts b/dts/upstream/src/arm64/rockchip/rk3576-nanopi-m5.dts
-index cce34c541f7..4f2930cff70 100644
+index cce34c541f7..c5b34069a44 100644
 --- a/dts/upstream/src/arm64/rockchip/rk3576-nanopi-m5.dts
 +++ b/dts/upstream/src/arm64/rockchip/rk3576-nanopi-m5.dts
-@@ -110,6 +110,24 @@
+@@ -110,6 +110,22 @@
  		regulator-name = "vcc12v_dcin";
  	};
  
@@ -29,7 +29,6 @@ index cce34c541f7..4f2930cff70 100644
 +		regulator-max-microvolt = <1200000>;
 +		regulator-name = "vcc1v2_ufs_vccq";
 +		vin-supply = <&vcc5v0_sys_s5>;
-+		en-supply = <&vcc_3v3_s3>;
 +	};
 +
 +	vcc1v8_ufs_vccq2: regulator-vcc1v8-ufs-vccq2 {
@@ -38,13 +37,12 @@ index cce34c541f7..4f2930cff70 100644
 +		regulator-max-microvolt = <1800000>;
 +		regulator-name = "vcc1v8_ufs_vccq2";
 +		vin-supply = <&vcc_1v8_s3>;
-+		en-supply = <&vdda_1v2_s0>;
 +	};
 +
  	vcc3v3_m2_keym: regulator-vcc3v3-m2-keym {
  		compatible = "regulator-fixed";
  		enable-active-high;
-@@ -906,6 +924,15 @@
+@@ -906,6 +922,15 @@
  	status = "okay";
  };
  
