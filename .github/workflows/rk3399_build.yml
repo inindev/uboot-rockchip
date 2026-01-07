@@ -40,8 +40,6 @@ jobs:
             config: ficus-rk3399_defconfig
           - name: rk3399-firefly
             config: firefly-rk3399_defconfig
-          - name: rk3399-generic
-            config: generic-rk3399_defconfig
           - name: rk3399-khadas-edge-captain
             config: khadas-edge-captain-rk3399_defconfig
           - name: rk3399-khadas-edge
@@ -113,9 +111,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: ARM-software/arm-trusted-firmware
-          ref: master
+          ref: v2.13.0
           path: arm-trusted-firmware
           fetch-depth: 1
+          submodules: recursive
 
       - name: Build BL31
         if: inputs.use_arm_tf

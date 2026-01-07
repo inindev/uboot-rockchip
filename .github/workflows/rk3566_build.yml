@@ -42,12 +42,6 @@ jobs:
             config: odroid-m1s-rk3566_defconfig
           - name: rk3566-orangepi-3b
             config: orangepi-3b-rk3566_defconfig
-          - name: rk3566-anbernic-rgxx3
-            config: anbernic-rgxx3-rk3566_defconfig
-          - name: rk3566-odroid-m1s
-            config: odroid-m1s-rk3566_defconfig
-          - name: rk3566-orangepi-3b
-            config: orangepi-3b-rk3566_defconfig
           - name: rk3566-pinetab2
             config: pinetab2-rk3566_defconfig
           - name: rk3566-powkiddy-x55
@@ -93,9 +87,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: ARM-software/arm-trusted-firmware
-          ref: master
+          ref: v2.13.0
           path: arm-trusted-firmware
           fetch-depth: 1
+          submodules: recursive
 
       - name: Build BL31
         if: inputs.use_arm_tf
