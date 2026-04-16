@@ -10,11 +10,6 @@ on:
         required: true
         default: v2026.04
         type: string
-      use_arm_tf:
-        description: Use ARM Trusted Firmware for BL31 (if unchecked, uses Rockchip BL31)
-        required: true
-        default: true
-        type: boolean
       cherry_pick_commit:
         description: Enter u-boot commit(s) to cherry-pick (optional, comma-separated)
         required: false
@@ -68,23 +63,6 @@ jobs:
           path: rkbin
           fetch-depth: 1
 
-      - name: Checkout ARM Trusted Firmware
-        if: inputs.use_arm_tf
-        uses: actions/checkout@v4
-        with:
-          repository: ARM-software/arm-trusted-firmware
-          ref: lts-v2.14.1
-          path: arm-trusted-firmware
-          fetch-depth: 1
-          submodules: recursive
-
-      - name: Build BL31
-        if: inputs.use_arm_tf
-        run: |
-          cd arm-trusted-firmware
-          make PLAT=rk3328 bl31
-          ls -l build/rk3328/release/bl31/bl31.elf
-
       - name: Checkout u-boot ${{ inputs.uboot_ref }}
         uses: actions/checkout@v4
         with:
@@ -121,11 +99,7 @@ jobs:
           fi
           python3 rkbin/tools/ddrbin_tool.py rk3508 rkbin/tools/ddrbin_param.txt "$DDR_BIN"
           export ROCKCHIP_TPL=../$DDR_BIN
-          if [ "${{ inputs.use_arm_tf }}" = "true" ]; then
-            export BL31=../arm-trusted-firmware/build/rk3328/release/bl31/bl31.elf
-          else
-            export BL31=../rkbin/$(awk -F'=' '$1 == "[BL31_OPTION]" {f=1; next} f && $1 == "PATH" {print $2; exit}' rkbin/RKTRUST/RK3308TRUST.ini)
-          fi
+          export BL31=../rkbin/$(awk -F'=' '$1 == "[BL31_OPTION]" {f=1; next} f && $1 == "PATH" {print $2; exit}' rkbin/RKTRUST/RK3308TRUST.ini)
           cd u-boot
           make mrproper
           make ${{ matrix.board.config }}
