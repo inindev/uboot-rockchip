@@ -1,4 +1,4 @@
-From 864946e7b3c52d4d3dfbf5f82e5f7b5df1b99194 Mon Sep 17 00:00:00 2001
+From acec487b123c74d49937f7750b64f9ed7a09429b Mon Sep 17 00:00:00 2001
 From: Jonas Karlman <jonas@kwiboo.se>
 Date: Tue, 28 Jan 2025 01:30:12 +0000
 Subject: [PATCH 1/7] rockchip: mkimage: Add rk3576 align and sd-card

@@ -1,7 +1,7 @@
-From 2833ab451236082a7ad67e52d6d547651025f7cd Mon Sep 17 00:00:00 2001
+From e73925050950375fc08c9865eead603326401569 Mon Sep 17 00:00:00 2001
 From: Alexey Charkov <alchark@gmail.com>
-Date: Tue, 30 Dec 2025 17:23:34 +0400
-Subject: [PATCH 6/7] arm64: dts: rockchip: enable UFS controller on
+Date: Wed, 11 Mar 2026 17:30:57 +0400
+Subject: [PATCH 3/7] arm64: dts: rockchip: enable UFS controller on
  FriendlyElec NanoPi M5
 
 The NanoPi M5 board supports pluggable UFS modules using the UFSHC
@@ -11,12 +11,19 @@ Enable the respective devicetree node and add its supply regulators.
 
 Link: https://wiki.friendlyelec.com/wiki/images/9/97/NanoPi_M5_LP5_2411_SCH.pdf
 Signed-off-by: Alexey Charkov <alchark@gmail.com>
+Link: https://patch.msgid.link/20251230-nanopi-m5-ufs-v3-1-ed188ae34fdb@gmail.com
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+
+[ upstream commit: cd50298ffc5f98872ddf0ac05c51a014003a34b7 ]
+
+(cherry picked from commit d9f2b91a7b6cc955e272c31a4bcb03a1c564efad)
+Signed-off-by: Alexey Charkov <alchark@flipper.net>
 ---
- .../src/arm64/rockchip/rk3576-nanopi-m5.dts   | 25 +++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ .../src/arm64/rockchip/rk3576-nanopi-m5.dts   | 24 +++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
 diff --git a/dts/upstream/src/arm64/rockchip/rk3576-nanopi-m5.dts b/dts/upstream/src/arm64/rockchip/rk3576-nanopi-m5.dts
-index cce34c541f7..c5b34069a44 100644
+index cce34c541f7..af4b7c004c3 100644
 --- a/dts/upstream/src/arm64/rockchip/rk3576-nanopi-m5.dts
 +++ b/dts/upstream/src/arm64/rockchip/rk3576-nanopi-m5.dts
 @@ -110,6 +110,22 @@
@@ -42,7 +49,7 @@ index cce34c541f7..c5b34069a44 100644
  	vcc3v3_m2_keym: regulator-vcc3v3-m2-keym {
  		compatible = "regulator-fixed";
  		enable-active-high;
-@@ -906,6 +922,15 @@
+@@ -906,6 +922,14 @@
  	status = "okay";
  };
  
@@ -51,7 +58,6 @@ index cce34c541f7..c5b34069a44 100644
 +	vccq-supply = <&vcc1v2_ufs_vccq>;
 +	vccq2-supply = <&vcc1v8_ufs_vccq2>;
 +	vdd-hba-supply = <&vdda_1v2_s0>;
-+
 +	status = "okay";
 +};
 +

@@ -2,8 +2,8 @@
 # Copyright (C) 2025, John Clark <inindev@gmail.com>
 
 RKBIN_REF := master
-ATF_REF := master
-UBOOT_REF := v2026.01
+ATF_REF := lts-v2.14.1
+UBOOT_REF := v2026.04
 
 # 1 = use atf bl31, 0 = use rockchip bl31
 USE_ARM_TF := 1
@@ -32,6 +32,10 @@ $(UBOOT_DIR):
 	@echo "\n$(h1)cloning u-boot...$(rst)"
 	git clone --no-checkout https://github.com/u-boot/u-boot.git $(UBOOT_DIR)
 	cd $(UBOOT_DIR) && git fetch --depth 1 origin refs/tags/$(UBOOT_REF):refs/tags/$(UBOOT_REF) && git checkout $(UBOOT_REF) 2>/dev/null && git checkout -b $(UBOOT_REF:v%=%)
+
+	@echo "\n$(h1)cherry-picking dba21bf0b6ececa4bbc15ac93b3cdf4b09286ed7...$(rst)"
+	cd $(UBOOT_DIR) && git cherry-pick -m 1 dba21bf0b6ececa4bbc15ac93b3cdf4b09286ed7
+
 	@patches="$$(find patches -maxdepth 2 -name '*.patch' 2>/dev/null | sort)"; \
 	if [ -n "$$patches" ]; then \
 	    echo "\n$(h1)applying patches...$(rst)"; \
