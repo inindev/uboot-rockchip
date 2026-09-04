@@ -1,7 +1,7 @@
-From acec487b123c74d49937f7750b64f9ed7a09429b Mon Sep 17 00:00:00 2001
+From 6a5bc2d16fd2ef4a8090c407bb841e379918c28c Mon Sep 17 00:00:00 2001
 From: Jonas Karlman <jonas@kwiboo.se>
 Date: Tue, 28 Jan 2025 01:30:12 +0000
-Subject: [PATCH 1/7] rockchip: mkimage: Add rk3576 align and sd-card
+Subject: [PATCH 1/2] rockchip: mkimage: Add rk3576 align and sd-card
  workaround
 
 The BootROM on RK3576 has an issue loading boot images from an SD-card.
@@ -90,7 +90,7 @@ index 00000000000..73ba22f8aa5
 +	.section	.note.GNU-stack,"",@progbits
 +*/
 diff --git a/tools/rkcommon.c b/tools/rkcommon.c
-index e7e78ef7e5b..81a5e8134a7 100644
+index b39777fc060..743484df95f 100644
 --- a/tools/rkcommon.c
 +++ b/tools/rkcommon.c
 @@ -34,15 +34,16 @@ enum hash_type {
@@ -152,15 +152,16 @@ index e7e78ef7e5b..81a5e8134a7 100644
  };
  
  static struct spl_info spl_infos[] = {
-@@ -152,24 +159,26 @@ static struct spl_info spl_infos[] = {
- 	{ "rv1126", "110B", 0x10000 - 0x1000, false, RK_HEADER_V1 },
+@@ -151,7 +158,7 @@ static struct spl_info spl_infos[] = {
+ 	{ "rk3506", "RK35", 0xC000 - 0x1000, false, RK_HEADER_V2 },
  	{ "rk3528", "RK35", 0x10000 - 0x1000, false, RK_HEADER_V2 },
  	{ "rk3568", "RK35", 0x10000 - 0x1000, false, RK_HEADER_V2 },
 -	{ "rk3576", "RK35", 0x80000 - 0x1000, false, RK_HEADER_V2 },
 +	{ "rk3576", "RK35", 0x80000 - 0x1000, false, RK_HEADER_V2, 8 },
  	{ "rk3588", "RK35", 0x100000 - 0x1000, false, RK_HEADER_V2 },
- };
- 
+ 	{ "rv1108", "RK11", 0x1800, false, RK_HEADER_V1 },
+ 	{ "rv1126", "110B", 0x10000 - 0x1000, false, RK_HEADER_V1 },
+@@ -160,17 +167,19 @@ static struct spl_info spl_infos[] = {
  /**
   * struct spl_params - spl params parsed in check_params()
   *
@@ -188,7 +189,7 @@ index e7e78ef7e5b..81a5e8134a7 100644
  };
  
  static struct spl_params spl_params = { 0 };
-@@ -193,14 +202,19 @@ static struct spl_info *rkcommon_get_spl_info(char *imagename)
+@@ -194,14 +203,19 @@ static struct spl_info *rkcommon_get_spl_info(char *imagename)
  	return NULL;
  }
  
@@ -214,7 +215,7 @@ index e7e78ef7e5b..81a5e8134a7 100644
  
  	/*
  	 * Pad to a 2KB alignment, as required for init/boot size by the ROM
-@@ -209,6 +223,27 @@ static int rkcommon_get_aligned_size(struct image_tool_params *params,
+@@ -210,6 +224,27 @@ static int rkcommon_get_aligned_size(struct image_tool_params *params,
  	return ROUND(size, RK_SIZE_ALIGN);
  }
  
@@ -242,7 +243,7 @@ index e7e78ef7e5b..81a5e8134a7 100644
  int rkcommon_check_params(struct image_tool_params *params)
  {
  	int i, size;
-@@ -223,34 +258,51 @@ int rkcommon_check_params(struct image_tool_params *params)
+@@ -224,34 +259,51 @@ int rkcommon_check_params(struct image_tool_params *params)
  	if (!rkcommon_get_spl_info(params->imagename))
  		goto err_spl_info;
  
@@ -309,7 +310,7 @@ index e7e78ef7e5b..81a5e8134a7 100644
  	return EXIT_SUCCESS;
  
  err_spl_info:
-@@ -295,13 +347,6 @@ bool rkcommon_need_rc4_spl(struct image_tool_params *params)
+@@ -296,13 +348,6 @@ bool rkcommon_need_rc4_spl(struct image_tool_params *params)
  	return info->spl_rc4;
  }
  
@@ -323,7 +324,7 @@ index e7e78ef7e5b..81a5e8134a7 100644
  static void do_sha256_hash(uint8_t *buf, uint32_t size, uint8_t *out)
  {
  	sha256_context ctx;
-@@ -314,13 +359,14 @@ static void do_sha256_hash(uint8_t *buf, uint32_t size, uint8_t *out)
+@@ -315,13 +360,14 @@ static void do_sha256_hash(uint8_t *buf, uint32_t size, uint8_t *out)
  static void rkcommon_set_header0(void *buf, struct image_tool_params *params)
  {
  	struct header0_info *hdr = buf;
@@ -342,8 +343,8 @@ index e7e78ef7e5b..81a5e8134a7 100644
  
  	/*
  	 * init_boot_size needs to be set, as it is read by the BootROM
-@@ -330,10 +376,11 @@ static void rkcommon_set_header0(void *buf, struct image_tool_params *params)
- 	 * see https://lists.denx.de/pipermail/u-boot/2017-May/293267.html
+@@ -331,10 +377,11 @@ static void rkcommon_set_header0(void *buf, struct image_tool_params *params)
+ 	 * see https://patch.msgid.link/CANbgqAQ5p-fE4T-Ye9UAMs-nRGU8AP_yxDf+5SbZbP8bxLa0dg@mail.gmail.com/
  	 * for a more detailed explanation by Andy Yan
  	 */
 -	if (spl_params.boot_file)
@@ -357,7 +358,7 @@ index e7e78ef7e5b..81a5e8134a7 100644
  	hdr->init_boot_size = cpu_to_le16(init_boot_size / RK_BLK_SIZE);
  
  	rc4_encode(buf, RK_BLK_SIZE, rc4_key);
-@@ -343,43 +390,43 @@ static void rkcommon_set_header0_v2(void *buf, struct image_tool_params *params)
+@@ -344,43 +391,43 @@ static void rkcommon_set_header0_v2(void *buf, struct image_tool_params *params)
  {
  	struct header0_info_v2 *hdr = buf;
  	uint32_t sector_offset, image_sector_count;
@@ -419,7 +420,7 @@ index e7e78ef7e5b..81a5e8134a7 100644
  		rkcommon_set_header0(buf, params);
  
  		/* Set up the SPL name (i.e. copy spl_hdr over) */
-@@ -387,14 +434,14 @@ void rkcommon_set_header(void *buf,  struct stat *sbuf,  int ifd,
+@@ -388,14 +435,14 @@ void rkcommon_set_header(void *buf,  struct stat *sbuf,  int ifd,
  			memcpy(&hdr->magic, rkcommon_get_spl_hdr(params), RK_SPL_HDR_SIZE);
  
  		if (rkcommon_need_rc4_spl(params))
@@ -440,7 +441,7 @@ index e7e78ef7e5b..81a5e8134a7 100644
  		}
  	}
  }
-@@ -499,6 +546,41 @@ int rkcommon_verify_header(unsigned char *buf, int size,
+@@ -500,6 +547,41 @@ int rkcommon_verify_header(unsigned char *buf, int size,
  	return -ENOENT;
  }
  
@@ -482,7 +483,7 @@ index e7e78ef7e5b..81a5e8134a7 100644
  void rkcommon_print_header(const void *buf, struct image_tool_params *params)
  {
  	struct header0_info header0;
-@@ -515,10 +597,7 @@ void rkcommon_print_header(const void *buf, struct image_tool_params *params)
+@@ -516,10 +598,7 @@ void rkcommon_print_header(const void *buf, struct image_tool_params *params)
  			return;
  		}
  
@@ -494,7 +495,7 @@ index e7e78ef7e5b..81a5e8134a7 100644
  	} else {
  		ret = rkcommon_parse_header(buf, &header0, &spl_info);
  
-@@ -532,18 +611,20 @@ void rkcommon_print_header(const void *buf, struct image_tool_params *params)
+@@ -533,18 +612,20 @@ void rkcommon_print_header(const void *buf, struct image_tool_params *params)
  		}
  
  		image_type = ret;
@@ -523,7 +524,7 @@ index e7e78ef7e5b..81a5e8134a7 100644
  }
  
  void rkcommon_rc4_encode_spl(void *buf, unsigned int offset, unsigned int size)
-@@ -583,7 +664,7 @@ int rkcommon_vrec_header(struct image_tool_params *params,
+@@ -584,7 +665,7 @@ int rkcommon_vrec_header(struct image_tool_params *params,
  	 * 4 bytes of these images can safely be overwritten using the
  	 * boot magic.
  	 */
@@ -532,7 +533,7 @@ index e7e78ef7e5b..81a5e8134a7 100644
  
  	/* Allocate, clear and install the header */
  	tparams->hdr = malloc(tparams->header_size);
-@@ -598,10 +679,12 @@ int rkcommon_vrec_header(struct image_tool_params *params,
+@@ -599,10 +680,12 @@ int rkcommon_vrec_header(struct image_tool_params *params,
  	 * We need to store the original file-size (i.e. before padding), as
  	 * imagetool does not set this during its adjustment of file_size.
  	 */
@@ -548,7 +549,7 @@ index e7e78ef7e5b..81a5e8134a7 100644
  
  	/* Ignoring pad len, since we are using our own copy_image() */
  	return 0;
-@@ -685,16 +768,13 @@ err_close:
+@@ -686,16 +769,13 @@ err_close:
  
  int rockchip_copy_image(int ifd, struct image_tool_params *params)
  {

@@ -1,9 +1,9 @@
 
-# Copyright (C) 2025, John Clark <inindev@gmail.com>
+# Copyright (C) 2026, John Clark <inindev@gmail.com>
 
 RKBIN_REF := master
 ATF_REF := lts-v2.14.1
-UBOOT_REF := v2026.04
+UBOOT_REF := v2026.07
 
 # 1 = use atf bl31, 0 = use rockchip bl31
 USE_ARM_TF := 1
@@ -32,9 +32,6 @@ $(UBOOT_DIR):
 	@echo "\n$(h1)cloning u-boot...$(rst)"
 	git clone --no-checkout https://github.com/u-boot/u-boot.git $(UBOOT_DIR)
 	cd $(UBOOT_DIR) && git fetch --depth 1 origin refs/tags/$(UBOOT_REF):refs/tags/$(UBOOT_REF) && git checkout $(UBOOT_REF) 2>/dev/null && git checkout -b $(UBOOT_REF:v%=%)
-
-	@echo "\n$(h1)cherry-picking dba21bf0b6ececa4bbc15ac93b3cdf4b09286ed7...$(rst)"
-	cd $(UBOOT_DIR) && git cherry-pick -m 1 dba21bf0b6ececa4bbc15ac93b3cdf4b09286ed7
 
 	@patches="$$(find patches -maxdepth 2 -name '*.patch' 2>/dev/null | sort)"; \
 	if [ -n "$$patches" ]; then \
@@ -86,13 +83,22 @@ else
 	$(eval BL31 := $(RKBIN_DIR)/$(shell awk -F'=' '$$1 == "[BL31_OPTION]" {f=1; next} f && $$1 == "PATH" {print $$2; exit}' $(RKBIN_DIR)/RKTRUST/$(RKBIN_PREFIX)TRUST.ini))
 endif
 
+# u-boot's config.mk derives BOARD/VENDOR from CONFIG_SYS_BOARD/CONFIG_SYS_VENDOR in
+# .config. Our own command-line BOARD=... would otherwise reach the sub-make as a
+# command-line override (propagated via BOTH the environment and MAKEFLAGS), which
+# outranks that assignment and makes BOARDDIR point at a nonexistent directory.
+# u-boot/Makefile then silently drops board/$(BOARDDIR)/ from libs-y via its
+# $(wildcard ...) test, with no warning or error. Clear both channels so u-boot
+# computes BOARD/VENDOR itself.
+UBOOT_MAKE = env -u BOARD MAKEFLAGS= $(MAKE) -C $(UBOOT_DIR)
+
 # main build target
 .PHONY: build
 build: validate_board check_prereqs boards_raw $(RKBIN_DIR) $(UBOOT_DIR) bl31
 	@echo "\n$(h1)beginning compile...$(rst)"
-	$(MAKE) -C $(UBOOT_DIR) mrproper
-	$(MAKE) -C $(UBOOT_DIR) $(BOARD_CONFIG)
-	$(MAKE) -C $(UBOOT_DIR) -j$(shell nproc) KCFLAGS="-Werror" ROCKCHIP_TPL=../$(ROCKCHIP_TPL) BL31=../$(BL31) TEE=
+	$(UBOOT_MAKE) mrproper
+	$(UBOOT_MAKE) $(BOARD_CONFIG)
+	$(UBOOT_MAKE) -j$(shell nproc) KCFLAGS="-Werror" ROCKCHIP_TPL=../$(ROCKCHIP_TPL) BL31=../$(BL31) TEE=
 	@echo "$(grn)"
 	$(UBOOT_DIR)/tools/mkimage -l $(UBOOT_DIR)/u-boot.itb
 	@echo "$(cya)"
