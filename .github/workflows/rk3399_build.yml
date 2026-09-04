@@ -8,7 +8,7 @@ on:
       uboot_ref:
         description: Enter a u-boot git tag (or branch/commit)
         required: true
-        default: v2026.04
+        default: v2026.07
         type: string
       use_arm_tf:
         description: Use ARM Trusted Firmware for BL31 (if unchecked, uses Rockchip BL31)
@@ -96,10 +96,10 @@ jobs:
           gcc --version
 
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Checkout rockchip rkbin
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: rockchip-linux/rkbin
           ref: master
@@ -108,7 +108,7 @@ jobs:
 
       - name: Checkout ARM Trusted Firmware
         if: inputs.use_arm_tf
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: ARM-software/arm-trusted-firmware
           ref: lts-v2.12.11
@@ -124,7 +124,7 @@ jobs:
           ls -l build/rk3399/release/bl31/bl31.elf
 
       - name: Checkout u-boot ${{ inputs.uboot_ref }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: u-boot/u-boot
           ref: ${{ inputs.uboot_ref }}
@@ -166,7 +166,7 @@ jobs:
           zip -r ../${{ matrix.board.name }}.zip ${{ matrix.board.name }}
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ matrix.board.name }}
           path: output/
@@ -174,7 +174,7 @@ jobs:
 
       - name: Upload Release Artifacts
         if: inputs.upload_release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ inputs.uboot_ref }}
           name: u-boot arm64 ${{ inputs.uboot_ref }}

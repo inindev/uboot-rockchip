@@ -8,7 +8,7 @@ on:
       uboot_ref:
         description: Enter a u-boot git tag (or branch/commit)
         required: true
-        default: v2026.04
+        default: v2026.07
         type: string
       cherry_pick_commit:
         description: Enter u-boot commit(s) to cherry-pick (optional, comma-separated)
@@ -53,10 +53,10 @@ jobs:
           aarch64-linux-gnu-gcc --version
 
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Checkout rockchip rkbin
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: rockchip-linux/rkbin
           ref: master
@@ -64,7 +64,7 @@ jobs:
           fetch-depth: 1
 
       - name: Checkout u-boot ${{ inputs.uboot_ref }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: u-boot/u-boot
           ref: ${{ inputs.uboot_ref }}
@@ -117,7 +117,7 @@ jobs:
           zip -r ../${{ matrix.board.name }}.zip ${{ matrix.board.name }}
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ matrix.board.name }}
           path: output/
@@ -125,7 +125,7 @@ jobs:
 
       - name: Upload Release Artifacts
         if: inputs.upload_release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ inputs.uboot_ref }}
           name: u-boot arm64 ${{ inputs.uboot_ref }}

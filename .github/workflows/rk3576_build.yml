@@ -8,7 +8,7 @@ on:
       uboot_ref:
         description: Enter a u-boot git tag (or branch/commit)
         required: true
-        default: v2026.04
+        default: v2026.07
         type: string
       use_arm_tf:
         description: Use ARM Trusted Firmware for BL31 (if unchecked, uses Rockchip BL31)
@@ -40,6 +40,8 @@ jobs:
             config: omni3576-rk3576_defconfig
           - name: rk3576-nanopi-m5
             config: nanopi-m5-rk3576_defconfig
+          - name: rk3576-nanopi-r76s
+            config: nanopi-r76s-rk3576_defconfig
           - name: rk3576-roc-pc
             config: roc-pc-rk3576_defconfig
           - name: rk3576-rock-4d
@@ -54,10 +56,10 @@ jobs:
           gcc --version
 
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Checkout rockchip rkbin
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: rockchip-linux/rkbin
           ref: master
@@ -66,7 +68,7 @@ jobs:
 
       - name: Checkout ARM Trusted Firmware
         if: inputs.use_arm_tf
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: ARM-software/arm-trusted-firmware
           ref: lts-v2.14.1
@@ -82,44 +84,12 @@ jobs:
           ls -l build/rk3576/release/bl31/bl31.elf
 
       - name: Checkout u-boot ${{ inputs.uboot_ref }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: u-boot/u-boot
           ref: ${{ inputs.uboot_ref }}
           path: u-boot
           fetch-depth: 1
-
-      - name: Checkout inindev uboot-rockchip patches
-        uses: actions/checkout@v4
-        with:
-          repository: inindev/uboot-rockchip
-          ref: main
-          path: uboot-rockchip
-          fetch-depth: 1
-
-      - name: Apply upstream commit dba21bf0
-        if: inputs.uboot_ref == 'v2026.04'
-        run: |
-          cd u-boot
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-          curl -sL https://github.com/u-boot/u-boot/commit/dba21bf0b6ececa4bbc15ac93b3cdf4b09286ed7.patch -o dba21bf0.patch
-          git am dba21bf0.patch
-          rm dba21bf0.patch
-
-      - name: Apply patches
-        if: inputs.uboot_ref == 'v2026.04'
-        run: |
-          cd u-boot
-          patches=$(find ../uboot-rockchip/patches -maxdepth 2 -name '*.patch' | sort)
-          if [ -n "$patches" ]; then
-            git config user.name "GitHub Actions"
-            git config user.email "actions@github.com"
-            for patch in $patches; do
-              echo "Applying $patch"
-              git am "$patch" || { echo "Failed to apply: $patch"; exit 1; }
-            done
-          fi
 
       - name: Cherry-pick commits
         if: inputs.cherry_pick_commit != ''
@@ -130,6 +100,14 @@ jobs:
           for COMMIT in "${COMMITS[@]}"; do
             git cherry-pick $(echo $COMMIT) || (echo "Cherry-pick failed for $COMMIT"; exit 1)
           done
+
+      - name: Apply patches
+        run: |
+          set -e
+          cd u-boot
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git am ../patches/0001-rockchip-mkimage-Add-rk3576-align-and-sd-card-workar.patch
 
       - name: "Configure and build u-boot config: ${{ matrix.board.config }}"
         run: |
@@ -157,7 +135,7 @@ jobs:
           zip -r ../${{ matrix.board.name }}.zip ${{ matrix.board.name }}
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ matrix.board.name }}
           path: output/
@@ -165,7 +143,7 @@ jobs:
 
       - name: Upload Release Artifacts
         if: inputs.upload_release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ inputs.uboot_ref }}
           name: u-boot arm64 ${{ inputs.uboot_ref }}
