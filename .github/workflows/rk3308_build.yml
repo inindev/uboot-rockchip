@@ -8,7 +8,7 @@ on:
       uboot_ref:
         description: Enter a u-boot git tag (or branch/commit)
         required: true
-        default: v2026.07
+        default: v2026.10
         type: string
       cherry_pick_commit:
         description: Enter u-boot commit(s) to cherry-pick (optional, comma-separated)

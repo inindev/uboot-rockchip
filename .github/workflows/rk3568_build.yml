@@ -8,7 +8,7 @@ on:
       uboot_ref:
         description: Enter a u-boot git tag (or branch/commit)
         required: true
-        default: v2026.07
+        default: v2026.10
         type: string
       use_arm_tf:
         description: Use ARM Trusted Firmware for BL31 (if unchecked, uses Rockchip BL31)
@@ -32,8 +32,14 @@ jobs:
     strategy:
       matrix:
         board:
+          - name: rk3568-9tripod-x3568-v4
+            config: 9tripod-x3568-v4-rk3568_defconfig
+          - name: rk3568-anbernic-rg-ds
+            config: anbernic-rg-ds-rk3568_defconfig
           - name: rk3568-bpi-r2-pro
             config: bpi-r2-pro-rk3568_defconfig
+          - name: rk3568-easepi-r1
+            config: easepi-r1-rk3568_defconfig
           - name: rk3568-evb
             config: evb-rk3568_defconfig
           - name: rk3568-fastrhino-r66s

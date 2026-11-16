@@ -8,7 +8,7 @@ on:
       uboot_ref:
         description: Enter a u-boot git tag (or branch/commit)
         required: true
-        default: v2026.07
+        default: v2026.10
         type: string
       use_arm_tf:
         description: Use ARM Trusted Firmware for BL31 (if unchecked, uses Rockchip BL31)
@@ -88,6 +88,8 @@ jobs:
             config: odroid-m2-rk3588s_defconfig
           - name: rk3588s-orangepi-5
             config: orangepi-5-rk3588s_defconfig
+          - name: rk3588s-roc-pc
+            config: roc-pc-rk3588s_defconfig
           - name: rk3588s-rock-5a
             config: rock5a-rk3588s_defconfig
           - name: rk3588s-rock-5c
