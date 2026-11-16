@@ -3,7 +3,7 @@
 
 RKBIN_REF := master
 ATF_REF := lts-v2.14.1
-UBOOT_REF := v2026.07
+UBOOT_REF := v2026.10
 
 # 1 = use atf bl31, 0 = use rockchip bl31
 USE_ARM_TF := 1

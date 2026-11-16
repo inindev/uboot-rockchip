@@ -1,4 +1,4 @@
-From 92273630c222b933145f5e036b70b752a7df51b6 Mon Sep 17 00:00:00 2001
+From eea945d663cf3285e027a9be611795441397bcfe Mon Sep 17 00:00:00 2001
 From: John Clark <inindev@gmail.com>
 Date: Thu, 3 Sep 2026 21:13:24 -0400
 Subject: [PATCH 2/2] board: rockchip: Add Xunlong Orange Pi CM4
@@ -903,10 +903,10 @@ index 00000000000..0db41c3b3c6
 +	};
 +};
 diff --git a/arch/arm/mach-rockchip/rk3568/Kconfig b/arch/arm/mach-rockchip/rk3568/Kconfig
-index 2730220a18e..f4453efb0ba 100644
+index ec22898137e..e56f2f46ce2 100644
 --- a/arch/arm/mach-rockchip/rk3568/Kconfig
 +++ b/arch/arm/mach-rockchip/rk3568/Kconfig
-@@ -59,6 +59,11 @@ config TARGET_ORANGEPI_3B_RK3566
+@@ -65,6 +65,11 @@ config TARGET_ORANGEPI_3B_RK3566
  	help
  	  Xunlong Orange Pi 3B single board computer with a RK3566 SoC.
  
@@ -918,7 +918,7 @@ index 2730220a18e..f4453efb0ba 100644
  endchoice
  
  config ROCKCHIP_BOOT_MODE_REG
-@@ -79,6 +84,7 @@ source "board/powkiddy/x55/Kconfig"
+@@ -86,6 +91,7 @@ source "board/powkiddy/x55/Kconfig"
  source "board/qnap/ts433/Kconfig"
  source "board/radxa/zero3-rk3566/Kconfig"
  source "board/xunlong/orangepi-3b-rk3566/Kconfig"
